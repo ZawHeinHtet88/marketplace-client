@@ -1,5 +1,4 @@
 // components/language-switch.tsx
-"use client";
 
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -21,7 +20,7 @@ export const LanguageSwitch = () => {
     const savedLang = localStorage.getItem("i18nextLng");
     if (savedLang) {
       setIsMyanmar(savedLang === "my");
-      i18n.changeLanguage(savedLang);
+      i18n?.changeLanguage(savedLang);
     }
   }, []);
 

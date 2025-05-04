@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 
 export const AuthGuard = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<string>();
-  const isLogin = false;
+  const isLogin = true;
 
   useEffect(
     function () {
