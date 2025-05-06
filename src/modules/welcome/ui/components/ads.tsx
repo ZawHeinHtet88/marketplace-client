@@ -1,0 +1,46 @@
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
+import { ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import AdsCard from "./ads-card";
+
+function Ads() {
+  return (
+    <section className="space-y-10">
+      <div className="flex items-center justify-between mb-5 border-b-1">
+        <h5 className="text-lg text-gray-500 font-semibold border-b-4 pb-4 border-red-600">
+          Ads from
+          <span className="capitalize text-red-600"> Partanership </span>
+        </h5>
+        <Link className="flex gap-2 text-red-600 pb-4" to="">
+          View All <ChevronRight />
+        </Link>
+      </div>
+
+      <div className="">
+        <Carousel
+          plugins={[
+            Autoplay({
+              delay: 2000,
+            }),
+          ]}
+          className=""
+        >
+          <CarouselContent className="-ml-1">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                <AdsCard />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+      </div>
+    </section>
+  );
+}
+
+export default Ads;

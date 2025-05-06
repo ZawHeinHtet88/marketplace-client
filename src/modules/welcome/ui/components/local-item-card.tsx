@@ -22,7 +22,7 @@ function LocalItemCard() {
         </CardTitle>
       </CardContent>
       <CardFooter className="justify-between">
-        <CardDescription className="text-lg font-extrabold text-gray-900/80">
+        <CardDescription className="text-lg font-extrabold text-green-600">
           5000 kyats
         </CardDescription>
         <Button className="bg-red-600">
