@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import LocalItemCard from "./local-item-card";
 
 function LocalItems() {
+  
   return (
     <section className="space-y-10">
       <div className="flex items-center justify-between  mb-5 border-b-1">

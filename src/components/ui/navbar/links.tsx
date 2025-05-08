@@ -1,3 +1,4 @@
+import CartModal from "@/modules/cart/ui/components/cart-modal";
 import { ShoppingBasket, User } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -11,10 +12,7 @@ function Links() {
         </Link>
       </div>
       <div className="flex items-center gap-2 px-10">
-        <ShoppingBasket className="text-red-600" />
-        <Link className="font-semibold text-gray-600" to={"/login"}>
-          Cart
-        </Link>
+        <CartModal />
       </div>
     </div>
   );

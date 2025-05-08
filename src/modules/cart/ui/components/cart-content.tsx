@@ -1,0 +1,23 @@
+import { useCartStore } from "../../store/index.store";
+import CartItemCard from "./cart-item-card";
+
+function CartContent() {
+  const { cart } = useCartStore((state) => state);
+  return (
+    <section className="space-y-5">
+      <header className="flex items-center gap-10 text-left uppercase font-semibold text-gray-700">
+        <div className="w-[40%]">Products Detail</div>
+        <div className="w-[30%]">Quantity</div>
+        <div className="w-[15%]">Price</div>
+        <div className="w-[20%]">Total(KYATS)</div>
+      </header>
+      <div className="h-[400px] flex flex-col overflow-y-scroll gap-10">
+        {cart.map((item, index) => (
+          <CartItemCard key={index} item={item} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export default CartContent;
