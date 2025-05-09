@@ -1,10 +1,11 @@
+import { Link } from "react-router-dom";
 
 function Logo() {
   return (
     <div className="">
-      <h4 className="font-mono text-2xl uppercase">
-        <span className="text-red-600 font-extrabold">Ayeyar</span><span className="">Mart</span>
-      </h4>
+      <Link to="/" className="font-mono text-2xl uppercase">
+        <span className="text-primary font-extrabold">Ayeyar</span><span className="">Mart</span>
+      </Link>
     </div>
   );
 }

@@ -21,7 +21,7 @@ function CartModal() {
     <Dialog>
       <DialogTrigger asChild>
         <Button className="border-0" variant="outline">
-          <ShoppingCart className="text-red-600 !w-6 !h-6" />
+          <ShoppingCart className="text-primary !w-6 !h-6" />
           {cart.length > 0 && (
             <sup>
               <Badge>{cart.length}</Badge>

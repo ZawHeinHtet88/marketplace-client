@@ -7,7 +7,7 @@ import { Footer } from "../ui/footer";
 
 export const Layout = () => {
   return (
-    <main className="">
+    <main className="bg-background">
       <WelcomeBar />
       <SidebarProvider>
         <AppSidebar/>

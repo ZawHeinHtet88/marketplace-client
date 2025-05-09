@@ -7,11 +7,11 @@ function LocalItems() {
   return (
     <section className="space-y-10">
       <div className="flex items-center justify-between  mb-5 border-b-1">
-        <h5 className="text-lg text-gray-500 font-semibold border-b-4 pb-4 border-red-600">
+        <h5 className="text-lg text-gray-500 font-semibold border-b-4 pb-4 border-primary">
           Grab the best Deal on{" "}
-          <span className="capitalize text-red-600">local items</span>
+          <span className="capitalize text-primary">local items</span>
         </h5>
-        <Link className="flex gap-2 text-red-600 pb-4" to="">
+        <Link className="flex gap-2 text-primary pb-4" to="">
           View All <ChevronRight />
         </Link>
       </div>

@@ -3,9 +3,9 @@ import { LanguageSwitch } from "../language-toggler";
 
 function WelcomeBar() {
   return (
-    <main className="bg-gray-100 py-2 px-5 lg:px-0">
+    <main className="bg-accent py-2 px-5 lg:px-0">
       <nav className="w-full lg:max-w-7xl mx-auto flex items-center justify-between">
-        <p className="capitalize text-gray-700 font-thin">
+        <p className="capitalize text-secondary-foreground font-thin">
           Welcome <span className="hidden md:inline-block">to worldwide Mega Mark!</span>
         </p>
         <div className="flex items-center">
