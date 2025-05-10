@@ -13,9 +13,24 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import { Box, DollarSign, MoreHorizontal, ShoppingCart, ViewIcon } from "lucide-react";
+import { useCartStore } from "@/modules/cart/store/index.store";
+import {
+  Box,
+  DollarSign,
+  MoreHorizontal,
+  ShoppingCart,
+  ViewIcon,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
-function SellerItemCard() {
+function ProductCard() {
+  const {addToCart} = useCartStore()
+   const item = {
+    _id : "2",
+    title: "shampoo",
+    category: "furniture",
+    price: 7800,
+  };
   return (
     <Card className="pb-2">
       <CardContent className="flex items-center gap-5">
@@ -35,11 +50,11 @@ function SellerItemCard() {
       </CardContent>
       <CardFooter className="justify-between pt-3 border-t-2">
         <div className="flex gap-5">
-          <Badge className="bg-green-600">
+          <Badge className="bg-green-600 text-foreground">
             <DollarSign />
             3400
           </Badge>
-          <Badge className="bg-orange-600">
+          <Badge className="bg-orange-600 text-foreground">
             <Box />4
           </Badge>
         </div>
@@ -56,8 +71,14 @@ function SellerItemCard() {
               </div>
               <Separator />
               <div className="flex gap-2">
-                <Button size={"icon"}><ShoppingCart/></Button>
-                <Button size={"icon"} className="bg-green-600"><ViewIcon/></Button>
+                <Button onClick={()=>addToCart(item)} size={"icon"}>
+                  <ShoppingCart />
+                </Button>
+                <Link to={"/products/34"}>
+                  <Button size={"icon"} className="bg-green-600">
+                    <ViewIcon />
+                  </Button>
+                </Link>
               </div>
             </div>
           </PopoverContent>
@@ -67,4 +88,4 @@ function SellerItemCard() {
   );
 }
 
-export default SellerItemCard;
+export default ProductCard;

@@ -10,7 +10,7 @@ export const TopCategories = () => {
           Shop From
           <span className="capitalize text-primary"> Top Categories</span>
         </h5>
-        <Link className="flex gap-2 text-primay pb-4" to="">
+        <Link className="flex gap-2 text-primary pb-4" to="">
           View All <ChevronRight />
         </Link>
       </div>

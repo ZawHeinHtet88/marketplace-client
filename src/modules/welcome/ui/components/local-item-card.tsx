@@ -18,7 +18,7 @@ function LocalItemCard() {
     price: 400,
   };
   return (
-    <Card className="pt-0 pb-5 hover:shadow-xl transition-all duration-700">
+    <Card className="pt-0 pb-5 hover:shadow-xl transition-all duration-700 border-card">
       <div className="bg-secondary flex items-center justify-center rounded-xl">
         <img className="h-[200px]" src="./m-logo.png" alt="logo" />
       </div>

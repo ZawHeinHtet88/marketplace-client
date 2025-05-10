@@ -5,7 +5,7 @@ function CartContent() {
   const { cart } = useCartStore((state) => state);
   return (
     <section className="space-y-5">
-      <header className="flex items-center gap-10 text-left uppercase font-semibold text-gray-700">
+      <header className="flex items-center gap-10 text-left uppercase font-semibold text-foreground/50">
         <div className="w-[40%]">Products Detail</div>
         <div className="w-[30%]">Quantity</div>
         <div className="w-[15%]">Price</div>

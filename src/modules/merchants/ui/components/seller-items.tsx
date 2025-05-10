@@ -18,9 +18,9 @@ import {
 import { Separator } from "@radix-ui/react-separator";
 import { Search, SidebarClose, SidebarOpen } from "lucide-react";
 import { useNewFeedSidebarStore } from "../../store/index.store";
-import SellerItemCard from "./seller-item-card";
 import { cn } from "@/lib/utils";
 import SellerItemPagination from "./seller-items-pagination";
+import ProductCard from "@/components/ui/product/product-card";
 
 function SellerItems() {
   const { isNewFeedOpen, setIsNewFeedOpen } = useNewFeedSidebarStore();
@@ -67,12 +67,7 @@ function SellerItems() {
       </CardHeader>
       <Separator />
       <CardContent className="grid grid-cols-1 md:grid-cols-2  lg:grid-rows-2 lg:grid-cols-3 gap-5">
-        <SellerItemCard />
-        <SellerItemCard />
-        <SellerItemCard />
-        <SellerItemCard />
-        <SellerItemCard />
-        <SellerItemCard />
+        <ProductCard />
       </CardContent>
       <Separator />
       <CardFooter className="">

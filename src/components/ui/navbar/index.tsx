@@ -5,7 +5,7 @@ import NavSearch from "./search";
 
 export const Navbar = () => {
   return (
-    <main className="border-b-2 border-b-gray-600 bg-background">
+    <main className="border-b-2 border-b-foreground bg-background">
       <nav className="px-5 lg:px-0 w-full lg:max-w-7xl mx-auto py-3 md:py-4">
         <div className="flex items-center justify-between">
           <Logo />

@@ -13,8 +13,8 @@ function CartItemCard({ item }: { item: CartItem }) {
       <div className="w-[40%] flex gap-5">
         <img className="w-[80px] h-[80px]" src="./login_image.jpg" />
         <div className="h-full space-y-1">
-          <h5 className="text-lg font-semibold">{item.title}</h5>
-          <p className="text-gray-700 text-sm">{item.category}</p>
+          <h5 className="text-lg font-semibold text-primary">{item.title}</h5>
+          <p className="text-foreground/70 text-sm">{item.category}</p>
           <button onClick={()=>removeFromCart(item._id)} className="text-red-600 text-sm">remove</button>
         </div>
       </div>
@@ -23,14 +23,16 @@ function CartItemCard({ item }: { item: CartItem }) {
           onClick={() => subQuantity(item._id)}
           variant={"ghost"}
           size={"icon"}
+          className="text-primary"
         >
           <Minus />
         </Button>
-        <Input type="number" min={0} className="w-[100px]" onChange={(state)=>changeQuantity(item._id,Number(state.currentTarget.value))} value={item.quantity} />
+        <Input type="number" min={0} className="w-[100px] text-primary" onChange={(state)=>changeQuantity(item._id,Number(state.currentTarget.value))} value={item.quantity} />
         <Button
           onClick={() => addQuantity(item._id)}
           variant={"ghost"}
           size={"icon"}
+          className="text-primary"
         >
           <Plus />
         </Button>

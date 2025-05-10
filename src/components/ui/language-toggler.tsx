@@ -25,7 +25,7 @@ export const LanguageSwitch = () => {
   }, []);
 
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center space-x-2 text-primary">
       <Label htmlFor="language-switch">EN</Label>
       <Switch
         id="language-switch"

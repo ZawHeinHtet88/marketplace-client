@@ -33,7 +33,7 @@ export function Banners() {
   };
 
   return (
-    <div className="relative w-full overflow-hidden rounded-2xl bg-gradient-to-r from-[#8B0000] to-[#1C1C1C]  text-white">
+    <div className="relative w-full overflow-hidden rounded-2xl bg-gradient-to-r dark:from-accent from-primary to-secondary  text-white">
       {/* Slide Content */}
       <div
         className="flex transition-transform duration-500"
@@ -48,17 +48,17 @@ export function Banners() {
       <Button
         variant={"ghost"}
         onClick={prevSlide}
-        className="absolute w-[80px] h-[80px] left-[-20px] top-1/2 -translate-y-1/2 md:bg-white rounded-full"
+        className="absolute w-[80px] h-[80px] left-[-20px] top-1/2 -translate-y-1/2 md:bg-background rounded-full"
       >
-        <ChevronLeft className="md:text-red-600 !w-10 !h-10" />
+        <ChevronLeft className="md:text-primary !w-10 !h-10" />
       </Button>
       <Button
         variant="ghost"
         size="icon"
         onClick={nextSlide}
-        className="absolute w-[80px] h-[80px] right-[-20px] top-1/2 -translate-y-1/2 md:bg-white rounded-full"
+        className="absolute w-[80px] h-[80px] right-[-20px] top-1/2 -translate-y-1/2 md:bg-background rounded-full"
       >
-        <ChevronRight className="md:text-red-600 !w-10 !h-10" />
+        <ChevronRight className="md:text-primary !w-10 !h-10" />
       </Button>
     </div>
   );

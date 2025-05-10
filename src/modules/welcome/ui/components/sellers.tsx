@@ -10,7 +10,7 @@ function Sellers() {
           Reliable
           <span className="capitalize text-primary"> Marchants</span>
         </h5>
-        <Link className="flex gap-2 text-primary pb-4" to="">
+        <Link className="flex gap-2 text-primary pb-4" to="/merchants">
           View All <ChevronRight />
         </Link>
       </div>

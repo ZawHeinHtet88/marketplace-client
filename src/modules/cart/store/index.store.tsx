@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { CartItem, Product } from "../type";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -26,7 +27,7 @@ export const useCartStore = create<CartState>()(
           set((state) => ({
             cart: state.cart.map((cartItem) =>
               cartItem._id === item._id
-                ? { ...cartItem, quantity: cartItem.quantity+1 }
+                ? { ...cartItem, quantity: cartItem.quantity + 1 }
                 : cartItem
             ),
           }));
@@ -35,18 +36,20 @@ export const useCartStore = create<CartState>()(
             cart: [...state.cart, { ...item, quantity: 1 }],
           }));
         }
+        toast.success(`Adding ${item.title} Successfully`);
         updateTotal();
       },
       removeFromCart: (id: string) => {
         set((state) => ({
           cart: state.cart.filter((cart) => cart._id !== id),
         }));
+        toast.success(`Remove from Cart`)
         updateTotal();
       },
       addQuantity: (id: string) => {
         set((state) => ({
           cart: state.cart.map((item) =>
-            item._id === id ? { ...item, quantity: item.quantity+1 } : item
+            item._id === id ? { ...item, quantity: item.quantity + 1 } : item
           ),
         }));
         updateTotal();
@@ -102,5 +105,5 @@ function removeFromCartAutomatically() {
   const { cart } = useCartStore.getState();
   const filterdCart = cart.filter((item) => item.quantity > 0);
   useCartStore.setState({ cart: filterdCart });
-  updateTotal()
+  updateTotal();
 }
