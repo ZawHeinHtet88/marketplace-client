@@ -9,6 +9,8 @@ import ProductListPage from "./modules/products/pages/product-list";
 import ProductDetailPage from "./modules/products/pages/product-details";
 import MerchantListPage from "./modules/merchants/pages/merchantList";
 import { Toaster } from "sonner";
+import { AuthGuard } from "./middlewares/auth-guard";
+import SignupPage from "./modules/auth/page/singup";
 
 function App() {
   return (
@@ -17,7 +19,14 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
-            <Route element={<Layout />}>
+            <Route path="/signup" element={<SignupPage />} />
+            <Route
+              element={
+                <AuthGuard>
+                  <Layout />
+                </AuthGuard>
+              }
+            >
               <Route index path="/" element={<WelcomePage />} />
               <Route path="/products" element={<ProductListPage />} />
               <Route path="/products/:id" element={<ProductDetailPage />} />
@@ -28,7 +37,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </Provider>
-      <Toaster/>
+      <Toaster position="top-center" />
     </>
   );
 }

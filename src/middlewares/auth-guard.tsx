@@ -1,18 +1,9 @@
-import { ReactNode, useEffect, useState } from "react";
+import { useAuthStore } from "@/modules/auth/store/index.store";
+import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 
 export const AuthGuard = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<string>();
-  const isLogin = true;
+  const { isAuthenticated } = useAuthStore((state) => state);
 
-  useEffect(
-    function () {
-      setUser("zaw");
-      console.log(user);
-      
-    },
-    [isLogin]
-  );
-
-  return isLogin ? children : <Navigate to={"/login"} />;
+  return isAuthenticated ? children : <Navigate to={"/login"} />;
 };

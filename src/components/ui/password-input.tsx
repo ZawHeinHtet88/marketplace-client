@@ -45,7 +45,7 @@ const PasswordInput = ({
         }}
         placeholder="********"
         type={showPassword ? "text" : "password"}
-        className="pr-10 bg-gray-200 py-5"
+        className="pr-10 bg-gray-200 py-5 text-foreground"
       />
 
       <button
