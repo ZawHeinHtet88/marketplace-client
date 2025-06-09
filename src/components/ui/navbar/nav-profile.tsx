@@ -23,15 +23,15 @@ function Navprofile() {
             <Avatar className="w-10 h-10">
               <AvatarImage src="https://githb.com/shadcn.png" alt="@shadcn" />
               <AvatarFallback className="text-foreground">
-                {user!.email.slice(0, 3)}
+                { user && user!.email.slice(0, 3)}
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
               <h4 className="capitalize text-primary font-semibold">
-                {user!.name}
+                {user && user!.name}
               </h4>
               <h5 className="text-sm text-foreground/70 font-semibold">
-                {user!.email}
+                {user && user!.email}
               </h5>
             </div>
           </div>

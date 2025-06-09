@@ -20,7 +20,7 @@ import { Search, SidebarClose, SidebarOpen } from "lucide-react";
 import { useNewFeedSidebarStore } from "../../store/index.store";
 import { cn } from "@/lib/utils";
 import SellerItemPagination from "./seller-items-pagination";
-import ProductCard from "@/components/ui/product/product-card";
+import ProductCard from "@/modules/products/components/ui/product-card";
 
 function SellerItems() {
   const { isNewFeedOpen, setIsNewFeedOpen } = useNewFeedSidebarStore();

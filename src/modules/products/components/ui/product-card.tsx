@@ -22,40 +22,41 @@ import {
   ViewIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Product } from "../../type";
 
-function ProductCard() {
-  const {addToCart} = useCartStore()
-   const item = {
-    _id : "2",
-    title: "shampoo",
-    category: "furniture",
-    price: 7800,
+function ProductCard({ product }: { product: Product }) {
+  const { addToCart } = useCartStore();
+  const item = {
+    _id: product.id,
+    title: product.name,
+    category: product.category.name,
+    price: product.price,
+    img : product.images[0]
   };
   return (
     <Card className="pb-2">
-      <CardContent className="flex items-center gap-5">
-        <img className="w-[60px] h-[60px]" src="../vite.svg" alt="" />
+      <CardContent className="flex items-center gap-5 h-[100px]">
+        <img className="w-[60px] h-[60px]" src={product.images[0]} alt={product.name} />
         <div className="space-y-2">
-          <CardTitle>Soap Strawberry</CardTitle>
+          <CardTitle className="line-clamp-2">{product.name}</CardTitle>
           <CardDescription className="line-clamp-1">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum
-            reiciendis ducimus fuga consectetur repellat perferendis,
-            consequuntur molestias dignissimos. Commodi iusto consequatur, velit
-            fugiat consequuntur hic deserunt quo optio est sint!
+            <div
+              dangerouslySetInnerHTML={{ __html: product.description }}
+            ></div>
           </CardDescription>
           <span>
-            <Badge variant={"outline"}>Mobile</Badge>
+            <Badge variant={"outline"}>{product.category.name}</Badge>
           </span>
         </div>
       </CardContent>
       <CardFooter className="justify-between pt-3 border-t-2">
         <div className="flex gap-5">
-          <Badge className="bg-green-600 text-foreground">
+          <Badge className="bg-green-600 text-background">
             <DollarSign />
-            3400
+            {product.price}
           </Badge>
-          <Badge className="bg-orange-600 text-foreground">
-            <Box />4
+          <Badge className="bg-orange-600 text-background">
+            <Box />{product.inventory}
           </Badge>
         </div>
         <Popover>
@@ -71,7 +72,7 @@ function ProductCard() {
               </div>
               <Separator />
               <div className="flex gap-2">
-                <Button onClick={()=>addToCart(item)} size={"icon"}>
+                <Button onClick={() => addToCart(item)} size={"icon"}>
                   <ShoppingCart />
                 </Button>
                 <Link to={"/products/34"}>

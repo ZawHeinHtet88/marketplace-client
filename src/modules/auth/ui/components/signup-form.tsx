@@ -216,7 +216,7 @@ export const SignupForm = () => {
               <p className="text-[14px] font-semibold text-foreground">
                 Do you already have an account?
               </p>
-              <Link to={"/signup"} className="text-blue-400 text-[14px]">
+              <Link to={"/login"} className="text-blue-400 text-[14px]">
                 Sign In
               </Link>
             </div>

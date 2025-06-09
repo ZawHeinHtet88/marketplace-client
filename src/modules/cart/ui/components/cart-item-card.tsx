@@ -11,7 +11,7 @@ function CartItemCard({ item }: { item: CartItem }) {
   return (
     <div className="flex gap-10 items-center">
       <div className="w-[40%] flex gap-5">
-        <img className="w-[80px] h-[80px]" src="./login_image.jpg" />
+        <img className="w-[80px] h-[80px]" src={item.img} alt={item.title} />
         <div className="h-full space-y-1">
           <h5 className="text-lg font-semibold text-primary">{item.title}</h5>
           <p className="text-foreground/70 text-sm">{item.category}</p>

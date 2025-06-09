@@ -2,7 +2,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import BreadCrumps from "@/components/ui/breadcrumps";
 import { Button } from "@/components/ui/button";
-import ProductCard from "@/components/ui/product/product-card";
 import { LucideShoppingCart } from "lucide-react";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
@@ -123,10 +122,10 @@ function ProductDetailPage() {
           Related Products
         </h6>
         <div className="grid grid-col-2 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          {/* <ProductCard />
           <ProductCard />
           <ProductCard />
-          <ProductCard />
-          <ProductCard />
+          <ProductCard /> */}
         </div>
       </div>
     </section>

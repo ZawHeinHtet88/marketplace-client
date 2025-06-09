@@ -49,7 +49,7 @@ export const LoginForm = () => {
   };
 
   return (
-    <section className="space-y-5">
+    <section className="space-y-5 w-full">
       <header className="flex items-center">
         <img className="w-[100px] h-[100px]" src="./m-logo.png" />
         <h4 className="text-xl font-semibold capitalize text-primary">
