@@ -11,6 +11,8 @@ import MerchantListPage from "./modules/merchants/pages/merchantList";
 import { Toaster } from "sonner";
 import { AuthGuard } from "./middlewares/auth-guard";
 import SignupPage from "./modules/auth/page/singup";
+import OrderListPage from "./modules/orders/pages/order-list";
+import PaymentSuccessPage from "./modules/cart/pages/payment-success";
 
 function App() {
   return (
@@ -32,6 +34,9 @@ function App() {
               <Route path="/products/:id" element={<ProductDetailPage />} />
               <Route path="/merchants" element={<MerchantListPage />} />
               <Route path="/merchants/:id" element={<MerchantPage />} />
+              <Route path="/orders" element={<OrderListPage />} />
+              <Route path="/payment-success" element={<PaymentSuccessPage />} />
+
               <Route path="*" element={<h3>Not Found</h3>}></Route>
             </Route>
           </Routes>

@@ -21,9 +21,28 @@ import { useNewFeedSidebarStore } from "../../store/index.store";
 import { cn } from "@/lib/utils";
 import SellerItemPagination from "./seller-items-pagination";
 import ProductCard from "@/modules/products/components/ui/product-card";
+import { useGetAllProductsQuery } from "@/modules/products/hooks/queries";
+import { useState } from "react";
+import Pagination from "@/modules/products/components/pagination";
 
 function SellerItems() {
   const { isNewFeedOpen, setIsNewFeedOpen } = useNewFeedSidebarStore();
+
+  const [filters, setFilters] = useState({
+    page: 1,
+    limit: 9,
+  });
+
+  const { data: productData, isLoading } = useGetAllProductsQuery(filters);
+  // Update filters when slider values change
+
+  const handlePageChange = (newPage: number) => {
+    setFilters((prev) => ({
+      ...prev,
+      page: newPage,
+    }));
+  };
+
   return (
     <Card
       className={cn(
@@ -67,11 +86,13 @@ function SellerItems() {
       </CardHeader>
       <Separator />
       <CardContent className="grid grid-cols-1 md:grid-cols-2  lg:grid-rows-2 lg:grid-cols-3 gap-5">
-        <ProductCard />
+        {productData?.data.map((product, index) => (
+          <ProductCard product={product} key={index} />
+        ))}
       </CardContent>
       <Separator />
-      <CardFooter className="">
-        <SellerItemPagination />
+      <CardFooter className="flex justify-center">
+        <Pagination page={filters.page} totalPages={100} onPageChange={handlePageChange}/>
       </CardFooter>
     </Card>
   );
