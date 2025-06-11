@@ -15,15 +15,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "@radix-ui/react-separator";
-import { Search, SidebarClose, SidebarOpen } from "lucide-react";
-import { useNewFeedSidebarStore } from "../../store/index.store";
 import { cn } from "@/lib/utils";
-import SellerItemPagination from "./seller-items-pagination";
+import Pagination from "@/modules/products/components/pagination";
 import ProductCard from "@/modules/products/components/ui/product-card";
 import { useGetAllProductsQuery } from "@/modules/products/hooks/queries";
+import { Separator } from "@radix-ui/react-separator";
+import { Search, SidebarClose, SidebarOpen } from "lucide-react";
 import { useState } from "react";
-import Pagination from "@/modules/products/components/pagination";
+import { useNewFeedSidebarStore } from "../../store/index.store";
 
 function SellerItems() {
   const { isNewFeedOpen, setIsNewFeedOpen } = useNewFeedSidebarStore();

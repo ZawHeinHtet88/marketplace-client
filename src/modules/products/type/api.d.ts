@@ -9,6 +9,6 @@ export interface getAllProductApiResponse {
 export interface getAllProductFilters {
   page: number;
   limit: number;
-  "price[gt]": number;
-  "price[lt]": number;
+  "price[gt]" ?: number;
+  "price[lt]"?: number;
 }
