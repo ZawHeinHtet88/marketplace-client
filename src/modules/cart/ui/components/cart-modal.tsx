@@ -1,4 +1,3 @@
-import { CreditCard, FileText, ShoppingCart, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,23 +13,21 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { useState, useEffect } from "react";
+import { CreditCard, FileText, ShoppingCart, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import {
   useCreateCheckOutSessionMutation,
   useCreateOrderMutation,
 } from "../../hooks/mutations";
 import { useCartStore } from "../../store/index.store";
 import CartContent from "./cart-content";
-import { useNavigate } from "react-router-dom";
 
 function CartModal() {
-  const { cart, totalAmount } = useCartStore((state) => state);
+  const { cart, totalAmount, resetCart } = useCartStore((state) => state);
 
   const [orderCode, setOrderCode] = useState("");
   const [isOrderStarting, setIsOrderStarting] = useState(false);
   const [paymentType, setPaymentType] = useState("");
-
-  const navigate = useNavigate();
 
   const {
     mutateAsync: createOrderMutateAsync,
@@ -41,6 +38,7 @@ function CartModal() {
   const {
     mutateAsync: createCheckoutSessionMutation,
     isPending: isCheckoutPending,
+    isSuccess: isCheckoutSuccess,
   } = useCreateCheckOutSessionMutation();
 
   // ✅ Move state update into useEffect to prevent infinite loop
@@ -48,7 +46,8 @@ function CartModal() {
     if (isSuccess) {
       setIsOrderStarting(true);
     }
-  }, [isSuccess]);
+    if (isCheckoutSuccess) setIsOrderStarting(false);
+  }, [isSuccess, isCheckoutSuccess]);
 
   const handleOrder = async () => {
     const products = cart
@@ -65,7 +64,7 @@ function CartModal() {
     const res = await createCheckoutSessionMutation({ code: orderCode });
 
     if (isSuccess) {
-      navigate(res.url);
+      window.open(res.url, "_blank");
     }
   };
 
@@ -112,9 +111,7 @@ function CartModal() {
 
         {isOrderStarting ? (
           <div className="space-y-4">
-            <Label className="text-base font-medium">
-              Select Payment Type
-            </Label>
+            <Label className="text-base font-medium">Select Payment Type</Label>
             <RadioGroup value={paymentType} onValueChange={setPaymentType}>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div className="relative">
