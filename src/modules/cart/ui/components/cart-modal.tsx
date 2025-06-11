@@ -1,5 +1,4 @@
 import { CreditCard, FileText, ShoppingCart, X } from "lucide-react";
-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   useCreateCheckOutSessionMutation,
   useCreateOrderMutation,
@@ -28,9 +27,7 @@ function CartModal() {
   const { cart, totalAmount } = useCartStore((state) => state);
 
   const [orderCode, setOrderCode] = useState("");
-
   const [isOrderStarting, setIsOrderStarting] = useState(false);
-
   const [paymentType, setPaymentType] = useState("");
 
   const navigate = useNavigate();
@@ -46,6 +43,13 @@ function CartModal() {
     isPending: isCheckoutPending,
   } = useCreateCheckOutSessionMutation();
 
+  // ✅ Move state update into useEffect to prevent infinite loop
+  useEffect(() => {
+    if (isSuccess) {
+      setIsOrderStarting(true);
+    }
+  }, [isSuccess]);
+
   const handleOrder = async () => {
     const products = cart
       .map((item) => `${item.quantity}_${item._id}`)
@@ -58,17 +62,12 @@ function CartModal() {
   };
 
   const handleCheckout = async () => {
-    paymentType;
     const res = await createCheckoutSessionMutation({ code: orderCode });
 
     if (isSuccess) {
       navigate(res.url);
     }
   };
-
-  if (isSuccess) {
-    setIsOrderStarting(true);
-  }
 
   return (
     <Dialog>
@@ -80,7 +79,6 @@ function CartModal() {
               <Badge>{cart.length}</Badge>
             </sup>
           )}
-
           <span
             className={cn(
               "font-semibold text-secondary-foreground",
@@ -92,109 +90,98 @@ function CartModal() {
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-4xl">
-        {/* Customize the close button color (keeps original positioning) */}
         <DialogClose
           className={
-            "text-red-500 hover:text-red-600 " + // Your color changes
-            "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground" // Default classes
+            "text-red-500 hover:text-red-600 " +
+            "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
           }
         >
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>
         </DialogClose>
-        <DialogHeader className="">
+        <DialogHeader>
           <DialogTitle className="flex items-center gap-2 font-semibold text-2xl text-primary">
             <ShoppingCart className="text-green-600 !w-7 !h-7" />
             Cart Items
           </DialogTitle>
           <DialogDescription>
-            {/* Your cart is empty! Ready to find something special? */}
-            Thank you for shopping with us! Review your items below.{" "}
+            Thank you for shopping with us! Review your items below.
           </DialogDescription>
         </DialogHeader>
         <Separator />
 
         {isOrderStarting ? (
-          <div>
-            <div className="space-y-4">
-              <Label className="text-base font-medium">
-                Select Payment Type
-              </Label>
-              <RadioGroup value={paymentType} onValueChange={setPaymentType}>
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <div className="relative">
-                    <RadioGroupItem
-                      value="stripe"
-                      id="stripe"
-                      className="peer sr-only"
-                    />
-                    <Label
-                      htmlFor="stripe"
-                      className={cn(
-                        "flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-gray-200 bg-white p-6 transition-all peer-checked:bg-emerald-50 hover:bg-gray-50",
-                        paymentType === "stripe" && "border-primary"
-                      )}
-                    >
-                      <CreditCard className="mb-3 h-8 w-8 text-gray-400 peer-checked:text-emerald-600" />
-                      <span className="font-medium text-gray-900">Strip</span>
-                      <span className="mt-1 text-center text-sm text-gray-500">
-                        Cash on Internet
-                      </span>
-                    </Label>
-                  </div>
-
-                  <div className="relative">
-                    <RadioGroupItem
-                      value="cashOnDelivery"
-                      id="cashOnDelivery"
-                      className="peer sr-only"
-                    />
-                    <Label
-                      htmlFor="cashOnDelivery"
-                      className={cn(
-                        "flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-gray-200 bg-white p-6 transition-all peer-checked:bg-emerald-50 hover:bg-gray-50",
-                        paymentType === "cashOnDelivery" && "border-primary"
-                      )}
-                    >
-                      <FileText className="mb-3 h-8 w-8 text-gray-400 peer-checked:text-emerald-600" />
-                      <span className="font-medium text-gray-900">
-                        Cash on Delivery
-                      </span>
-                      <span className="mt-1 text-center text-sm text-gray-500">
-                        Cash Product When Product Recieve
-                      </span>
-                    </Label>
-                  </div>
+          <div className="space-y-4">
+            <Label className="text-base font-medium">
+              Select Payment Type
+            </Label>
+            <RadioGroup value={paymentType} onValueChange={setPaymentType}>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div className="relative">
+                  <RadioGroupItem
+                    value="stripe"
+                    id="stripe"
+                    className="peer sr-only"
+                  />
+                  <Label
+                    htmlFor="stripe"
+                    className={cn(
+                      "flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-gray-200 bg-white p-6 transition-all peer-checked:bg-emerald-50 hover:bg-gray-50",
+                      paymentType === "stripe" && "border-primary"
+                    )}
+                  >
+                    <CreditCard className="mb-3 h-8 w-8 text-gray-400 peer-checked:text-emerald-600" />
+                    <span className="font-medium text-gray-900">Stripe</span>
+                    <span className="mt-1 text-center text-sm text-gray-500">
+                      Cash on Internet
+                    </span>
+                  </Label>
                 </div>
-              </RadioGroup>
-            </div>
+                <div className="relative">
+                  <RadioGroupItem
+                    value="cashOnDelivery"
+                    id="cashOnDelivery"
+                    className="peer sr-only"
+                  />
+                  <Label
+                    htmlFor="cashOnDelivery"
+                    className={cn(
+                      "flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-gray-200 bg-white p-6 transition-all peer-checked:bg-emerald-50 hover:bg-gray-50",
+                      paymentType === "cashOnDelivery" && "border-primary"
+                    )}
+                  >
+                    <FileText className="mb-3 h-8 w-8 text-gray-400 peer-checked:text-emerald-600" />
+                    <span className="font-medium text-gray-900">
+                      Cash on Delivery
+                    </span>
+                    <span className="mt-1 text-center text-sm text-gray-500">
+                      Cash Product When Product Receive
+                    </span>
+                  </Label>
+                </div>
+              </div>
+            </RadioGroup>
+          </div>
+        ) : !cart.length ? (
+          <div className="flex flex-col items-center justify-center space-x-2 h-[400px]">
+            <img
+              className="w-[200px] h-[200px]"
+              src="./empty-cart.gif"
+              alt=""
+            />
+            <p className="text-xl font-bold text-primary">
+              Your cart is empty now
+            </p>
           </div>
         ) : (
-          <>
-            {!cart.length ? (
-              <div className="flex flex-col items-center justify-center space-x-2 h-[400px]">
-                <img
-                  className="w-[200px] h-[200px]"
-                  src="./empty-cart.gif"
-                  alt=""
-                />
-                <p className="text-xl font-bold text-primary">
-                  Your cart is empty now
-                </p>
-              </div>
-            ) : (
-              <CartContent />
-            )}
-          </>
+          <CartContent />
         )}
 
         <Separator />
-        <div className=" flex justify-between items-center">
-          <div className="">
-            <p className="text-lg font-semibold text-primary">
-              Total Cost - <span className="text-green-600">{totalAmount}</span>
-            </p>
-          </div>
+        <div className="flex justify-between items-center">
+          <p className="text-lg font-semibold text-primary">
+            Total Cost - <span className="text-green-600">{totalAmount}</span>
+          </p>
           {isOrderStarting ? (
             <Button
               onClick={handleCheckout}
