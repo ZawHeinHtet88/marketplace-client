@@ -10,3 +10,10 @@ export const getAllProducts = async (filters: getAllProductFilters) => {
   });
   return res.data;
 };
+
+export const getAllTypes = async (filters: any) => {
+  const res = await api.get<getAllProductApiResponse>(`/user/types`, {
+    params: filters,
+  });
+  return res.data;
+};

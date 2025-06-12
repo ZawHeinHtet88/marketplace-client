@@ -23,7 +23,7 @@ import { useCartStore } from "../../store/index.store";
 import CartContent from "./cart-content";
 
 function CartModal() {
-  const { cart, totalAmount, resetCart } = useCartStore((state) => state);
+  const { cart, totalAmount } = useCartStore((state) => state);
 
   const [orderCode, setOrderCode] = useState("");
   const [isOrderStarting, setIsOrderStarting] = useState(false);
@@ -64,7 +64,7 @@ function CartModal() {
     const res = await createCheckoutSessionMutation({ code: orderCode });
 
     if (isSuccess) {
-      window.open(res.url, "_blank");
+      window.open(res.url);
     }
   };
 

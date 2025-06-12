@@ -13,3 +13,10 @@ export interface CheckoutSessionApiResponse {
   url: string;
   isSuccess: boolean;
 }
+
+export interface CheckoutSuccessApiResponse {
+  status: string;
+  isSuccess: boolean;
+  orderCode: string;
+  totalAmount: string;
+}

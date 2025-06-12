@@ -5,9 +5,9 @@ import { useCartStore } from "../../store/index.store";
 import { CartItem } from "../../type";
 
 function CartItemCard({ item }: { item: CartItem }) {
-  const { addQuantity ,subQuantity,removeFromCart,changeQuantity} = useCartStore((state) => state);
+  const { addQuantity, subQuantity, removeFromCart, changeQuantity } =
+    useCartStore((state) => state);
 
-  
   return (
     <div className="flex gap-10 items-center">
       <div className="w-[40%] flex gap-5">
@@ -15,7 +15,12 @@ function CartItemCard({ item }: { item: CartItem }) {
         <div className="h-full space-y-1">
           <h5 className="text-lg font-semibold text-primary">{item.title}</h5>
           <p className="text-foreground/70 text-sm">{item.category}</p>
-          <button onClick={()=>removeFromCart(item._id)} className="text-red-600 text-sm">remove</button>
+          <button
+            onClick={() => removeFromCart(item._id)}
+            className="text-red-600 text-sm"
+          >
+            remove
+          </button>
         </div>
       </div>
       <div className="w-[30%] flex ">
@@ -27,7 +32,15 @@ function CartItemCard({ item }: { item: CartItem }) {
         >
           <Minus />
         </Button>
-        <Input type="number" min={0} className="w-[100px] text-primary" onChange={(state)=>changeQuantity(item._id,Number(state.currentTarget.value))} value={item.quantity} />
+        <Input
+          type="number"
+          min={0}
+          className="w-[100px] text-primary"
+          onChange={(state) =>
+            changeQuantity(item._id, Number(state.currentTarget.value))
+          }
+          value={item.quantity}
+        />
         <Button
           onClick={() => addQuantity(item._id)}
           variant={"ghost"}

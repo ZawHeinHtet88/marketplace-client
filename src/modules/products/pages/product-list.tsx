@@ -35,6 +35,9 @@ function ProductListPage() {
     "price[lt]": values[1],
   });
 
+  const { data: productData, isLoading } = useGetAllProductsQuery(filters);
+
+  const numberOfPage = productData?.total && Math.ceil(productData?.total / filters.limit);
   // Update filters when slider values change
   useEffect(() => {
     setFilters((prev) => ({
@@ -51,8 +54,6 @@ function ProductListPage() {
       page: newPage,
     }));
   };
-
-  const { data: productData, isLoading } = useGetAllProductsQuery(filters);
 
   return (
     <section className="flex gap-5 my-10">
@@ -125,7 +126,7 @@ function ProductListPage() {
                 </Button>
                 <Button
                   onClick={() => {
-                    setValues([2,9999999999]);
+                    setValues([2, 9999999999]);
                     setFilters({
                       page: 1,
                       limit: 9,
@@ -159,7 +160,7 @@ function ProductListPage() {
 
                 <Pagination
                   page={filters.page}
-                  totalPages={100}
+                  totalPages={numberOfPage || 1}
                   onPageChange={handlePageChange}
                 />
               </>

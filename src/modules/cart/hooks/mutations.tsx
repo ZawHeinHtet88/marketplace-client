@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { createCheckoutSession, createOrder } from "../api";
+import { checkoutSuccess, createCheckoutSession, createOrder } from "../api";
 
 export const useCreateOrderMutation = () =>
   useMutation({
@@ -9,4 +9,9 @@ export const useCreateOrderMutation = () =>
 export const useCreateCheckOutSessionMutation = () =>
   useMutation({
     mutationFn: createCheckoutSession,
+  });
+
+export const useCheckoutSuccessMutation = () =>
+  useMutation({
+    mutationFn: checkoutSuccess,
   });
