@@ -2,25 +2,15 @@ import { useState } from "react";
 import MerchantCard from "../ui/components/merchant-card";
 import InfiniteScroll from "@/components/ui/infinite-scroll";
 import { Loader2 } from "lucide-react";
-
-interface DummyProductResponse {
-  products: DummyProduct[];
-  total: number;
-  skip: number;
-  limit: number;
-}
-
-interface DummyProduct {
-  id: number;
-  title: string;
-  price: string;
-}
+import { api } from "@/lib/axios";
+import { GetAllMerchantsApiResponse } from "../types/api";
+import { Merchant } from "../types";
 
 function MerchantListPage() {
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [products, setProducts] = useState<DummyProduct[]>([]);
+  const [merchants, setMerchants] = useState<Merchant[]>([]);
 
   const next = async () => {
     setLoading(true);
@@ -29,17 +19,13 @@ function MerchantListPage() {
      * In your app, you can remove this setTimeout.
      **/
     setTimeout(async () => {
-      const res = await fetch(
-        `https://dummyjson.com/products?limit=8&skip=${
-          8 * page
-        }&select=title,price`
-      );
-      const data = (await res.json()) as DummyProductResponse;
-      setProducts((prev) => [...prev, ...data.products]);
+      const res = await api.get(`/user/merchants?limit=6&page=${page}`);
+      const data = (await res.data) as GetAllMerchantsApiResponse;
+      setMerchants((prev) => [...prev, ...data.data]);
       setPage((prev) => prev + 1);
 
       // Usually your response will tell you if there is no more data.
-      if (data.products.length < 3) {
+      if (data.total < 1000) {
         setHasMore(false);
       }
       setLoading(false);
@@ -49,8 +35,8 @@ function MerchantListPage() {
     <section className="my-10">
       <h4 className="text-xl text-primary underline mb-5">Merchants</h4>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-        {products.map((products, index) => (
-          <MerchantCard key={index} />
+        {merchants.map((merchant, index) => (
+          <MerchantCard merchant={merchant} key={index} />
         ))}
       </div>
       <InfiniteScroll

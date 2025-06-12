@@ -12,6 +12,8 @@ import { BaggageClaim, CheckCircle, Download, Loader, Mail } from "lucide-react"
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useCheckoutSuccessMutation } from "../hooks/mutations";
+import { useCartStore } from "../store/index.store";
+import { toast } from "sonner";
 
 interface OrderData {
   transcation_id: string;
@@ -23,6 +25,7 @@ function PaymentSuccessPage() {
   const [orderData, setOrderData] = useState<OrderData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const {resetCart} =useCartStore(state=>state)
 
   const session_id = searchParams.get("session_id");
   const { mutateAsync } = useCheckoutSuccessMutation();
@@ -43,6 +46,8 @@ function PaymentSuccessPage() {
             transcation_id: res.orderCode,
             total_amount: res.totalAmount,
           });
+          resetCart()
+          toast.success("Order Successfully")
         } else {
           setError("Failed to process payment");
         }

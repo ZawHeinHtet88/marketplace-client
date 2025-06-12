@@ -5,19 +5,21 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-function MerchantCard() {
+import { Merchant } from "../../types";
+import { ShipIcon } from "lucide-react";
+function MerchantCard({ merchant }: { merchant: Merchant }) {
   return (
-    <Link to={"/merchants/34"}>
-      <Card className="border-primary shadow p-0 pb-5 overflow-hidden">
+    <Link to={`/merchants/${merchant._id}`}>
+      <Card className="border-primary shadopw p-0 pb-5 overflow-hidden">
         <img
-          className="rounded hover:scale-110 transition-all duration-100 ease-in-out"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTffXp7NevzYT7o1-2_Ww6rMZQsoQVfu2W1PA&s"
-          alt=""
-        />
+          className="h-[200px] w-full object-cover rounded hover:scale-110 transition-all duration-100 ease-in-out"
+          src={merchant.logo}
+          alt={merchant.businessName}
+        /> 
 
         <CardContent>
-          <CardTitle className="mb-2 font-semibold text-primary">
-            Myo Ma Quatility Clothing
+          <CardTitle className="mb-2 font-semibold text-primary flex items-center gap-2">
+           <ShipIcon/> {merchant.businessName}
           </CardTitle>
           <CardDescription>Yone Pote,Hmawbi, Yangon</CardDescription>
         </CardContent>

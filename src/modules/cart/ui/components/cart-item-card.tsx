@@ -35,6 +35,7 @@ function CartItemCard({ item }: { item: CartItem }) {
         <Input
           type="number"
           min={0}
+          disabled
           className="w-[100px] text-primary"
           onChange={(state) =>
             changeQuantity(item._id, Number(state.currentTarget.value))

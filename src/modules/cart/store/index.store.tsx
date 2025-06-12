@@ -43,14 +43,18 @@ export const useCartStore = create<CartState>()(
         set((state) => ({
           cart: state.cart.filter((cart) => cart._id !== id),
         }));
-        toast.success(`Remove from Cart`)
+        toast.success(`Remove from Cart`);
         updateTotal();
       },
       addQuantity: (id: string) => {
         set((state) => ({
-          cart: state.cart.map((item) =>
-            item._id === id ? { ...item, quantity: item.quantity + 1 } : item
-          ),
+          cart: state.cart.map((item) => {
+            if(item._id === id && item.quantity >= 20) {
+              toast.warning("You can add only 20 quantity per product.")
+              return item
+            }
+            return item._id === id ? { ...item, quantity: item.quantity + 1 } : item;
+          }),
         }));
         updateTotal();
       },
@@ -87,6 +91,7 @@ export const useCartStore = create<CartState>()(
       resetCart: () =>
         set(() => ({
           cart: [],
+          totalAmount : 0
         })),
     }),
     {
