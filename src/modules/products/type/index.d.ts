@@ -30,10 +30,10 @@ export interface Product {
   shipping: number;
   status: string;
   cashOnDelivery: boolean;
-  merchant: Merchant
+  merchant: Merchant;
   createdAt: string;
   updatedAt: string;
-  id: string
+  id: string;
 }
 
 export interface Merchant {
@@ -61,4 +61,10 @@ export interface Merchant {
   createdAt: string;
   updatedAt: string;
   id: string;
+}
+
+export interface Type {
+  _id: string;
+  name: string;
+  image : string;
 }

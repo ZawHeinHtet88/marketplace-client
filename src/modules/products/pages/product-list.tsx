@@ -23,7 +23,7 @@ import { useEffect, useState } from "react";
 import FilterModal from "../components/filter-modal";
 import Pagination from "../components/pagination";
 import Skeletons from "../components/skeletons";
-import { useGetAllProductsQuery } from "../hooks/queries";
+import { useGetAllProductsQuery, useGetAllTypesQuery } from "../hooks/queries";
 
 function ProductListPage() {
   const [values, setValues] = useState<number[]>([2, 4534534]);
@@ -36,6 +36,8 @@ function ProductListPage() {
   });
 
   const { data: productData, isLoading } = useGetAllProductsQuery(filters);
+
+  const {data:types} = useGetAllTypesQuery()
 
   const numberOfPage = productData?.total && Math.ceil(productData?.total / filters.limit);
   // Update filters when slider values change
@@ -88,6 +90,32 @@ function ProductListPage() {
                 max={4534534}
                 step={1}
               />{" "}
+            </div>
+             <div className="space-y-3">
+              <h5 className="text-primary font-semibold">Filter By Types</h5>
+              <div>
+                <Select onValueChange={(value) => {setFilters((prev) => ({
+                    ...prev,
+                    type: value,
+                    page: 1, // Reset to first page when filters change
+                  }))}}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {
+                        types?.data.map((type) => (
+                          <SelectItem key={type._id} value={type._id}>
+                            {type.name}
+                          </SelectItem>
+                        ))
+                      }
+                   
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <div className="space-y-3">
               <h5 className="text-primary font-semibold">Filter By Category</h5>

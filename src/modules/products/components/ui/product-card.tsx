@@ -75,7 +75,7 @@ function ProductCard({ product }: { product: Product }) {
                 <Button onClick={() => addToCart(item)} size={"icon"}>
                   <ShoppingCart />
                 </Button>
-                <Link to={"/products/34"}>
+                <Link to={"/products/"+product.id}>
                   <Button size={"icon"} className="bg-green-600">
                     <ViewIcon />
                   </Button>

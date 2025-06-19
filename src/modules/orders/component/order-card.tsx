@@ -2,7 +2,7 @@ import { Order } from "../types";
 
 function OrderCard({ order }: { order: Order }) {
   return (
-    <div className="rounded-t-2xl p-5 flex justify-between items-center border-b ">
+    <div className="rounded-t-2xl p-5 flex justify-between items-center ">
       <div className="">
         <div className="mb-4">
           <h4 className="text-primary text-lg font-semibold">{order.code}</h4>

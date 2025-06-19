@@ -2,6 +2,8 @@ import { api } from "@/lib/axios";
 import {
   getAllProductApiResponse,
   getAllProductFilters,
+  getAllTypesApiResponse,
+  SingleProductApiResponse,
 } from "./../type/api.d";
 
 export const getAllProducts = async (filters: getAllProductFilters) => {
@@ -11,9 +13,12 @@ export const getAllProducts = async (filters: getAllProductFilters) => {
   return res.data;
 };
 
-export const getAllTypes = async (filters: any) => {
-  const res = await api.get<getAllProductApiResponse>(`/user/types`, {
-    params: filters,
-  });
+export const getAllTypes = async () => {
+  const res = await api.get<getAllTypesApiResponse>(`/user/types`);
   return res.data;
 };
+
+export const getProduct = async (id: string) => {
+  const res = await api.get<SingleProductApiResponse>(`/user/products/${id}`);
+  return res.data;
+}
