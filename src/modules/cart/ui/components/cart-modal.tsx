@@ -64,7 +64,7 @@ function CartModal() {
     const res = await createCheckoutSessionMutation({ code: orderCode });
 
     if (isSuccess) {
-      window.open(res.url);
+      window.location.href = res.url;
     }
   };
 

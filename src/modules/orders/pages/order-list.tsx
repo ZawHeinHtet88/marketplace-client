@@ -38,7 +38,7 @@ function OrderListPage() {
       <header className="mb-5">
         <h5 className="text-2xl text-primary font-bold">My Orders</h5>
       </header>
-      <div className="shadow-lg rounded-2xl w-full">
+      <div className="rounded-2xl w-full">
         {orders.map((order, index) => (
           <OrderCard key={index} order={order} />
         ))}

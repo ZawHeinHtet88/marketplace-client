@@ -13,6 +13,7 @@ import { AuthGuard } from "./middlewares/auth-guard";
 import SignupPage from "./modules/auth/page/singup";
 import OrderListPage from "./modules/orders/pages/order-list";
 import PaymentSuccessPage from "./modules/cart/pages/payment-success";
+import OrderDetails from "./modules/orders/pages/order-details";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
               <Route path="/merchants" element={<MerchantListPage />} />
               <Route path="/merchants/:id" element={<MerchantPage />} />
               <Route path="/orders" element={<OrderListPage />} />
+              <Route path="/orders/:id" element={<OrderDetails />} />
               <Route path="/payment-success" element={<PaymentSuccessPage />} />
 
               <Route path="*" element={<h3>Not Found</h3>}></Route>

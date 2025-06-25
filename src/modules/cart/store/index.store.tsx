@@ -23,20 +23,28 @@ export const useCartStore = create<CartState>()(
         const isExistItem = get().cart.some(
           (cartItem) => cartItem._id === item._id
         );
+
         if (isExistItem) {
           set((state) => ({
-            cart: state.cart.map((cartItem) =>
-              cartItem._id === item._id
+            cart: state.cart.map((cartItem) => {
+              if (cartItem.quantity >= 20) {
+                toast.warning("You can add only 20 quantity per product.");
+
+                return cartItem;
+              }
+              toast.success(`Adding ${item.title} Successfully`);
+              return cartItem._id === item._id
                 ? { ...cartItem, quantity: cartItem.quantity + 1 }
-                : cartItem
-            ),
+                : cartItem;
+            }),
           }));
         } else {
+          toast.success(`Adding ${item.title} Successfully`);
           set((state) => ({
             cart: [...state.cart, { ...item, quantity: 1 }],
           }));
         }
-        toast.success(`Adding ${item.title} Successfully`);
+
         updateTotal();
       },
       removeFromCart: (id: string) => {
@@ -49,11 +57,13 @@ export const useCartStore = create<CartState>()(
       addQuantity: (id: string) => {
         set((state) => ({
           cart: state.cart.map((item) => {
-            if(item._id === id && item.quantity >= 20) {
-              toast.warning("You can add only 20 quantity per product.")
-              return item
+            if (item._id === id && item.quantity >= 20) {
+              toast.warning("You can add only 20 quantity per product.");
+              return item;
             }
-            return item._id === id ? { ...item, quantity: item.quantity + 1 } : item;
+            return item._id === id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item;
           }),
         }));
         updateTotal();
@@ -91,7 +101,7 @@ export const useCartStore = create<CartState>()(
       resetCart: () =>
         set(() => ({
           cart: [],
-          totalAmount : 0
+          totalAmount: 0,
         })),
     }),
     {
