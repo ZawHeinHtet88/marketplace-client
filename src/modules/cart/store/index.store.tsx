@@ -20,11 +20,12 @@ export const useCartStore = create<CartState>()(
       cart: [],
       totalAmount: 0,
       addToCart: (item: Product) => {
-        const isExistItem = get().cart.some(
-          (cartItem) => cartItem._id === item._id
-        );
-
-        if (isExistItem) {
+        const existingItem = get().cart.find((cartItem) => cartItem._id === item._id);
+        if (existingItem) {
+          if (existingItem.quantity >= 20) {
+            toast.warning("You can add only 20 quantity per product.");
+            return;
+          }
           set((state) => ({
             cart: state.cart.map((cartItem) => {
               if (cartItem.quantity >= 20) {
@@ -73,9 +74,9 @@ export const useCartStore = create<CartState>()(
           cart: state.cart.map((item) =>
             item._id === id
               ? {
-                  ...item,
-                  quantity: item.quantity > 1 ? item.quantity - 1 : 1,
-                }
+                ...item,
+                quantity: item.quantity > 1 ? item.quantity - 1 : 1,
+              }
               : item
           ),
         }));

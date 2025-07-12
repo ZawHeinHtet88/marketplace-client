@@ -21,7 +21,7 @@ function MerchantCard({ merchant }: { merchant: Merchant }) {
           <CardTitle className="mb-2 font-semibold text-primary flex items-center gap-2">
            <ShipIcon/> {merchant.businessName}
           </CardTitle>
-          <CardDescription>Yone Pote,Hmawbi, Yangon</CardDescription>
+          <CardDescription>{merchant.address.full}</CardDescription>
         </CardContent>
       </Card>
     </Link>

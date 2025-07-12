@@ -16,6 +16,7 @@ function LocalItemCard() {
     title: "soap",
     category: "furniture",
     price: 400,
+    img: "./m-logo.png",
   };
   return (
     <Card className="pt-0 pb-5 hover:shadow-xl transition-all duration-700 border-card">

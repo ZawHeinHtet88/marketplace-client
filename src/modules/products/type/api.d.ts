@@ -1,12 +1,11 @@
-import { get } from "http";
 import { Product, Type } from ".";
-import { type } from './../../../components/ui/chart';
 
 export interface getAllProductApiResponse {
   status: string;
   results: number;
   total: number;
   data: Product[];
+  merchant?: string
 }
 
 export interface getAllProductFilters {
@@ -19,9 +18,9 @@ export interface getAllProductFilters {
 }
 
 export interface SingleProductApiResponse {
-  status: string; 
+  status: string;
   data: {
-    data : Product
+    data: Product
   };
 }
 

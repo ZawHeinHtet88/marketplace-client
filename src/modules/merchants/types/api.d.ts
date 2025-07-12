@@ -7,3 +7,11 @@ export interface GetAllMerchantsApiResponse {
   data: Merchant[];
   isSuccess: boolean;
 }
+
+export interface GetMerchantApiResponse {
+  status : string;
+  data:{  
+    data : Merchant
+  }
+  isSuccess : true
+}

@@ -12,6 +12,7 @@ function MerchantListPage() {
   const [hasMore, setHasMore] = useState(true);
   const [merchants, setMerchants] = useState<Merchant[]>([]);
 
+
   const next = async () => {
     setLoading(true);
     /**
@@ -19,13 +20,14 @@ function MerchantListPage() {
      * In your app, you can remove this setTimeout.
      **/
     setTimeout(async () => {
-      const res = await api.get(`/user/merchants?limit=6&page=${page}`);
+      const res = await api.get(`/user/merchants?limit=8&page=${page}`);
       const data = (await res.data) as GetAllMerchantsApiResponse;
       setMerchants((prev) => [...prev, ...data.data]);
       setPage((prev) => prev + 1);
+      const numberOfPage = data?.total && Math.ceil(data?.total / 8);
 
       // Usually your response will tell you if there is no more data.
-      if (data.total < 1000) {
+      if (page === numberOfPage) {
         setHasMore(false);
       }
       setLoading(false);
@@ -43,7 +45,7 @@ function MerchantListPage() {
         hasMore={hasMore}
         isLoading={loading}
         next={next}
-        threshold={1}
+        threshold={100}
       >
         {hasMore && (
           <div className="h-[500px] flex items-center justify-center">

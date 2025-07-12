@@ -25,7 +25,7 @@ function PaymentSuccessPage() {
   const [orderData, setOrderData] = useState<OrderData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const {resetCart} =useCartStore(state=>state)
+  const { resetCart } = useCartStore(state => state)
 
   const session_id = searchParams.get("session_id");
   const { mutateAsync } = useCheckoutSuccessMutation();
@@ -40,7 +40,7 @@ function PaymentSuccessPage() {
         }
 
         const res = await mutateAsync(session_id);
-        
+
         if (res.isSuccess) {
           setOrderData({
             transcation_id: res.orderCode,
@@ -53,13 +53,15 @@ function PaymentSuccessPage() {
         }
       } catch (err) {
         setError("An error occurred while processing your payment");
+        console.log(err);
+
       } finally {
         setIsLoading(false);
       }
     }
 
     handleOrderMutation();
-  }, [session_id, mutateAsync]);
+  }, [session_id, mutateAsync, resetCart]);
 
   if (isLoading) {
     return (

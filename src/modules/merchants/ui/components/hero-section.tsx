@@ -5,23 +5,36 @@ import { Separator } from "@/components/ui/separator";
 import { Mail } from "lucide-react";
 import SellerStat from "./seller-stat";
 import { PhotoProvider, PhotoView } from "react-photo-view";
+import { useParams } from "react-router-dom";
+import { useGetMerchantQuery } from "../../hooks/queries";
+import { useMemo } from "react";
 
 export const HeroSection = () => {
+  const { id } = useParams();
+
+  const { data, isLoading } = useGetMerchantQuery(id || "")
+
+  const merchant = useMemo(() => {
+    return data?.data.data;
+  }, [data?.data.data]);
+
+  if (isLoading) return "Loading"
   return (
     <Card className="">
       <CardContent className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <PhotoProvider>
-            <PhotoView src="../login_image.jpg">
+            <PhotoView src={merchant?.logo}>
               <Avatar className="w-[60px] h-[60px] hover:cursor-pointer">
-                <AvatarImage src="../login_image.jpg" alt="@shadcn" />
+                <AvatarImage src={merchant?.logo} alt="@shadcn" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </PhotoView>
           </PhotoProvider>
           <div>
-            <h3 className="text-xl font-semibold">Su Nay Chi</h3>
-            <span className="text-green-600">last active 1 min ago</span>
+            <h3 className="text-xl font-semibold">{merchant?.businessName}</h3>
+            <span className="text-green-600">Address : {merchant?.address.full}</span>
+            <p>Phone : {merchant?.phone}</p>
           </div>
         </div>
         <div>

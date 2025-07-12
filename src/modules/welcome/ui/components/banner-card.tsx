@@ -16,7 +16,7 @@ const slides = [
     // Add more slides if needed
   ];
   
-function BannerCard({slide,current}:{slide:any,current:number}) {
+function BannerCard({slide,current}:{slide:{highlight:string,discount:string},current:number}) {
   return (
     <div
       className="w-full flex-shrink-0 px-10 md:px-30 flex justify-between items-center min-h-[300px]"
