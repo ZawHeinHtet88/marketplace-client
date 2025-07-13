@@ -34,7 +34,9 @@ export interface Product {
   createdAt: string;
   updatedAt: string;
   id: string;
+  relatedProducts : this[]
 }
+
 
 export interface Merchant {
   address: {

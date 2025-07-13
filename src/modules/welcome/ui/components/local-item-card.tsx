@@ -27,8 +27,8 @@ function LocalItemCard({product}:{product:FeaturedProduct}) {
       <CardContent className="space-y-2">
         <CardTitle className="text-lg font-bold line-clamp-2">{product.name}</CardTitle>
         <CardTitle className="flex items-center gap-2">
-          <img className="w-4 h-4"  alt="" />
-          <p className="text-accent-foreground">{product.category}</p>
+          <img className="w-4 h-4"  alt={product.merchant.logo} />
+          <p className="text-accent-foreground line-clamp-1">{product.merchant.businessName}</p>
         </CardTitle>
       </CardContent>
       <CardFooter className="justify-between">

@@ -52,6 +52,7 @@ function NavSearch() {
           if (e.key === "Enter") {
             e.preventDefault();
             handleNavigate(inputValue);
+            setShowSuggestions(false)
           }
         }}
         ref={inputRef}

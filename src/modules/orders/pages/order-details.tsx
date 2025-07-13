@@ -1,5 +1,5 @@
-import { useParams } from "react-router-dom";
-import { useGetOrderQuery } from "../hooks/queries";
+import BreadCrumps from "@/components/ui/breadcrumps";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -8,12 +8,33 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useCreateCheckOutSessionMutation } from "@/modules/cart/hooks/mutations";
 import { formatDate } from "@/utils/format-date";
-import BreadCrumps from "@/components/ui/breadcrumps";
+import { DollarSign } from "lucide-react";
+import { useParams } from "react-router-dom";
+import { toast } from "sonner";
+import { useGetOrderQuery } from "../hooks/queries";
 
 function OrderDetails() {
   const { id } = useParams<{ id: string }>();
 
+  const {
+    mutateAsync: createCheckoutSessionMutation,
+    isPending: isCheckoutPending,
+  } = useCreateCheckOutSessionMutation();
+
+
+  const handleCheckout = async (orderId: string) => {
+
+    const res = await createCheckoutSessionMutation({ code: orderId })
+
+    if (res.isSuccess) {
+      window.location.href = res.url;
+    } else {
+      toast.error("Can't checkout")
+    }
+
+  }
   const { data, isLoading } = useGetOrderQuery(id!);
 
   if (isLoading) {
@@ -50,6 +71,7 @@ function OrderDetails() {
               <TableCell>Status</TableCell>
               <TableCell>Is Delivered</TableCell>
               <TableCell>Created At</TableCell>
+              <TableCell>Action</TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -74,12 +96,19 @@ function OrderDetails() {
                   {item.isDelivered ? "Yes" : "No"}{" "}
                 </TableCell>
                 <TableCell>{formatDate(item.createdAt)}</TableCell>
+                <TableCell>
+                  {
+                    item.status === "pending" ?
+                      <Button onClick={() => handleCheckout(item.code)} disabled={isCheckoutPending }><DollarSign />Cash</Button> : "-"
+                  }
+                </TableCell>
+
               </TableRow>
             ))}
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell colSpan={9}>Total</TableCell>
+              <TableCell colSpan={10}>Total</TableCell>
               <TableCell className="text-right">{data?.amount} MMK</TableCell>
             </TableRow>
           </TableFooter>

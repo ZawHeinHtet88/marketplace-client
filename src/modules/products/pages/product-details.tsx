@@ -8,6 +8,7 @@ import "react-photo-view/dist/react-photo-view.css";
 import { useGetProductQuery } from "../hooks/queries";
 import { useParams } from "react-router-dom";
 import { useCartStore } from "@/modules/cart/store/index.store";
+import ProductCard from "../components/ui/product-card";
 
 function ProductDetailPage() {
 
@@ -17,7 +18,7 @@ function ProductDetailPage() {
   
   const { data: productData, isLoading } = useGetProductQuery(id || "");
 
-  const product = productData?.data.data;
+  const product = productData?.product;
 
    const item = {
     _id: product?.id ?? "",
@@ -108,10 +109,11 @@ function ProductDetailPage() {
           Related Products
         </h6>
         <div className="grid grid-col-2 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          {product?.relatedProducts.map(product=><ProductCard product={product}/>)}
           {/* <ProductCard />
           <ProductCard />
           <ProductCard />
-          <ProductCard /> */}
+          // <ProductCard /> */}
         </div>
       </div>
     </section>

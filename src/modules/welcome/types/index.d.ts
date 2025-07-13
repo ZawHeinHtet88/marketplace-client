@@ -16,7 +16,10 @@ export interface FeaturedProduct {
     "status": number,
     "isFeatured": boolean,
     "cashOnDelivery": boolean,
-    "merchant": string,
+    "merchant": {
+        businessName : string;
+        logo : string
+    },
     "createdAt": string,
     "updatedAt": string,
     "id": string

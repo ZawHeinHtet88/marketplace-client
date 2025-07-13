@@ -18,10 +18,8 @@ export interface getAllProductFilters {
 }
 
 export interface SingleProductApiResponse {
-  status: string;
-  data: {
-    data: Product
-  };
+  message: string;
+  product:Product
 }
 
 export interface getAllTypesApiResponse {
