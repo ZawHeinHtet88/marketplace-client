@@ -8,31 +8,32 @@ import {
 } from "@/components/ui/card";
 import { useCartStore } from "@/modules/cart/store/index.store";
 import { ShoppingCart } from "lucide-react";
+import { FeaturedProduct } from "../../types";
 
-function LocalItemCard() {
+function LocalItemCard({product}:{product:FeaturedProduct}) {
   const { addToCart } = useCartStore((state) => state);
   const item = {
-    _id : "1",
-    title: "soap",
-    category: "furniture",
-    price: 400,
-    img: "./m-logo.png",
+    _id : product.id,
+    title: product.name,
+    category: product.category,
+    price: product.price,
+    img: product.images[0],
   };
   return (
     <Card className="pt-0 pb-5 hover:shadow-xl transition-all duration-700 border-card">
       <div className="bg-secondary flex items-center justify-center rounded-xl">
-        <img className="h-[200px]" src="./m-logo.png" alt="logo" />
+        <img className="h-[200px] w-full object-cover" src={product.images[0]} alt="logo" />
       </div>
       <CardContent className="space-y-2">
-        <CardTitle className="text-lg font-bold">{item.title}</CardTitle>
+        <CardTitle className="text-lg font-bold line-clamp-2">{product.name}</CardTitle>
         <CardTitle className="flex items-center gap-2">
-          <img className="w-4 h-4" src="./vite.svg" alt="" />
-          <p className="text-accent-foreground">{item.category}</p>
+          <img className="w-4 h-4"  alt="" />
+          <p className="text-accent-foreground">{product.category}</p>
         </CardTitle>
       </CardContent>
       <CardFooter className="justify-between">
         <CardDescription className="text-lg font-extrabold text-green-600">
-          {item.price} kyats
+          {product.price} kyats
         </CardDescription>
         <Button onClick={() => addToCart(item)} className="bg-primary">
           <ShoppingCart />

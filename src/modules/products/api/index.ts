@@ -22,3 +22,7 @@ export const getProduct = async (id: string) => {
   const res = await api.get<SingleProductApiResponse>(`/user/products/${id}`);
   return res.data;
 }
+
+// export const getRelatedProduct = async() => {
+//   const res = await api.get
+// }

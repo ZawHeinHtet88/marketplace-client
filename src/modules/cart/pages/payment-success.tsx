@@ -30,8 +30,13 @@ function PaymentSuccessPage() {
   const session_id = searchParams.get("session_id");
   const { mutateAsync } = useCheckoutSuccessMutation();
 
-  useEffect(function () {
+  useEffect(() => {
+    let hasFetched = false;
+
     async function handleOrderMutation() {
+      if (hasFetched) return; // avoid double call
+      hasFetched = true;
+
       try {
         if (!session_id) {
           setError("No session ID found");
@@ -46,22 +51,21 @@ function PaymentSuccessPage() {
             transcation_id: res.orderCode,
             total_amount: res.totalAmount,
           });
-          resetCart()
-          toast.success("Order Successfully")
+          resetCart();
+          toast.success("Order Successfully");
         } else {
           setError("Failed to process payment");
         }
       } catch (err) {
         setError("An error occurred while processing your payment");
-        console.log(err);
-
+        console.error(err);
       } finally {
         setIsLoading(false);
       }
     }
 
     handleOrderMutation();
-  }, [session_id, mutateAsync, resetCart]);
+  }, [session_id]);
 
   if (isLoading) {
     return (

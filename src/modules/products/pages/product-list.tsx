@@ -24,20 +24,34 @@ import FilterModal from "../components/filter-modal";
 import Pagination from "../components/pagination";
 import Skeletons from "../components/skeletons";
 import { useGetAllProductsQuery, useGetAllTypesQuery } from "../hooks/queries";
+import { useLocation } from "react-router-dom";
 
 function ProductListPage() {
   const [values, setValues] = useState<number[]>([2, 4534534]);
+
+  const location = useLocation();
+
+  const { type } = location.state || {}
+
+  const [selectedType, setSelectedType] = useState("")
 
   const [filters, setFilters] = useState({
     page: 1,
     limit: 9,
     "price[gt]": values[0],
     "price[lt]": values[1],
+    type: selectedType
   });
 
   const { data: productData, isLoading } = useGetAllProductsQuery(filters);
 
-  const {data:types} = useGetAllTypesQuery()
+  const { data: types } = useGetAllTypesQuery()
+
+  useEffect(() => {
+    if (type) {
+      setSelectedType(type)
+    }
+  }, [type, setFilters])
 
   const numberOfPage = productData?.total && Math.ceil(productData?.total / filters.limit);
   // Update filters when slider values change
@@ -46,9 +60,10 @@ function ProductListPage() {
       ...prev,
       "price[gt]": values[0],
       "price[lt]": values[1],
+      type: selectedType,
       page: 1, // Reset to first page when filters change
     }));
-  }, [values]);
+  }, [values, selectedType]);
 
   const handlePageChange = (newPage: number) => {
     setFilters((prev) => ({
@@ -91,14 +106,12 @@ function ProductListPage() {
                 step={1}
               />{" "}
             </div>
-             <div className="space-y-3">
+            <div className="space-y-3">
               <h5 className="text-primary font-semibold">Filter By Types</h5>
               <div>
-                <Select onValueChange={(value) => {setFilters((prev) => ({
-                    ...prev,
-                    type: value,
-                    page: 1, // Reset to first page when filters change
-                  }))}}>
+                <Select value={selectedType} onValueChange={(value) => {
+                  setSelectedType(value)
+                }}>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select a Type" />
                   </SelectTrigger>
@@ -111,7 +124,7 @@ function ProductListPage() {
                           </SelectItem>
                         ))
                       }
-                   
+
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -160,7 +173,9 @@ function ProductListPage() {
                       limit: 9,
                       "price[gt]": 2,
                       "price[lt]": 9999999999,
+                      type: ""
                     });
+                    setSelectedType("")
                   }}
                   size={"icon"}
                 >

@@ -1,9 +1,13 @@
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import LocalItemCard from "./local-item-card";
+import { useGetAllFeaturedProductQuery } from "../../hooks/queries";
 
 function LocalItems() {
-  
+  const { data, isLoading } = useGetAllFeaturedProductQuery();
+
+  if (isLoading) return "Loading";
+
   return (
     <section className="space-y-10">
       <div className="flex items-center justify-between  mb-5 border-b-1">
@@ -11,17 +15,17 @@ function LocalItems() {
           Grab the best Deal on{" "}
           <span className="capitalize text-primary">local items</span>
         </h5>
-        <Link className="flex gap-2 text-primary pb-4" to="">
+        <Link to="/products" className="flex gap-2 text-primary pb-4">
           View All <ChevronRight />
         </Link>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5">
-        <LocalItemCard/>
-        <LocalItemCard/>
-        <LocalItemCard/>
-        <LocalItemCard/>
-        <LocalItemCard/>
+        {
+          data?.products.map(product => <LocalItemCard key={product.id} product={product} />
+          )
+        }
+
       </div>
     </section>
   );

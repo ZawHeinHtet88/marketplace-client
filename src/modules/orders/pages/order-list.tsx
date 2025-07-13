@@ -19,7 +19,7 @@ function OrderListPage() {
      * In your app, you can remove this setTimeout.
      **/
     setTimeout(async () => {
-      const res = await api.get(`/user/orders?limit=5&page=${page}`);
+      const res = await api.get(`/user/orders?limit=5&page=${page}&sort=createdAt`);
       const data = (await res.data) as GetAllOrdersApiResponse;
       setOrders((prev) => [...prev, ...data.orders]);
       setPage((prev) => prev + 1);
