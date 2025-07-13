@@ -30,3 +30,9 @@ export interface getAllTypesApiResponse {
   total: number;
   data: Type[];
 }
+
+export interface SearchProductsApiResponse{
+  message : string,
+  isSuccess : boolean,
+  product : {name:string}[]
+}

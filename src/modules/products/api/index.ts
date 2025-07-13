@@ -3,6 +3,7 @@ import {
   getAllProductApiResponse,
   getAllProductFilters,
   getAllTypesApiResponse,
+  SearchProductsApiResponse,
   SingleProductApiResponse,
 } from "./../type/api.d";
 
@@ -26,3 +27,8 @@ export const getProduct = async (id: string) => {
 // export const getRelatedProduct = async() => {
 //   const res = await api.get
 // }
+
+export const searchProduct = async (search: string) => {
+  const res = await api.get<SearchProductsApiResponse>("/user/products/search", { params: {q:search} });
+  return res.data
+}

@@ -31,7 +31,7 @@ function ProductListPage() {
 
   const location = useLocation();
 
-  const { type } = location.state || {}
+  const { type ,search} = location.state || {}
 
   const [selectedType, setSelectedType] = useState("")
 
@@ -40,6 +40,7 @@ function ProductListPage() {
     limit: 9,
     "price[gt]": values[0],
     "price[lt]": values[1],
+    "name[regex]": "",
     type: selectedType
   });
 
@@ -61,9 +62,10 @@ function ProductListPage() {
       "price[gt]": values[0],
       "price[lt]": values[1],
       type: selectedType,
-      page: 1, // Reset to first page when filters change
+      "name[regex]": search,
+       page: 1, 
     }));
-  }, [values, selectedType]);
+  }, [values, selectedType,search]);
 
   const handlePageChange = (newPage: number) => {
     setFilters((prev) => ({
@@ -173,8 +175,10 @@ function ProductListPage() {
                       limit: 9,
                       "price[gt]": 2,
                       "price[lt]": 9999999999,
-                      type: ""
+                      type: "",
+                      "name[regex]" : ""
                     });
+                    location.state.search = ""
                     setSelectedType("")
                   }}
                   size={"icon"}
