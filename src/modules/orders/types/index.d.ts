@@ -10,6 +10,8 @@ export interface Order {
   merchant: string;
   isDelivered: boolean;
   id: string;
+  image : string;
+  createdAt:string
 }
 
 export interface PlacedOrder {

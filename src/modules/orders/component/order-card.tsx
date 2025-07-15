@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import { Order } from "../types";
+import { formatDate } from "@/utils/format-date";
 
 function OrderCard({ order }: { order: Order }) {
   return (
     <Link to={`/orders/${order.code}`}>
       <div className="mb-4 rounded-xl p-5 flex justify-between items-center shadow dark:border dark:border-gray-700 dark:bg-background">
         <div className="">
-          <div className="mb-4">
+          <div className="mb-1">
             <h4 className="text-primary text-lg font-semibold">{order.code}</h4>
           </div>
           {order.isDelivered ? (
@@ -18,6 +19,7 @@ function OrderCard({ order }: { order: Order }) {
               Stay on progress...
             </p>
           )}
+          <div className="mt-1 font-semibold text-foreground/70">{formatDate(order.createdAt)}</div>
         </div>
         <div>
           <img

@@ -3,7 +3,7 @@ import { SingleOrderApiResponse } from "../types/api";
 
 
 export const getOrder = async (orderId: string) => {
-    const res = await api.get<SingleOrderApiResponse>(`/user/orders/${orderId}`);
+    const res = await api.get<SingleOrderApiResponse>(`/user/orders/${orderId}?sort=createdAt`);
 
     return res.data;
 }

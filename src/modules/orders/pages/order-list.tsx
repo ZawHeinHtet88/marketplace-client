@@ -34,12 +34,11 @@ function OrderListPage() {
   };
 
   return (
-    <section className="max-w-4xl mx-auto my-10 h-screen">
+    <section className="max-w-4xl mx-auto my-10 min-h-screen">
       <header className="mb-5">
         <h5 className="text-2xl text-primary font-bold">My Orders</h5>
       </header>
       <div className="rounded-2xl w-full">
-        {orders.length <=0 && <h4>There haven't order yet</h4>}
         {orders.map((order, index) => (
           <OrderCard key={index} order={order} />
         ))}

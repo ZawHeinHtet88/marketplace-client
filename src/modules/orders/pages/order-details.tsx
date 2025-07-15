@@ -23,18 +23,15 @@ function OrderDetails() {
     isPending: isCheckoutPending,
   } = useCreateCheckOutSessionMutation();
 
-
   const handleCheckout = async (orderId: string) => {
-
-    const res = await createCheckoutSessionMutation({ code: orderId })
+    const res = await createCheckoutSessionMutation({ code: orderId });
 
     if (res.isSuccess) {
       window.location.href = res.url;
     } else {
-      toast.error("Can't checkout")
+      toast.error("Can't checkout");
     }
-
-  }
+  };
   const { data, isLoading } = useGetOrderQuery(id!);
 
   if (isLoading) {
@@ -54,9 +51,22 @@ function OrderDetails() {
       />
 
       <div className="space-y-4">
-        <h1 className="text-primary text-lg font-semibold">
-          Order - {data?.order[0]?.code}
-        </h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-primary text-lg font-semibold">
+            Order - {data?.order[0]?.code}
+          </h1>
+          {data?.order[0]?.status === "pending"  ? (
+            <Button
+              onClick={() => handleCheckout(data?.order[0]?.code ?? "")}
+              disabled={isCheckoutPending}
+            >
+              <DollarSign />
+              Cash
+            </Button>
+          ) : (
+            ""
+          )}
+        </div>
 
         <Table>
           <TableHeader>
@@ -71,7 +81,6 @@ function OrderDetails() {
               <TableCell>Status</TableCell>
               <TableCell>Is Delivered</TableCell>
               <TableCell>Created At</TableCell>
-              <TableCell>Action</TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -96,19 +105,12 @@ function OrderDetails() {
                   {item.isDelivered ? "Yes" : "No"}{" "}
                 </TableCell>
                 <TableCell>{formatDate(item.createdAt)}</TableCell>
-                <TableCell>
-                  {
-                    item.status === "pending" ?
-                      <Button onClick={() => handleCheckout(item.code)} disabled={isCheckoutPending }><DollarSign />Cash</Button> : "-"
-                  }
-                </TableCell>
-
               </TableRow>
             ))}
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell colSpan={10}>Total</TableCell>
+              <TableCell colSpan={9}>Total</TableCell>
               <TableCell className="text-right">{data?.amount} MMK</TableCell>
             </TableRow>
           </TableFooter>
