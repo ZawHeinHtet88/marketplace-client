@@ -3,22 +3,23 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Mail } from "lucide-react";
-import SellerStat from "./seller-stat";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 import { useParams } from "react-router-dom";
 import { useGetMerchantQuery } from "../../hooks/queries";
-import { useMemo } from "react";
+import SellerStat from "./seller-stat";
 
 export const HeroSection = () => {
   const { id } = useParams();
 
   const { data, isLoading } = useGetMerchantQuery(id || "")
 
-  const merchant = useMemo(() => {
-    return data?.data.data;
-  }, [data?.data.data]);
-
+  
+  // if(!merchant) return "No merchant"
   if (isLoading) return "Loading"
+  const merchant = data?.data
+
+  console.log(merchant);
+  
   return (
     <Card className="">
       <CardContent className="flex items-center justify-between">

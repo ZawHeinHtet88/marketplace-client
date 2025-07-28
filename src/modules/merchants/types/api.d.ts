@@ -1,17 +1,15 @@
+import { Pagination } from "@/types/global";
 import { Merchant } from ".";
 
 export interface GetAllMerchantsApiResponse {
   status: string;
-  results: number;
-  total: number;
+  pagination : Pagination;
   data: Merchant[];
   isSuccess: boolean;
 }
 
 export interface GetMerchantApiResponse {
   status : string;
-  data:{  
-    data : Merchant
-  }
+  data:Merchant
   isSuccess : true
 }

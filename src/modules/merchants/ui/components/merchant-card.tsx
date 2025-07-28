@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { Merchant } from "../../types";
 import { ShipIcon } from "lucide-react";
 function MerchantCard({ merchant }: { merchant: Merchant }) {
+  
   return (
     <Link to={`/merchants/${merchant._id}`}>
       <Card className="border-primary shadopw p-0 pb-5 overflow-hidden">

@@ -46,7 +46,7 @@ function SellerItems() {
   const { data: productData } = useGetAllProductsQuery(filters);
   const numberOfPages = useMemo(
     () =>
-      productData?.total ? Math.ceil(productData.total / filters.limit) : 0,
+      productData?.pagination.totalResult ? Math.ceil(productData.pagination.totalResult / filters.limit) : 0,
     [productData, filters.limit]
   );
 
@@ -79,7 +79,7 @@ function SellerItems() {
         <CardTitle className="font-semibold text-lg">
           Products{" "}
           <span className="text-gray-500">
-            ({productData?.total ?? 0})
+            ({productData?.pagination.totalResult ?? 0})
           </span>
         </CardTitle>
         <div className="flex items-center gap-5">

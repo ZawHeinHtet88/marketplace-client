@@ -54,7 +54,7 @@ function ProductListPage() {
     }
   }, [type, setFilters])
 
-  const numberOfPage = productData?.total && Math.ceil(productData?.total / filters.limit);
+  const numberOfPage = productData?.pagination.totalResult && Math.ceil(productData?.pagination.totalResult / filters.limit);
   // Update filters when slider values change
   useEffect(() => {
     setFilters((prev) => ({

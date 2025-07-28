@@ -1,10 +1,11 @@
+import { Pagination } from "@/types/global";
 import { Product, Type } from ".";
 
-export interface getAllProductApiResponse {
+export interface getAllProductApiResponse extends BasePag {
   status: string;
-  results: number;
-  total: number;
+  isSuccess: boolean;
   data: Product[];
+  pagination : Pagination;
   merchant?: string
 }
 
