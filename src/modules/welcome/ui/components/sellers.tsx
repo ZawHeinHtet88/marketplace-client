@@ -1,8 +1,12 @@
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import SellerCard from "./seller-card";
+import { useGetReliableMerchant } from "@/modules/merchants/hooks/queries";
 
 function Sellers() {
+  const { data, isLoading } = useGetReliableMerchant();
+
+  if (isLoading) return "Loading...";
   return (
     <section className="space-y-10">
       <div className="flex items-center justify-between  mb-5 border-b-1">
@@ -16,12 +20,10 @@ function Sellers() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
-        <SellerCard />
-        <SellerCard />
-        <SellerCard />
-        <SellerCard />
-        <SellerCard />
-        <SellerCard />
+        {data?.data.map((merchant) => (
+          <SellerCard merchant={merchant}/>
+        ))}
+        
       </div>
     </section>
   );

@@ -24,7 +24,7 @@ function MerchantListPage() {
       const data = (await res.data) as GetAllMerchantsApiResponse;
       setMerchants((prev) => [...prev, ...data.data]);
       setPage((prev) => prev + 1);
-      const numberOfPage = data?.total && Math.ceil(data?.total / 8);
+      const numberOfPage = data?.pagination.totalResult&& Math.ceil(data?.pagination.totalResult / 8);
 
       // Usually your response will tell you if there is no more data.
       if (page === numberOfPage) {

@@ -50,18 +50,16 @@ export interface Merchant {
   name: string;
   email: string;
   role: string;
-  randToken: string;
+  randToken?: string;
   phone: string;
   businessName: string;
   logo: string;
   description: string;
-  NRCNumber: string;
-  NRCFront: string;
-  NRCBack: string;
-  balance: boolean;
-  rating: boolean;
-  createdAt: string;
-  updatedAt: string;
+  NRCNumber?: string;
+  NRCFront?: string;
+  NRCBack?: string;
+  balance: number;
+  rating: number;
   id: string;
 }
 

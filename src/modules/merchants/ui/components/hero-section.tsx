@@ -18,7 +18,6 @@ export const HeroSection = () => {
   if (isLoading) return "Loading"
   const merchant = data?.data
 
-  console.log(merchant);
   
   return (
     <Card className="">
