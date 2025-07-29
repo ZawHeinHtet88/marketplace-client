@@ -16,15 +16,18 @@ import { cn } from "@/lib/utils";
 import { CreditCard, FileText, ShoppingCart, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
+  useCashOnDeliveryMutation,
   useCreateCheckOutSessionMutation,
   useCreateOrderMutation,
 } from "../../hooks/mutations";
 import { useCartStore } from "../../store/index.store";
 import CartContent from "./cart-content";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 function CartModal() {
-  const { cart, totalAmount,resetCart } = useCartStore((state) => state);
-
+  const { cart, totalAmount, resetCart } = useCartStore((state) => state);
+  const navigate = useNavigate();
   const [orderCode, setOrderCode] = useState("");
   const [isOrderStarting, setIsOrderStarting] = useState(false);
   const [paymentType, setPaymentType] = useState("");
@@ -41,6 +44,11 @@ function CartModal() {
     isSuccess: isCheckoutSuccess,
   } = useCreateCheckOutSessionMutation();
 
+  const {
+    mutateAsync: cashOnDeliveryMutation,
+    isPending: isCashOnDeliveryPending,
+  } = useCashOnDeliveryMutation();
+
   // ✅ Move state update into useEffect to prevent infinite loop
   useEffect(() => {
     if (isSuccess) {
@@ -53,7 +61,7 @@ function CartModal() {
     const products = cart
       .map((item) => `${item.quantity}_${item._id}`)
       .join("#");
-    
+
     const res = await createOrderMutateAsync(products);
 
     if (res.isSuccess) {
@@ -62,12 +70,23 @@ function CartModal() {
   };
 
   const handleCheckout = async () => {
-    const res = await createCheckoutSessionMutation({ code: orderCode });
+    if (paymentType === "cashOnDelivery") {
+      const res = await cashOnDeliveryMutation({ code: orderCode });
 
-    if (isSuccess) {
-      resetCart()
-      window.location.href = res.url;
+      if (res.isSuccess) {
+        resetCart();
+        toast.success("Order Created Successfully");
+        setIsOrderStarting(false);
+        navigate("/");
+      }
+    } else {
+      const res = await createCheckoutSessionMutation({ code: orderCode });
+      if (isSuccess) {
+        resetCart();
+        window.location.href = res.url;
+      }
     }
+    setIsOrderStarting(false)
   };
 
   return (
@@ -184,7 +203,9 @@ function CartModal() {
           {isOrderStarting ? (
             <Button
               onClick={handleCheckout}
-              disabled={!cart.length || isCheckoutPending}
+              disabled={
+                !cart.length || isCheckoutPending || isCashOnDeliveryPending
+              }
               className="bg-green-600"
             >
               Check Out

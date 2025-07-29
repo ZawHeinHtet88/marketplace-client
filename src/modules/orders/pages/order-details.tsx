@@ -1,6 +1,14 @@
 import BreadCrumps from "@/components/ui/breadcrumps";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
   Table,
   TableBody,
   TableCell,
@@ -8,38 +16,62 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useCreateCheckOutSessionMutation } from "@/modules/cart/hooks/mutations";
+import { cn } from "@/lib/utils";
+import {
+  useCashOnDeliveryMutation,
+  useCreateCheckOutSessionMutation,
+} from "@/modules/cart/hooks/mutations";
 import { formatDate } from "@/utils/format-date";
-import { DollarSign } from "lucide-react";
+import { CreditCard, DollarSign, FileText, Loader } from "lucide-react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { useGetOrderQuery } from "../hooks/queries";
+import { QueryClient } from "@tanstack/react-query";
 
 function OrderDetails() {
   const { id } = useParams<{ id: string }>();
-
+  const [paymentType, setPaymentType] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const queryClient = new QueryClient()
   const {
     mutateAsync: createCheckoutSessionMutation,
     isPending: isCheckoutPending,
   } = useCreateCheckOutSessionMutation();
 
-  const handleCheckout = async (orderId: string) => {
-    const res = await createCheckoutSessionMutation({ code: orderId });
+  const {
+    mutateAsync: cashOnDeliveryMutation,
+    isPending: isCashOnDeliveryPending,
+  } = useCashOnDeliveryMutation();
 
-    if (res.isSuccess) {
-      window.location.href = res.url;
+  const handleCheckout = async (orderId: string) => {
+    if (paymentType === "cashOnDelivery") {
+      const res = await cashOnDeliveryMutation({ code: orderId });
+      if (res.isSuccess) {
+        toast.success("Order Successfully");
+        setDialogOpen(false); // Close dialog
+        queryClient.invalidateQueries({ queryKey: ["order"] });
+      }
     } else {
-      toast.error("Can't checkout");
+      const res = await createCheckoutSessionMutation({ code: orderId });
+
+      if (res.isSuccess) {
+        setDialogOpen(false); // Close dialog before redirect
+        window.location.href = res.url;
+      } else {
+        toast.error("Can't checkout");
+      }
     }
+    setDialogOpen(false); // Close dialog
   };
   const { data, isLoading } = useGetOrderQuery(id!);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div className="w-full min-h-screen">Loading...</div>;
   }
 
   return (
-    <div className="max-w-6xl mx-auto my-10 h-screen space-y-5">
+    <div className="max-w-6xl mx-auto my-10 min-h-screen space-y-5">
       <BreadCrumps
         breadcrumbs={[
           { label: "Orders", href: "/orders" },
@@ -55,14 +87,83 @@ function OrderDetails() {
           <h1 className="text-primary text-lg font-semibold">
             Order - {data?.order[0]?.code}
           </h1>
-          {data?.order[0]?.status === "pending"  ? (
-            <Button
-              onClick={() => handleCheckout(data?.order[0]?.code ?? "")}
-              disabled={isCheckoutPending}
-            >
-              <DollarSign />
-              Cash
-            </Button>
+          {data?.order[0]?.status === "pending" ? (
+            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  disabled={isCheckoutPending || isCashOnDeliveryPending}
+                  onClick={() => setDialogOpen(true)}
+                >
+                  <DollarSign />
+                  Cash
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-5xl">
+                <div className="space-y-4">
+                  <Label className="text-base font-medium">
+                    Select Payment Type
+                  </Label>
+                  <RadioGroup
+                    value={paymentType}
+                    onValueChange={setPaymentType}
+                  >
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                      <div className="relative">
+                        <RadioGroupItem
+                          value="stripe"
+                          id="stripe"
+                          className="peer sr-only"
+                        />
+                        <Label
+                          htmlFor="stripe"
+                          className={cn(
+                            "flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-gray-200 bg-white p-6 transition-all peer-checked:bg-emerald-50 hover:bg-gray-50",
+                            paymentType === "stripe" && "border-primary"
+                          )}
+                        >
+                          <CreditCard className="mb-3 h-8 w-8 text-gray-400 peer-checked:text-emerald-600" />
+                          <span className="font-medium text-gray-900">
+                            Stripe
+                          </span>
+                        </Label>
+                      </div>
+                      <div className="relative">
+                        <RadioGroupItem
+                          value="cashOnDelivery"
+                          id="cashOnDelivery"
+                          className="peer sr-only"
+                        />
+                        <Label
+                          htmlFor="cashOnDelivery"
+                          className={cn(
+                            "flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-gray-200 bg-white p-6 transition-all peer-checked:bg-emerald-50 hover:bg-gray-50",
+                            paymentType === "cashOnDelivery" && "border-primary"
+                          )}
+                        >
+                          <FileText className="mb-3 h-8 w-8 text-gray-400 peer-checked:text-emerald-600" />
+                          <span className="font-medium text-gray-900">
+                            Cash on Delivery
+                          </span>
+                        </Label>
+                      </div>
+                    </div>
+                  </RadioGroup>
+                </div>
+                <DialogFooter className="">
+                  <Button
+                    onClick={() => handleCheckout(data?.order[0]?.code ?? "")}
+                    type="button"
+                    disabled={isCashOnDeliveryPending}
+                  >
+                    {isCashOnDeliveryPending ? (
+                      <Loader className="animate-spin" />
+                    ) : (
+                      "Check out"
+                    )}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           ) : (
             ""
           )}

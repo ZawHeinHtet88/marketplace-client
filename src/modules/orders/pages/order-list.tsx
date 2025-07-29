@@ -32,7 +32,7 @@ function OrderListPage() {
       setLoading(false);
     }, 800);
   };
-
+  
   return (
     <section className="max-w-4xl mx-auto my-10 min-h-screen">
       <header className="mb-5">

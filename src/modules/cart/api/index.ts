@@ -10,13 +10,20 @@ export const createOrder = async (products: string) => {
 
 export const createCheckoutSession = async ({ code }: { code: string }) => {
   const res = await api.post<CheckoutSessionApiResponse>(
-    `user/create-checkout-session`,
+    `/user/create-checkout-session`,
     {
       code,
     }
   );
   return res.data;
 };
+
+export const cashOnDelivery = async ({code}:{code:string}) => { 
+  const res = await api.post<OrderApiRespones>(`/user/cash-on-delivery`, {
+    code,
+  });
+  return res.data;
+}
 
 export const checkoutSuccess = async (sessionId: string) => {
   const res = await api.post<CheckoutSuccessApiResponse>(

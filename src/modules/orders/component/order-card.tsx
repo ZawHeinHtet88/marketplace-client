@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Order } from "../types";
 import { formatDate } from "@/utils/format-date";
+import { getImageUrl } from "@/utils/images";
 
 function OrderCard({ order }: { order: Order }) {
   return (
@@ -24,7 +25,7 @@ function OrderCard({ order }: { order: Order }) {
         <div>
           <img
             className="w-[100px] h-[100px] rounded-2xl"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTX4sPl8qfzRC7uZqlCP89rszr0mNCJaVUow&s"
+            src={getImageUrl({resource:"images",fileName:order.image})}
             alt=""
           />
         </div>
