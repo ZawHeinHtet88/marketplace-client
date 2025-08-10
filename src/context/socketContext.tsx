@@ -13,6 +13,8 @@ export function SocketProvider({ children }) {
 
   const BACKEND_URL = API_BASE_URL;
 
+  const userInfo = {}
+
   //   const {
   //     userInfo,
   //     selectedChatData,
@@ -24,6 +26,7 @@ export function SocketProvider({ children }) {
 
   useEffect(() => {
     if (userInfo) {
+
       // Initialize socket connection
       const socket = io(BACKEND_URL, {
         withCredentials: true,
@@ -38,16 +41,16 @@ export function SocketProvider({ children }) {
       // Define the message handler function
       const handleReceiveMessage = (message) => {
         // Check if message is from the selected chat
-        if (
-          selectedChatType &&
-          (selectedChatData._id === message.sender._id ||
-            selectedChatData._id === message.recipient._id)
-        ) {
-          addMessage(message);
-        } else {
-          console.log("Message not relevant to selected chat.");
-        }
-        addContactsInDM(message);
+        // if (
+        //   selectedChatType &&
+        //   (selectedChatData._id === message.sender._id ||
+        //     selectedChatData._id === message.recipient._id)
+        // ) {
+        //   addMessage(message);
+        // } else {
+        //   console.log("Message not relevant to selected chat.");
+        // }
+        // addContactsInDM(message);
       };
 
 
@@ -68,12 +71,12 @@ export function SocketProvider({ children }) {
       };
     }
   }, [
-    userInfo,
-    addMessage,
-    selectedChatData?._id,
-    selectedChatType,
-    addChannelInChannelList,
-    addContactsInDM,
+    // userInfo,
+    // addMessage,
+    // selectedChatData?._id,
+    // selectedChatType,
+    // addChannelInChannelList,
+    // addContactsInDM,
 
   ]);
 
