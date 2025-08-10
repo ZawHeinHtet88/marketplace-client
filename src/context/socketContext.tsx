@@ -22,8 +22,6 @@ export function SocketProvider({ children }) {
   //     addContactsInDM,
   //   } = useAppStore();
 
-  //   const { setForexData } = useAppStore();
-
   useEffect(() => {
     if (userInfo) {
       // Initialize socket connection
@@ -93,3 +91,15 @@ export const useSocket = () => {
   }
   return context;
 };
+
+
+///////////// Send Message /////////////////
+// get socket from context api 
+//     socket.emit("sendMessage", {
+//         sender: userInfo._id,
+//         message,
+//         recipient: selectedChatData._id,
+//         messageType: "text",
+//         fileUrl: undefined,
+//       });
+/////////////////////////////////////////////
