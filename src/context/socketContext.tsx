@@ -1,84 +1,66 @@
-// import { useAppStore } from "@/store";
-import { io } from "socket.io-client";
-import { createContext, useRef, useEffect, useContext, useState } from "react";
+// SocketContext.tsx
 import { API_BASE_URL } from "@/lib/axios";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
+import { io, Socket } from "socket.io-client";
 
+interface UserInfo {
+  _id: string;
+  name?: string;
+}
 
-const SocketContext = createContext(null);
+interface OnlineUser {
+  _id: string;
+  name?: string;
+}
 
-export function SocketProvider({ children }) {
-  const [socket, setSocket] = useState(null);
+interface SocketContextType {
+  socket: Socket | null;
+  onlineUsers: OnlineUser[];
+}
 
-  const [onlineUsers, setOnlineUsers] = useState([]); // State for online users
+const SocketContext = createContext<SocketContextType | undefined>(undefined);
 
-  const BACKEND_URL = API_BASE_URL;
+interface SocketProviderProps {
+  children: ReactNode;
+  userInfo: UserInfo | null; // <-- we pass user from props or store
+}
 
-  const userInfo = {}
-
-  //   const {
-  //     userInfo,
-  //     selectedChatData,
-  //     selectedChatType,
-  //     addMessage,
-  //     addChannelInChannelList,
-  //     addContactsInDM,
-  //   } = useAppStore();
+export function SocketProvider({ children, userInfo }: SocketProviderProps) {
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
 
   useEffect(() => {
-    if (userInfo) {
+    if (!userInfo) return;
 
-      // Initialize socket connection
-      const socket = io(BACKEND_URL, {
-        withCredentials: true,
-        query: { userId: userInfo._id },
-      });
+    const newSocket = io(API_BASE_URL, {
+      withCredentials: true,
+      query: { userId: userInfo._id },
+    });
 
-      setSocket(socket);
-      socket.on("connect", () => {
-        console.log("Connected to socket server");
-      });
+    setSocket(newSocket);
 
-      // Define the message handler function
-      const handleReceiveMessage = (message) => {
-        // Check if message is from the selected chat
-        // if (
-        //   selectedChatType &&
-        //   (selectedChatData._id === message.sender._id ||
-        //     selectedChatData._id === message.recipient._id)
-        // ) {
-        //   addMessage(message);
-        // } else {
-        //   console.log("Message not relevant to selected chat.");
-        // }
-        // addContactsInDM(message);
-      };
+    newSocket.on("connect", () => {
+      console.log("✅ Connected to socket server");
+    });
 
+    newSocket.on("receiveMessage", (message) => {
+      console.log("📩 Message received:", message);
+    });
 
+    newSocket.on("onlineUsers", (users: OnlineUser[]) => {
+      setOnlineUsers(users);
+    });
 
-
-      // Listen for 'receiveMessage' event
-      socket.on("receiveMessage", handleReceiveMessage);
-      socket.on("onlineUsers", (users) => setOnlineUsers(users));
-
-      return () => {
-        if (socket) {
-          socket.off("receiveMessage");
-          socket.off("recieveChannelMessage");
-          socket.off("forexUpdate");
-          socket.off("joinAndLeaveChannel");
-          socket.disconnect();
-        }
-      };
-    }
-  }, [
-    // userInfo,
-    // addMessage,
-    // selectedChatData?._id,
-    // selectedChatType,
-    // addChannelInChannelList,
-    // addContactsInDM,
-
-  ]);
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [userInfo]);
 
   return (
     <SocketContext.Provider value={{ socket, onlineUsers }}>
@@ -89,20 +71,8 @@ export function SocketProvider({ children }) {
 
 export const useSocket = () => {
   const context = useContext(SocketContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useSocket must be used within a SocketProvider");
   }
   return context;
 };
-
-
-///////////// Send Message /////////////////
-// get socket from context api 
-//     socket.emit("sendMessage", {
-//         sender: userInfo._id,
-//         message,
-//         recipient: selectedChatData._id,
-//         messageType: "text",
-//         fileUrl: undefined,
-//       });
-/////////////////////////////////////////////
