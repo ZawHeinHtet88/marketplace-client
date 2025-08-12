@@ -1,11 +1,10 @@
 // SocketContext.tsx
-import { API_BASE_URL } from "@/lib/axios";
 import {
   createContext,
+  ReactNode,
   useContext,
   useEffect,
   useState,
-  ReactNode,
 } from "react";
 import { io, Socket } from "socket.io-client";
 
@@ -38,7 +37,7 @@ export function SocketProvider({ children, userInfo }: SocketProviderProps) {
   useEffect(() => {
     if (!userInfo) return;
 
-    const newSocket = io(API_BASE_URL, {
+    const newSocket = io("http://localhost:3000", {
       withCredentials: true,
       query: { userId: userInfo._id },
     });

@@ -3,11 +3,17 @@ import { ReactNode } from "react";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ThemeProvider } from "./theme-provider";
 import { SocketProvider } from "./../context/socketContext";
+import { useAuthStore } from "@/modules/auth/store/index.store";
 
 const queryClient = new QueryClient();
 
 export const Provider = ({ children }: { children: ReactNode }) => {
-  const userInfo = { _id: "123", name: "Zaw Hein Htet" }; // get from auth/store
+  const { user } = useAuthStore((state) => state);
+
+  const userInfo = {
+    _id: user?._id ?? "",
+    name: user?.name ?? "",
+  };
 
   return (
     <QueryClientProvider client={queryClient}>
