@@ -11,7 +11,7 @@ export const Provider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuthStore((state) => state);
 
   const userInfo = {
-    _id: user?._id ?? "",
+    _id: user?.id ?? "",
     name: user?.name ?? "",
   };
 

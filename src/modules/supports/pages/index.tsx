@@ -1,38 +1,68 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send } from "lucide-react";
 import { useSocket } from "@/context/socketContext";
+import { useAuthStore } from "@/modules/auth/store/index.store";
+import { useSupportChatStore } from "../store/index.store";
 
 export default function CustomerSupportPage() {
-  const [messages, setMessages] = useState([
-    { sender: "admin", text: "Hello! How can I help you today?" },
-  ]);
+  const { messages, addMessage } = useSupportChatStore((state) => state);
+  const { user } = useAuthStore((state) => state);
   const [input, setInput] = useState("");
   const { socket } = useSocket();
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Auto scroll when messages change
   useEffect(() => {
-    if (!socket) return;
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
-    console.log("revived message")
-    socket.on("receiveMessage", (message) => {
-      setMessages((prev) => [...prev, { sender: "admin", text: message }]);
-    });
+    useEffect(() => {
+      if (!socket) return;
 
-    return () => {
-      socket.off("receiveMessage");
-    };
-  }, [socket]);
+      const onReceive = (msg: any) => {
+        console.log("Received message:", msg);
+
+        // Ignore if the message originated from me
+        const senderId = String(msg?.sender?._id ?? msg?.sender ?? "");
+        if (senderId === String(user?.id ?? "")) return;
+
+        addMessage({
+          sender: "customer", // your UI schema
+          text: msg.message,
+        });
+      };
+
+      socket.on("receiveMessage", onReceive);
+      return () => {
+        socket.off("receiveMessage", onReceive);
+      };
+    }, [socket, user?.id, addMessage]);
 
   const handleSend = () => {
     if (!input.trim()) return;
 
-    setMessages((prev) => [...prev, { sender: "user", text: input }]);
+    addMessage({
+      sender: "user",
+      text: input,
+    });
 
     if (socket) {
-      socket.emit("sendMessage", input);
+      socket.emit("sendMessage", {
+        message: input,
+        sender: user?.id,
+        recipent: "6888d0f3b50e11c8196701db",
+        messageType: "text",
+      });
     }
 
     setInput("");
@@ -55,12 +85,12 @@ export default function CustomerSupportPage() {
           <CardHeader className="bg-blue-600 text-white rounded-t-2xl pt-3">
             <CardTitle className="text-lg">Live Support Chat</CardTitle>
           </CardHeader>
-          <CardContent className="p-0 flex flex-col h-[70vh]">
-            <ScrollArea className="flex-1 p-4 space-y-3">
+          <CardContent className="p-0 flex flex-col h-[70vh] overflow-y-scroll">
+            <ScrollArea className="flex-1 p-4 space-y-6">
               {messages.map((msg, idx) => (
                 <div
                   key={idx}
-                  className={`flex ${
+                  className={`flex mb-1 ${
                     msg.sender === "user" ? "justify-end" : "justify-start"
                   }`}
                 >
@@ -75,8 +105,11 @@ export default function CustomerSupportPage() {
                   </div>
                 </div>
               ))}
+              <div ref={messagesEndRef} />
             </ScrollArea>
-            <div className="p-4 border-t flex gap-2">
+          </CardContent>
+          <CardFooter>
+            <div className="p-4 border-t flex gap-2 w-full">
               <Input
                 placeholder="Type your message..."
                 value={input}
@@ -87,7 +120,7 @@ export default function CustomerSupportPage() {
                 <Send className="w-4 h-4" />
               </Button>
             </div>
-          </CardContent>
+          </CardFooter>
         </Card>
       </div>
     </div>
