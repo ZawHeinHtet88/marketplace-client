@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Product } from "../../type";
+import { getImageUrl } from "@/utils/images";
 
 function ProductCard({ product }: { product: Product }) {
   const { addToCart } = useCartStore();
@@ -31,12 +32,12 @@ function ProductCard({ product }: { product: Product }) {
     title: product.name,
     category: product.category.name,
     price: product.price,
-    img : product.images[0]
+    img : product.optimize_images && product!.optimize_images[0]
   };
   return (
     <Card className="pb-2">
       <CardContent className="flex items-center gap-5 h-[100px]">
-        <img className="w-[60px] h-[60px]" src={product.images[0]} alt={product.name} />
+        <img className="w-[60px] h-[60px]" src={getImageUrl({resource:"optimize",fileName: product.optimize_images ? product!.optimize_images[0] : ""})} alt={product.name} />
         <div className="space-y-2">
           <CardTitle className="line-clamp-2">{product.name}</CardTitle>
           <CardDescription className="line-clamp-1">

@@ -23,7 +23,7 @@ function OrderListPage() {
       const data = (await res.data) as GetAllOrdersApiResponse;
       setOrders((prev) => [...prev, ...data.orders]);
       setPage((prev) => prev + 1);
-
+        
 
       // Usually your response will tell you if there is no more data.
       if (data.orders.length < 100) {
@@ -32,6 +32,8 @@ function OrderListPage() {
       setLoading(false);
     }, 800);
   };
+  
+  console.log(orders);
   
   return (
     <section className="max-w-4xl mx-auto my-10 min-h-screen">

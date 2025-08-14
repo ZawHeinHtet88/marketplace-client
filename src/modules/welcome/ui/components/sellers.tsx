@@ -21,7 +21,7 @@ function Sellers() {
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
         {data?.data.map((merchant) => (
-          <SellerCard merchant={merchant}/>
+          <SellerCard key={merchant.id} merchant={merchant}/>
         ))}
         
       </div>

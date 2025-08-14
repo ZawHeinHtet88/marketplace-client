@@ -10,6 +10,7 @@ import { useCartStore } from "@/modules/cart/store/index.store";
 import { ShoppingCart } from "lucide-react";
 import { FeaturedProduct } from "../../types";
 import { useNavigate } from "react-router-dom";
+import { getImageUrl } from "@/utils/images";
 
 function LocalItemCard({ product }: { product: FeaturedProduct }) {
   const { addToCart } = useCartStore((state) => state);
@@ -24,7 +25,7 @@ function LocalItemCard({ product }: { product: FeaturedProduct }) {
   return (
     <Card onClick={() => navigate(`/products/${product.id}`)} className="pt-0 pb-5 hover:shadow-xl transition-all duration-700 border-card">
       <div className="bg-secondary flex items-center justify-center rounded-xl">
-        <img className="h-[200px] w-full object-cover" src={product.images[0]} alt="logo" />
+        <img className="h-[200px] w-full object-cover" src={getImageUrl({resource : "optimize",fileName : product.optimize_images[0]})} alt="logo" />
       </div>
       <CardContent className="space-y-2">
         <CardTitle className="text-lg font-bold line-clamp-2">{product.name}</CardTitle>

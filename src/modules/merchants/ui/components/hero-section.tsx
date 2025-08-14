@@ -24,13 +24,13 @@ export const HeroSection = () => {
         <div className="flex items-center gap-2">
           <PhotoProvider>
             <PhotoView
-              src={getImageUrl({ resource: "images", fileName: merchant?.logo })}
+              src={getImageUrl({ resource: "optimize", fileName: merchant?.optimize_logo })}
             >
               <Avatar className="w-[60px] h-[60px] hover:cursor-pointer">
                 <AvatarImage
                   src={getImageUrl({
-                    resource: "images",
-                    fileName: merchant?.logo,
+                    resource: "optimize",
+                    fileName: merchant?.optimize_logo,
                   })}
                   alt="@shadcn"
                 />

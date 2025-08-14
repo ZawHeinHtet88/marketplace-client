@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAllProducts, getAllTypes, getProduct, searchProduct } from "../api";
+import { getAllCategories, getAllProducts, getAllTypes, getProduct, searchProduct } from "../api";
 import { getAllProductFilters } from "../type/api";
 
 export const useGetAllProductsQuery = (filters: getAllProductFilters) => {
@@ -29,4 +29,11 @@ export const useGetAllSearchProductsQuery = (search: string,enabled : boolean) =
     queryFn: () => searchProduct(search),
     enabled : enabled && search.length > 0
   })
+}
+
+export const useGetAllCategoriesQuery = () => {
+  return useQuery({
+    queryKey: ["categories"],
+    queryFn: () => getAllCategories(),
+  });
 }

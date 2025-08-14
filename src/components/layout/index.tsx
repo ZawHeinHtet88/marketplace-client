@@ -14,7 +14,7 @@ export const Layout = () => {
         <AppSidebar />
         <Navbar />
       </SidebarProvider>
-      <section className="w-full lg:max-w-7xl mx-auto px-5 lg:px-0">
+      <section className="w-full lg:max-w-7xl mx-auto px-5 lg:px-0 min-h-screen">
         <Outlet />
         <SupportNavigator/>
       </section>

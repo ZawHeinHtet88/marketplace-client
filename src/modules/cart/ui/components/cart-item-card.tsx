@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Minus, Plus } from "lucide-react";
 import { useCartStore } from "../../store/index.store";
 import { CartItem } from "../../type";
+import { getImageUrl } from "./../../../../utils/images";
 
 function CartItemCard({ item }: { item: CartItem }) {
   const { addQuantity, subQuantity, removeFromCart, changeQuantity } =
@@ -11,9 +12,15 @@ function CartItemCard({ item }: { item: CartItem }) {
   return (
     <div className="flex gap-10 items-center">
       <div className="w-[40%] flex gap-5">
-        <img className="w-[80px] h-[80px]" src={item.img} alt={item.title} />
+        <img
+          className="w-[80px] h-[80px]"
+          src={getImageUrl({ resource: "optimize", fileName: item.img })}
+          alt={item.title}
+        />
         <div className="h-full space-y-1">
-          <h5 className="text-lg font-semibold text-primary line-clamp-3">{item.title}</h5>
+          <h5 className="text-lg font-semibold text-primary line-clamp-3">
+            {item.title}
+          </h5>
           <p className="text-foreground/70 text-sm">{item.category}</p>
           <button
             onClick={() => removeFromCart(item._id)}

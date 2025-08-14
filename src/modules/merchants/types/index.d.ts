@@ -19,4 +19,5 @@ export interface Merchant {
   createdAt: number;
   updatedAt: number;
   id: string;
+  optimize_logo ?: string;
 }

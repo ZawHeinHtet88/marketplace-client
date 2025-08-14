@@ -28,6 +28,7 @@ import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { useGetOrderQuery } from "../hooks/queries";
 import { QueryClient } from "@tanstack/react-query";
+import { getImageUrl } from "@/utils/images";
 
 function OrderDetails() {
   const { id } = useParams<{ id: string }>();
@@ -191,7 +192,7 @@ function OrderDetails() {
                 <TableCell>
                   <img
                     className="w-[30px] h-[30px] object-cover rounded-2xl"
-                    src={item.productId.images[0]}
+                    src={getImageUrl({resource:"image", fileName:item.productId.images[0]})}
                     alt={item.productId.name}
                   />
                 </TableCell>

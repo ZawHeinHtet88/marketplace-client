@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { getAllFeaturedProducts, getAllPopularTypes } from "../api"
+import { getAds, getAllFeaturedProducts, getAllPopularTypes } from "../api"
 
 export const useGetAllFeaturedProductQuery = () => {
     return useQuery(
@@ -14,5 +14,12 @@ export const useGetAllPopularTypeQuery = () => {
     return useQuery({
         queryKey : ['popular-type'],
         queryFn : getAllPopularTypes
+    })
+}
+
+export const useGetAllAdsQuery = () => {
+    return useQuery({
+        queryKey : ["ads"],
+        queryFn : getAds
     })
 }

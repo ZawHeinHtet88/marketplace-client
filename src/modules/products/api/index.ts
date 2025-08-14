@@ -1,5 +1,6 @@
 import { api } from "@/lib/axios";
 import {
+  getAllCategoriesApiResponse,
   getAllProductApiResponse,
   getAllProductFilters,
   getAllTypesApiResponse,
@@ -18,6 +19,11 @@ export const getAllTypes = async () => {
   const res = await api.get<getAllTypesApiResponse>(`/user/types`);
   return res.data;
 };
+
+export const getAllCategories = async() => {
+  const res = await api.get<getAllCategoriesApiResponse>("/user/categories");
+  return res.data
+}
 
 export const getProduct = async (id: string) => {
   const res = await api.get<SingleProductApiResponse>(`/user/products/${id}`);

@@ -35,3 +35,12 @@ export interface SearchProductsApiResponse{
   isSuccess : boolean,
   product : {name:string}[]
 }
+
+
+export interface getAllCategoriesApiResponse{
+  data : {
+    _id:string,
+    name:string,
+    type :string
+  }[]
+}

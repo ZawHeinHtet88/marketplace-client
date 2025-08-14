@@ -15,6 +15,7 @@ export interface Product {
   body: string;
   description: string;
   category: Category;
+  optimize_images : string[];
   type: {
     _id: string;
     name: string;
@@ -46,6 +47,7 @@ export interface Merchant {
     country: string;
     full: string;
   };
+  optimize_logo ?: string;
   _id: string;
   name: string;
   email: string;

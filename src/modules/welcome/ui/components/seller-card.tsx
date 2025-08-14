@@ -13,7 +13,7 @@ function SellerCard({merchant}:{merchant:Merchant}) {
       <CardContent className="mx-auto p-1  overflow-hidden w-[150px] h-[150px] rounded-full border-4 transition-all duration-200 border-primary">
         <img
           className="rounded-full w-full h-full"
-          src={getImageUrl({ resource: "images", fileName: merchant.logo })}
+          src={getImageUrl({ resource: "optimize", fileName: merchant.optimize_logo })}
           alt="card"
         />
       </CardContent>

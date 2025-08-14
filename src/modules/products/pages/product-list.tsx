@@ -6,9 +6,8 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from "@/components/ui/select";
 import ProductCard from "@/modules/products/components/ui/product-card";
 import {
@@ -19,21 +18,27 @@ import {
   SortAsc,
   SortDesc,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 import FilterModal from "../components/filter-modal";
 import Pagination from "../components/pagination";
 import Skeletons from "../components/skeletons";
-import { useGetAllProductsQuery, useGetAllTypesQuery } from "../hooks/queries";
-import { useLocation } from "react-router-dom";
+import {
+  useGetAllCategoriesQuery,
+  useGetAllProductsQuery,
+  useGetAllTypesQuery,
+} from "../hooks/queries";
 
 function ProductListPage() {
   const [values, setValues] = useState<number[]>([2, 4534534]);
 
   const location = useLocation();
 
-  const { type ,search} = location.state || {}
+  const { type, search } = location.state || {};
 
-  const [selectedType, setSelectedType] = useState("")
+  const [selectedType, setSelectedType] = useState("");
+
+  const [selectedCategory,setSelectedCategory] = useState("");
 
   const [filters, setFilters] = useState({
     page: 1,
@@ -41,20 +46,29 @@ function ProductListPage() {
     "price[gt]": values[0],
     "price[lt]": values[1],
     "name[regex]": "",
-    type: selectedType
+    type: selectedType,
+    category : selectedCategory
   });
 
   const { data: productData, isLoading } = useGetAllProductsQuery(filters);
 
-  const { data: types } = useGetAllTypesQuery()
+  const { data: categories } = useGetAllCategoriesQuery();
+
+  const filteredCategories = useMemo(()=> {
+    return categories?.data.filter(category => category.type === selectedType);
+  }, [categories, selectedType]);
+
+  const { data: types } = useGetAllTypesQuery();
 
   useEffect(() => {
     if (type) {
-      setSelectedType(type)
+      setSelectedType(type);
     }
-  }, [type, setFilters])
+  }, [type, setFilters]);
 
-  const numberOfPage = productData?.pagination.totalResult && Math.ceil(productData?.pagination.totalResult / filters.limit);
+  const numberOfPage =
+    productData?.pagination.totalResult &&
+    Math.ceil(productData?.pagination.totalResult / filters.limit);
   // Update filters when slider values change
   useEffect(() => {
     setFilters((prev) => ({
@@ -63,9 +77,10 @@ function ProductListPage() {
       "price[lt]": values[1],
       type: selectedType,
       "name[regex]": search,
-       page: 1, 
+      page: 1,
+      category: selectedCategory,
     }));
-  }, [values, selectedType,search]);
+  }, [values, selectedType, search, selectedCategory]);
 
   const handlePageChange = (newPage: number) => {
     setFilters((prev) => ({
@@ -73,6 +88,7 @@ function ProductListPage() {
       page: newPage,
     }));
   };
+
 
   return (
     <section className="flex gap-5 my-10">
@@ -111,22 +127,22 @@ function ProductListPage() {
             <div className="space-y-3">
               <h5 className="text-primary font-semibold">Filter By Types</h5>
               <div>
-                <Select value={selectedType} onValueChange={(value) => {
-                  setSelectedType(value)
-                }}>
+                <Select
+                  value={selectedType}
+                  onValueChange={(value) => {
+                    setSelectedType(value);
+                  }}
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select a Type" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {
-                        types?.data.map((type) => (
-                          <SelectItem key={type._id} value={type._id}>
-                            {type.name}
-                          </SelectItem>
-                        ))
-                      }
-
+                      {types?.data.map((type) => (
+                        <SelectItem key={type._id} value={type._id}>
+                          {type.name}
+                        </SelectItem>
+                      ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -135,18 +151,23 @@ function ProductListPage() {
             <div className="space-y-3">
               <h5 className="text-primary font-semibold">Filter By Category</h5>
               <div>
-                <Select>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a fruit" />
+                <Select value={selectedCategory} onValueChange={(value) => {
+                  setSelectedCategory(value);
+                }}>
+                  <SelectTrigger
+                    disabled={!selectedType}
+                   
+                    className="w-full"
+                  >
+                    <SelectValue placeholder="Select a Category" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectLabel>Fruits</SelectLabel>
-                      <SelectItem value="apple">Apple</SelectItem>
-                      <SelectItem value="banana">Banana</SelectItem>
-                      <SelectItem value="blueberry">Blueberry</SelectItem>
-                      <SelectItem value="grapes">Grapes</SelectItem>
-                      <SelectItem value="pineapple">Pineapple</SelectItem>
+                      {filteredCategories?.map((category) => (
+                        <SelectItem key={category._id} value={category._id}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -176,10 +197,13 @@ function ProductListPage() {
                       "price[gt]": 2,
                       "price[lt]": 9999999999,
                       type: "",
-                      "name[regex]" : ""
+                      "name[regex]": "",
+                      category: "",
                     });
-                    location.state.search = ""
-                    setSelectedType("")
+                    setSelectedType("");
+                    location.state.search = " ";
+                    setSelectedType("");
+                    setSelectedCategory("");
                   }}
                   size={"icon"}
                 >

@@ -7,8 +7,10 @@ import Autoplay from "embla-carousel-autoplay";
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import AdsCard from "./ads-card";
+import { useGetAllAdsQuery } from "../../hooks/queries";
 
-function Ads() {
+ function Ads() {
+  const {data} = useGetAllAdsQuery()
   return (
     <section className="space-y-10">
       <div className="flex items-center justify-between mb-5 border-b-1">
@@ -31,9 +33,9 @@ function Ads() {
           className=""
         >
           <CarouselContent className="-ml-1">
-            {Array.from({ length: 5 }).map((_, index) => (
+            {data?.data.map((ad ,index) => (
               <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-                <AdsCard />
+                <AdsCard ad={ad}/>
               </CarouselItem>
             ))}
           </CarouselContent>
