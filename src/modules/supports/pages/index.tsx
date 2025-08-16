@@ -13,6 +13,7 @@ import { Send } from "lucide-react";
 import { useSocket } from "@/context/socketContext";
 import { useAuthStore } from "@/modules/auth/store/index.store";
 import { useSupportChatStore } from "../store/index.store";
+import { useGetAllMessagesQuery } from "../hooks/queries";
 
 export default function CustomerSupportPage() {
   const { messages, addMessage } = useSupportChatStore((state) => state);
@@ -20,33 +21,45 @@ export default function CustomerSupportPage() {
   const [input, setInput] = useState("");
   const { socket } = useSocket();
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
+  const { data, isFetched } = useGetAllMessagesQuery(user?.id ?? "");
+  useEffect(() => {
+    if (isFetched && data?.data) {
+      data?.data.map((msg) => {
+        addMessage({
+          sender: msg.sender === user?.id ? "user" : "customer",
+          text: msg.message,
+        });
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, isFetched]);
   // Auto scroll when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-    useEffect(() => {
-      if (!socket) return;
+  useEffect(() => {
+    if (!socket) return;
 
-      const onReceive = (msg: any) => {
-        console.log("Received message:", msg);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const onReceive = (msg: any) => {
+      console.log("Received message:", msg);
 
-        // Ignore if the message originated from me
-        const senderId = String(msg?.sender?._id ?? msg?.sender ?? "");
-        if (senderId === String(user?.id ?? "")) return;
+      // Ignore if the message originated from me
+      const senderId = String(msg?.sender?._id ?? msg?.sender ?? "");
+      if (senderId === String(user?.id ?? "")) return;
 
-        addMessage({
-          sender: "customer", // your UI schema
-          text: msg.message,
-        });
-      };
+      addMessage({
+        sender: "customer", // your UI schema
+        text: msg.message,
+      });
+    };
 
-      socket.on("receiveMessage", onReceive);
-      return () => {
-        socket.off("receiveMessage", onReceive);
-      };
-    }, [socket, user?.id, addMessage]);
+    socket.on("receiveMessage", onReceive);
+    return () => {
+      socket.off("receiveMessage", onReceive);
+    };
+  }, [socket, user?.id, addMessage]);
 
   const handleSend = () => {
     if (!input.trim()) return;
@@ -60,7 +73,7 @@ export default function CustomerSupportPage() {
       socket.emit("sendMessage", {
         message: input,
         sender: user?.id,
-        recipent: "6888d0f3b50e11c8196701db",
+        recipient: "6888d0f3b50e11c8196701db",
         messageType: "text",
       });
     }

@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
 type Message = {
   sender: string;
@@ -23,40 +22,28 @@ type SupportChatSlice = {
   resetChat: () => void;
 };
 
-  export const useSupportChatStore = create<SupportChatSlice>()(
-    persist(
-      (set) => ({
-        client: null,
-        setClient: (client) => set({ client }),
+export const useSupportChatStore = create<SupportChatSlice>()((set) => ({
+  client: null,
+  setClient: (client) => set({ client }),
 
-        messages: [],
-        addMessage: (message) =>
-          set((state) => ({
-            messages: [...state.messages, message],
-          })),
-        setMessages: (messages) => set({ messages }),
+  messages: [],
+  addMessage: (message) =>
+    set((state) => ({
+      messages: [...state.messages, message],
+    })),
+  setMessages: (messages) => set({ messages }),
 
-        adminTyping: false,
-        setAdminTyping: (status) => set({ adminTyping: status }),
+  adminTyping: false,
+  setAdminTyping: (status) => set({ adminTyping: status }),
 
-        socketConnected: false,
-        setSocketConnected: (status) => set({ socketConnected: status }),
+  socketConnected: false,
+  setSocketConnected: (status) => set({ socketConnected: status }),
 
-        resetChat: () =>
-          set({
-            client: null,
-            messages: [],
-            adminTyping: false,
-            socketConnected: false,
-          }),
-      }),
-      {
-        name: "support-chat-storage", // localStorage key
-        partialize: (state) => ({
-          // Choose which fields to store in localStorage
-          client: state.client,
-          messages: state.messages,
-        }),
-      }
-    )
-  );
+  resetChat: () =>
+    set({
+      client: null,
+      messages: [],
+      adminTyping: false,
+      socketConnected: false,
+    }),
+}));
