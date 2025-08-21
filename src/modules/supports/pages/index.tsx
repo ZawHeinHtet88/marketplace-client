@@ -1,5 +1,3 @@
-import { useState, useEffect, useRef } from "react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,20 +6,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send } from "lucide-react";
 import { useSocket } from "@/context/socketContext";
 import { useAuthStore } from "@/modules/auth/store/index.store";
+import { Send } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { useGetAdminIdQuery, useGetAllMessagesQuery } from "../hooks/queries";
 import { useSupportChatStore } from "../store/index.store";
-import { useGetAllMessagesQuery } from "../hooks/queries";
-
 export default function CustomerSupportPage() {
   const { messages, addMessage } = useSupportChatStore((state) => state);
   const { user } = useAuthStore((state) => state);
   const [input, setInput] = useState("");
   const { socket } = useSocket();
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { data, isFetched } = useGetAllMessagesQuery(user?.id ?? "");
+  const {data:adminData} = useGetAdminIdQuery();
+
+  const { data, isFetched,isLoading } = useGetAllMessagesQuery(adminData?.adminId ?? "");
   useEffect(() => {
     if (isFetched && data?.data) {
       data?.data.map((msg) => {
@@ -99,6 +100,11 @@ export default function CustomerSupportPage() {
             <CardTitle className="text-lg">Live Support Chat</CardTitle>
           </CardHeader>
           <CardContent className="p-0 flex flex-col h-[70vh] overflow-y-scroll">
+            {isLoading && (
+              <div className="flex items-center justify-center h-full">
+                <p className="text-gray-500">Loading messages...</p>
+              </div>
+            )}
             <ScrollArea className="flex-1 p-4 space-y-6">
               {messages.map((msg, idx) => (
                 <div

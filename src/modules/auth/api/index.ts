@@ -12,3 +12,9 @@ export const signup = async ({ data }: { data: SignupSchemaType }) => {
 
   return res.data;
 };
+
+export const googleLogin = async () => {
+  const res = await api.get("/auth/google");
+
+  return res.data
+}

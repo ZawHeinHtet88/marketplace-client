@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { login, signup } from "../../api";
+import { googleLogin, login, signup } from "../../api";
 
 export const useLoginMutation = () =>
   useMutation({
@@ -10,3 +10,8 @@ export const useSignupMutation = () =>
   useMutation({
     mutationFn: signup,
   });
+
+export const useGoogleLoginMutation = () =>
+  useMutation({
+    mutationFn: googleLogin
+  })

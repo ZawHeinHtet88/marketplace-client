@@ -28,7 +28,7 @@ function ProductDetailPage() {
       typeof product?.price === "number"
         ? product.price
         : Number(product?.price) || 0,
-    img:product?.optimize_images ? product?.optimize_images[0] : "",
+    img: product?.optimize_images ? product?.optimize_images[0] : "",
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -63,10 +63,16 @@ function ProductDetailPage() {
             </PhotoView>
             <div className="grid grid-cols-4 gap-5">
               {product?.images.slice(1, 5).map((image, index) => (
-                <PhotoView src={image} key={index}>
+                <PhotoView
+                  src={getImageUrl({
+                    resource: "images",
+                    fileName: image,
+                  })}
+                  key={index}
+                >
                   <div className="hover:cursor-pointer">
                     <img
-                      className="w-full rounded-xl shadow"
+                      className="w-full h-[100px] rounded-xl shadow"
                       src={getImageUrl({
                         resource: "images",
                         fileName: image,
@@ -122,6 +128,7 @@ function ProductDetailPage() {
             <div>
               <p className="text-foreground/80">{product?.description}</p>
             </div>
+            <div></div>
           </div>
         </div>
       </div>
@@ -133,10 +140,6 @@ function ProductDetailPage() {
           {product?.relatedProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
-          {/* <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          // <ProductCard /> */}
         </div>
       </div>
     </section>

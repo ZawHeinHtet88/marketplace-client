@@ -23,6 +23,7 @@ import { useAuthStore } from "../../store/index.store";
 import { toast } from "sonner";
 import { Loader } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import GoogleLogin from "./google-login";
 
 export const LoginForm = () => {
   const { mutateAsync, isPending } = useLoginMutation();
@@ -112,14 +113,7 @@ export const LoginForm = () => {
             >
               {isPending ? <Loader className="animate-spin" /> : "Sign In"}
             </Button>
-            <Button className="w-full py-6 bg-secondary text-foreground">
-              <img
-                className="w-[20px] h-[20px]"
-                src="./google.png"
-                alt="google"
-              />
-              or Sign in with Google
-            </Button>
+           <GoogleLogin/>
             <div className="flex items-center justify-center gap-2">
               <p className="text-[14px] font-semibold text-foreground">
                 Don't have an account?
