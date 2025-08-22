@@ -72,7 +72,7 @@ function ProductDetailPage() {
                 >
                   <div className="hover:cursor-pointer">
                     <img
-                      className="w-full h-[100px] rounded-xl shadow"
+                      className="w-full h-[100px] rounded-xl shadow object-cover"
                       src={getImageUrl({
                         resource: "images",
                         fileName: image,

@@ -91,7 +91,7 @@ function ProductListPage() {
 
 
   return (
-    <section className="flex gap-5 my-10">
+    <section className="flex gap-5">
       <div className="hidden md:block">
         <Card className="flex-1">
           <CardContent className="flex flex-col gap-5">

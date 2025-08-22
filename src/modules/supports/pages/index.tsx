@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useSocket } from "@/context/socketContext";
 import { useAuthStore } from "@/modules/auth/store/index.store";
-import { Send } from "lucide-react";
+import { SendHorizonal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useGetAdminIdQuery, useGetAllMessagesQuery } from "../hooks/queries";
 import { useSupportChatStore } from "../store/index.store";
@@ -135,8 +135,11 @@ export default function CustomerSupportPage() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSend()}
               />
+              {/* <Button onClick={handleSend}>
+                <Link className="w-4 h-4" />
+              </Button> */}
               <Button onClick={handleSend}>
-                <Send className="w-4 h-4" />
+                <SendHorizonal className="w-4 h-4" />
               </Button>
             </div>
           </CardFooter>
