@@ -23,25 +23,52 @@ function LocalItemCard({ product }: { product: FeaturedProduct }) {
     img: product.images[0],
   };
   return (
-    <Card onClick={() => navigate(`/products/${product.id}`)} className="pt-0 pb-5 hover:shadow-xl transition-all duration-700 border-card">
+    <Card
+      onClick={() => navigate(`/products/${product.id}`)}
+      className="pt-0 pb-5 hover:shadow-xl transition-all duration-700 border-card"
+    >
       <div className="bg-secondary flex items-center justify-center rounded-xl">
-        <img className="h-[200px] w-full object-cover" src={getImageUrl({resource : "optimize",fileName : product.optimize_images[0]})} alt="logo" />
+        <img
+          className="h-[200px] w-full object-cover"
+          src={getImageUrl({
+            resource: "optimize",
+            fileName: product.optimize_images[0],
+          })}
+          alt="logo"
+        />
       </div>
       <CardContent className="space-y-2">
-        <CardTitle className="text-lg font-bold line-clamp-2">{product.name}</CardTitle>
+        <CardTitle className="text-lg font-bold line-clamp-2">
+          {product.name}
+        </CardTitle>
         <CardTitle className="flex items-center gap-2">
-          <img className="w-4 h-4" alt={getImageUrl({resource:"images",fileName:product.merchant.logo})} />
-          <p className="text-accent-foreground line-clamp-1">{product.merchant.businessName}</p>
+          <img
+            className="w-4 h-4"
+            alt={getImageUrl({
+              resource: "images",
+              fileName: product.merchant.logo,
+            })}
+            src={getImageUrl({
+              resource: "images",
+              fileName: product.merchant.logo,
+            })}
+          />
+          <p className="text-accent-foreground line-clamp-1">
+            {product.merchant.businessName}
+          </p>
         </CardTitle>
       </CardContent>
       <CardFooter className="justify-between">
         <CardDescription className="text-lg font-extrabold text-green-600">
           {product.price} kyats
         </CardDescription>
-        <Button onClick={(e) => {
-          e.stopPropagation(); // Prevent card click
-          addToCart(item);
-        }} className="bg-primary">
+        <Button
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent card click
+            addToCart(item);
+          }}
+          className="bg-primary"
+        >
           <ShoppingCart />
         </Button>
       </CardFooter>

@@ -37,4 +37,5 @@ export interface Ad {
   product: string;
   link: string;
   image: string;
+  companyImg : string;
 }

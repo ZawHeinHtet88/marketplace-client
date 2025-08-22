@@ -20,7 +20,7 @@ function AdsCard({ ad }: { ad: Ad }) {
         </CardDescription>
       </CardContent>
       <CardContent className="w-[40%]">
-        <img src="./m-logo.png" alt="" />
+        <img src={getImageUrl({resource:"image",fileName:ad.companyImg})} alt="" />
       </CardContent>
     </Card>
   );
