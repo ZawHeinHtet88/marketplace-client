@@ -74,7 +74,7 @@ export default function CustomerSupportPage() {
       socket.emit("sendMessage", {
         message: input,
         sender: user?.id,
-        recipient: "6888d0f3b50e11c8196701db",
+        recipient: adminData?.adminId,
         messageType: "text",
       });
     }
