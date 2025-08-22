@@ -14,13 +14,20 @@ function AdsCard({ ad }: { ad: Ad }) {
         <CardTitle className="inline-block py-2 px-4 rounded-lg bg-gray-200/40">
           {ad.company}
         </CardTitle>
-        <img className="w-[40px] h-[40px]" src={getImageUrl({resource:"images",fileName:ad.image})} alt="" />
+        <img
+          className="w-[40px] h-[40px]"
+          src={getImageUrl({ resource: "images", fileName: ad.companyImg })}
+          alt=""
+        />
         <CardDescription className="text-foreground text-xl">
           {ad.product}
         </CardDescription>
       </CardContent>
       <CardContent className="w-[40%]">
-        <img src={getImageUrl({resource:"images",fileName:ad.companyImg})} alt="" />
+        <img
+          src={getImageUrl({ resource: "images", fileName: ad.image })}
+          alt=""
+        />
       </CardContent>
     </Card>
   );
