@@ -1,3 +1,4 @@
+import CartModal from "@/modules/cart/ui/components/cart-modal";
 import { SidebarTrigger } from "../sidebar";
 import Links from "./links";
 import Logo from "./logo";
@@ -13,8 +14,9 @@ export const Navbar = () => {
             <NavSearch />
             <Links />
           </div>
-          <div className="block lg:hidden">
-            <SidebarTrigger/>
+          <div className=" lg:hidden flex items-center gap-2">
+            <CartModal />
+            <SidebarTrigger />
           </div>
         </div>
       </nav>

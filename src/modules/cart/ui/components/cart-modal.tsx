@@ -86,7 +86,7 @@ function CartModal() {
         window.location.href = res.url;
       }
     }
-    setIsOrderStarting(false)
+    setIsOrderStarting(false);
   };
 
   return (
@@ -109,7 +109,7 @@ function CartModal() {
           </span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-4xl">
+      <DialogContent className="sm:max-w-4xl dark:bg-neutral-900 overflow-hidden">
         <DialogClose
           className={
             "text-red-500 hover:text-red-600 " +
@@ -120,19 +120,21 @@ function CartModal() {
           <span className="sr-only">Close</span>
         </DialogClose>
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 font-semibold text-2xl text-primary">
+          <DialogTitle className="flex items-center gap-2 font-semibold text-2xl text-primary ">
             <ShoppingCart className="text-green-600 !w-7 !h-7" />
             Cart Items
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-left">
             Thank you for shopping with us! Review your items below.
           </DialogDescription>
         </DialogHeader>
-        <Separator />
+        <Separator className="dark:bg-neutral-700 w-full" />
 
         {isOrderStarting ? (
           <div className="space-y-4">
-            <Label className="text-base font-medium">Select Payment Type</Label>
+            <Label className="text-base font-medium dark:text-neutral-200">
+              Select Payment Type
+            </Label>
             <RadioGroup value={paymentType} onValueChange={setPaymentType}>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div className="relative">
@@ -144,13 +146,16 @@ function CartModal() {
                   <Label
                     htmlFor="stripe"
                     className={cn(
-                      "flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-gray-200 bg-white p-6 transition-all peer-checked:bg-emerald-50 hover:bg-gray-50",
-                      paymentType === "stripe" && "border-primary"
+                      "flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-gray-200 bg-white p-6 transition-all peer-checked:bg-emerald-50 hover:bg-gray-50 dark:bg-neutral-800 dark:border-neutral-700 dark:hover:bg-neutral-700",
+                      paymentType === "stripe" &&
+                        "border-primary dark:border-primary"
                     )}
                   >
-                    <CreditCard className="mb-3 h-8 w-8 text-gray-400 peer-checked:text-emerald-600" />
-                    <span className="font-medium text-gray-900">Stripe</span>
-                    <span className="mt-1 text-center text-sm text-gray-500">
+                    <CreditCard className="mb-3 h-8 w-8 text-gray-400 peer-checked:text-emerald-600 dark:text-neutral-400 dark:peer-checked:text-emerald-400" />
+                    <span className="font-medium text-gray-900 dark:text-neutral-100">
+                      Stripe
+                    </span>
+                    <span className="mt-1 text-center text-sm text-gray-500 dark:text-neutral-400">
                       Cash on Internet
                     </span>
                   </Label>
@@ -164,15 +169,16 @@ function CartModal() {
                   <Label
                     htmlFor="cashOnDelivery"
                     className={cn(
-                      "flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-gray-200 bg-white p-6 transition-all peer-checked:bg-emerald-50 hover:bg-gray-50",
-                      paymentType === "cashOnDelivery" && "border-primary"
+                      "flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-gray-200 bg-white p-6 transition-all peer-checked:bg-emerald-50 hover:bg-gray-50 dark:bg-neutral-800 dark:border-neutral-700 dark:hover:bg-neutral-700",
+                      paymentType === "cashOnDelivery" &&
+                        "border-primary dark:border-primary"
                     )}
                   >
-                    <FileText className="mb-3 h-8 w-8 text-gray-400 peer-checked:text-emerald-600" />
-                    <span className="font-medium text-gray-900">
+                    <FileText className="mb-3 h-8 w-8 text-gray-400 peer-checked:text-emerald-600 dark:text-neutral-400 dark:peer-checked:text-emerald-400" />
+                    <span className="font-medium text-gray-900 dark:text-neutral-100">
                       Cash on Delivery
                     </span>
-                    <span className="mt-1 text-center text-sm text-gray-500">
+                    <span className="mt-1 text-center text-sm text-gray-500 dark:text-neutral-400">
                       Cash Product When Product Receive
                     </span>
                   </Label>
@@ -187,7 +193,7 @@ function CartModal() {
               src="./empty-cart.gif"
               alt=""
             />
-            <p className="text-xl font-bold text-primary">
+            <p className="text-xl font-bold text-primary dark:text-primary-foreground">
               Your cart is empty now
             </p>
           </div>
@@ -195,10 +201,13 @@ function CartModal() {
           <CartContent />
         )}
 
-        <Separator />
+        <Separator className="dark:bg-neutral-700" />
         <div className="flex justify-between items-center">
-          <p className="text-lg font-semibold text-primary">
-            Total Cost - <span className="text-green-600">{totalAmount}</span>
+          <p className="text-lg font-semibold text-primary ">
+            Total Cost -{" "}
+            <span className="text-green-600 dark:text-green-400">
+              {totalAmount}
+            </span>
           </p>
           {isOrderStarting ? (
             <Button
@@ -206,7 +215,7 @@ function CartModal() {
               disabled={
                 !cart.length || isCheckoutPending || isCashOnDeliveryPending
               }
-              className="bg-green-600"
+              className="bg-green-600 dark:bg-green-700"
             >
               Check Out
             </Button>
@@ -214,7 +223,7 @@ function CartModal() {
             <Button
               onClick={handleOrder}
               disabled={!cart.length || isOrderPending}
-              className="bg-green-600"
+              className="bg-green-600 dark:bg-green-700"
             >
               {isOrderPending ? "Ordering..." : "Make Order"}
             </Button>

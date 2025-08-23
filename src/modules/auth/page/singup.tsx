@@ -3,10 +3,10 @@ import { SignupForm } from "../ui/components/signup-form"
 function SignupPage() {
   return (
     <section className="w-screen h-screen flex container">
-      <div className="w-[70%] h-full hidden lg:block">
+      <div className="w-[60%] h-full hidden lg:block">
         <img className="w-full h-full object-cove7" alt="Login Image" src="./login_image.jpg"/>
       </div>
-      <div className="flex-1 p-10">
+      <div className="flex-1">
         <SignupForm/>
       </div>
     </section>

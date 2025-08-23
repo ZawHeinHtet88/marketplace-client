@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import { useCartStore } from "@/modules/cart/store/index.store";
 import ProductCard from "../components/ui/product-card";
 import { getImageUrl } from "@/utils/images";
+import { useEffect } from "react";
 
 function ProductDetailPage() {
   const { addToCart } = useCartStore((state) => state);
@@ -30,6 +31,10 @@ function ProductDetailPage() {
         : Number(product?.price) || 0,
     img: product?.optimize_images ? product?.optimize_images[0] : "",
   };
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   if (isLoading) return <div>Loading...</div>;
 

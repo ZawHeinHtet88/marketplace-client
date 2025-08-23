@@ -50,15 +50,42 @@ export const LoginForm = () => {
   };
 
   return (
-    <section className="space-y-5 w-full">
-      <header className="flex items-center">
-        <img className="w-[100px] h-[100px]" src="./m-logo.png" />
-        <h4 className="text-xl font-semibold capitalize text-primary">
-          Ayeyar Marketplace
-        </h4>
-      </header>
-      <p className="text-lg font-bold text-foreground">Nice To See You Again</p>
-      <div>
+    <section
+      className="min-h-screen w-full flex items-center justify-center px-2"
+      style={{
+        background:
+          "linear-gradient(135deg, var(--primary), var(--primary), var(--secondary))",
+      }}
+    >
+      <div className="w-full max-w-md bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 sm:p-10 space-y-8 border border-white/30 mx-auto">
+        <header className="flex flex-col items-center gap-3">
+          <div
+            className="p-1 rounded-full"
+            style={{
+              background:
+                "linear-gradient(135deg, var(--secondary), var(--primary))",
+            }}
+          >
+            <img
+              className="w-16 h-16 sm:w-20 sm:h-20 rounded-full shadow-lg"
+              src="./m-logo.png"
+            />
+          </div>
+          <h4
+            className="text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text"
+            style={{
+              backgroundImage:
+                "linear-gradient(90deg, var(--primary), var(--secondary))",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            Ayeyar Marketplace
+          </h4>
+          <p className="text-base font-semibold text-gray-700">
+            Welcome Back 👋
+          </p>
+        </header>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -74,12 +101,11 @@ export const LoginForm = () => {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      className="bg-gray-200 py-5 text-foreground placeholder:text-foreground/50"
+                      className="bg-white/70 py-5 text-gray-700 placeholder:text-gray-400 "
                       placeholder="Pls enter mail..."
                       {...field}
                     />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
@@ -93,32 +119,44 @@ export const LoginForm = () => {
                     <p className="">Password</p>
                     <Button
                       variant={"link"}
-                      className="text-sm font-medium text-blue-400"
+                      className="text-sm font-medium"
+                      style={{ color: "var(--primary)" }}
                     >
                       Forget Password?
                     </Button>
                   </FormLabel>
                   <FormControl>
-                    <PasswordInput placeholder="password..." {...field} />
+                    <PasswordInput
+                      placeholder="password..."
+                      className="bg-white/70 py-4 text-gray-700 placeholder:text-gray-400 rounded-xl border border-gray-200 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/30"
+                      {...field}
+                    />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
             />
             <Button
-              className="w-full py-6 font-bold"
+              className="w-full py-4 font-bold rounded-xl text-white transition"
+              style={{
+                background:
+                  "linear-gradient(90deg, var(--primary), var(--secondary))",
+              }}
               disabled={isPending}
               type="submit"
             >
               {isPending ? <Loader className="animate-spin" /> : "Sign In"}
             </Button>
-           <GoogleLogin/>
-            <div className="flex items-center justify-center gap-2">
+            <GoogleLogin />
+            <div className="flex items-center justify-center gap-2 pt-2">
               <p className="text-[14px] font-semibold text-foreground">
                 Don't have an account?
               </p>
-              <Link to={"/signup"} className="text-blue-400 text-[14px]" >
+              <Link
+                to={"/signup"}
+                className="text-[14px] hover:underline font-semibold"
+                style={{ color: "var(--primary)" }}
+              >
                 Sign up now
               </Link>
             </div>

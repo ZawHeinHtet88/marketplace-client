@@ -35,6 +35,7 @@ export interface Product {
   createdAt: string;
   updatedAt: string;
   id: string;
+  _id:string;
   relatedProducts : this[]
 }
 

@@ -25,7 +25,7 @@ function OrderCard({ order }: { order: Order }) {
         <div>
           <img
             className="w-[100px] h-[100px] rounded-2xl"
-            src={getImageUrl({resource:"image",fileName:order.image})}
+            src={getImageUrl({resource:"images",fileName:order.image})}
             alt=""
           />
         </div>

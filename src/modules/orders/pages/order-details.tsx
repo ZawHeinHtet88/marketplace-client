@@ -173,9 +173,9 @@ function OrderDetails() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableCell className="w-[10px]">No</TableCell>
-              <TableCell className="w-[100px]">Image</TableCell>
-              <TableCell className="w-[200px]">Product</TableCell>
+              <TableCell className="md:w-[10px]">No</TableCell>
+              <TableCell className="md:w-[100px]">Image</TableCell>
+              <TableCell className="md:w-[200px]">Product</TableCell>
               <TableCell>Quantity</TableCell>
               <TableCell>Price</TableCell>
               <TableCell>Shipping Cost</TableCell>
@@ -192,7 +192,7 @@ function OrderDetails() {
                 <TableCell>
                   <img
                     className="w-[30px] h-[30px] object-cover rounded-2xl"
-                    src={getImageUrl({resource:"image", fileName:item.productId.images[0]})}
+                    src={getImageUrl({resource:"images", fileName:item.productId.images[0]})}
                     alt={item.productId.name}
                   />
                 </TableCell>
@@ -212,8 +212,8 @@ function OrderDetails() {
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell colSpan={9}>Total</TableCell>
-              <TableCell className="text-right">{data?.amount} MMK</TableCell>
+              <TableCell colSpan={8}>Total</TableCell>
+              <TableCell colSpan={2} className="text-right">{data?.amount} MMK</TableCell>
             </TableRow>
           </TableFooter>
         </Table>

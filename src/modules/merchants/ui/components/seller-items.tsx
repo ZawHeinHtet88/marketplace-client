@@ -7,13 +7,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useDebouncedState } from "@/hooks/use-debounce";
 import { cn } from "@/lib/utils";
 import Pagination from "@/modules/products/components/pagination";
@@ -46,7 +39,9 @@ function SellerItems() {
   const { data: productData } = useGetAllProductsQuery(filters);
   const numberOfPages = useMemo(
     () =>
-      productData?.pagination.totalResult ? Math.ceil(productData.pagination.totalResult / filters.limit) : 0,
+      productData?.pagination.totalResult
+        ? Math.ceil(productData.pagination.totalResult / filters.limit)
+        : 0,
     [productData, filters.limit]
   );
 
@@ -66,7 +61,7 @@ function SellerItems() {
     setIsNewFeedOpen();
   }, [setIsNewFeedOpen]);
 
-  
+  const hasProducts = productData?.data && productData.data.length > 0;
 
   return (
     <Card
@@ -83,17 +78,6 @@ function SellerItems() {
           </span>
         </CardTitle>
         <div className="flex items-center gap-5">
-          <Select onValueChange={(value) => console.log(value)}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Select a fruit" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="apple">Apple</SelectItem>
-              <SelectItem value="banana">Banana</SelectItem>
-              <SelectItem value="orange">Orange</SelectItem>
-            </SelectContent>
-          </Select>
-
           <div className="relative max-w-sm rounded-xl">
             <Search className="absolute left-3 top-1/2 h-6 w-6 -translate-y-1/2 text-gray-600" />
             <Input
@@ -118,20 +102,31 @@ function SellerItems() {
       <Separator />
 
       <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-rows-2 lg:grid-cols-3 gap-5">
-        {productData?.data.map((product, index) => (
-          <ProductCard product={product} key={index} />
-        ))}
+        {hasProducts ? (
+          productData.data.map((product, index) => (
+            <ProductCard product={product} key={index} />
+          ))
+        ) : (
+          <div className="col-span-full flex flex-col items-center justify-center py-16">
+           
+            <span className="text-lg mt-15 font-semibold text-gray-500">
+              No products found.
+            </span>
+          </div>
+        )}
       </CardContent>
 
       <Separator />
 
-      <CardFooter className="flex justify-center">
-        <Pagination
-          page={page}
-          totalPages={numberOfPages}
-          onPageChange={handlePageChange}
-        />
-      </CardFooter>
+      {hasProducts && (
+        <CardFooter className="flex justify-center">
+          <Pagination
+            page={page}
+            totalPages={numberOfPages}
+            onPageChange={handlePageChange}
+          />
+        </CardFooter>
+      )}
     </Card>
   );
 }

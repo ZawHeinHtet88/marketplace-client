@@ -1,10 +1,10 @@
+import SkeletonCards from "@/components/ui/skeleton-card";
 import { useGetAllPopularTypeQuery } from "../../hooks/queries";
 import TopCategoryCard from "./top-category-card";
 
 export const TopCategories = () => {
-  const { data, isLoading } = useGetAllPopularTypeQuery()
+  const { data, isLoading } = useGetAllPopularTypeQuery();
 
-  if (isLoading) return "Loading...";
   return (
     <section className="space-y-10">
       <div className="flex items-center justify-between mb-5 border-b-1">
@@ -18,9 +18,11 @@ export const TopCategories = () => {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-5">
-        {
-          data?.types.map(type => <TopCategoryCard key={type._id} type={type}/>)
-        }
+        {isLoading
+          ? SkeletonCards({ count: 7 })
+          : data?.types.map((type) => (
+              <TopCategoryCard key={type._id} type={type} />
+            ))}
       </div>
     </section>
   );

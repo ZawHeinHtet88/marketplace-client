@@ -2,11 +2,10 @@ import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import LocalItemCard from "./local-item-card";
 import { useGetAllFeaturedProductQuery } from "../../hooks/queries";
+import SkeletonCards from "@/components/ui/skeleton-card";
 
 function LocalItems() {
   const { data, isLoading } = useGetAllFeaturedProductQuery();
-
-  if (isLoading) return "Loading";
 
   return (
     <section className="space-y-10">
@@ -20,12 +19,12 @@ function LocalItems() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5">
-        {
-          data?.products.map(product => <LocalItemCard key={product.id} product={product} />
-          )
-        }
-
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        {isLoading
+          ? SkeletonCards({ count: 8 })
+          : data?.products.map((product) => (
+              <LocalItemCard key={product.id} product={product} />
+            ))}
       </div>
     </section>
   );

@@ -1,16 +1,17 @@
 import {
-    Carousel,
-    CarouselContent,
-    CarouselItem
+  Carousel,
+  CarouselContent,
+  CarouselItem,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import AdsCard from "./ads-card";
 import { useGetAllAdsQuery } from "../../hooks/queries";
+import { Card, CardContent } from "@/components/ui/card";
 
- function Ads() {
-  const {data} = useGetAllAdsQuery()
+function Ads() {
+  const { data, isLoading } = useGetAllAdsQuery();
   return (
     <section className="space-y-10">
       <div className="flex items-center justify-between mb-5 border-b-1">
@@ -22,27 +23,44 @@ import { useGetAllAdsQuery } from "../../hooks/queries";
           View All <ChevronRight />
         </Link>
       </div>
-
-      <div className="">
-        <Carousel
-          plugins={[
-            Autoplay({
-              delay: 2000,
-            }),
-          ]}
-          className=""
-        >
-          <CarouselContent className="-ml-1">
-            {data?.data.map((ad ,index) => (
-              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-                <AdsCard ad={ad}/>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
-      </div>
+      {isLoading ? (
+        <AdsSkeleton />
+      ) : (
+        <div className="">
+          <Carousel
+            plugins={[
+              Autoplay({
+                delay: 2000,
+              }),
+            ]}
+            className=""
+          >
+            <CarouselContent className="-ml-1">
+              {data?.data.map((ad, index) => (
+                <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                  <AdsCard ad={ad} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+        </div>
+      )}
     </section>
   );
 }
 
 export default Ads;
+
+const AdsSkeleton = () => (
+  <div className="flex gap-4">
+    {[...Array(3)].map((_, i) => (
+      <Card key={i} className="animate-pulse md:basis-1/2 lg:basis-1/3 h-48">
+        <CardContent className="flex flex-col gap-3 p-4">
+          <div className="bg-gray-200 rounded-lg h-24 w-full mb-2" />
+          <div className="h-5 bg-gray-200 rounded w-2/3 mb-1" />
+          <div className="h-4 bg-gray-200 rounded w-1/2" />
+        </CardContent>
+      </Card>
+    ))}
+  </div>
+);

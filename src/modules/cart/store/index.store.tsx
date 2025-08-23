@@ -6,7 +6,7 @@ import { persist } from "zustand/middleware";
 interface CartState {
   cart: CartItem[];
   totalAmount: number;
-  addToCart: (item: Product) => void;
+  addToCart: (item: Product & { quantity?: number }) => void;
   removeFromCart: (id: string) => void;
   addQuantity: (id: string) => void;
   subQuantity: (id: string) => void;
@@ -19,33 +19,35 @@ export const useCartStore = create<CartState>()(
     (set, get) => ({
       cart: [],
       totalAmount: 0,
-      addToCart: (item: Product) => {
-        const existingItem = get().cart.find((cartItem) => cartItem._id === item._id);
+      addToCart: (item) => {
+        const existingItem = get().cart.find(
+          (cartItem) => cartItem._id === item._id
+        );
+        const addQty = item.quantity ?? 1;
         if (existingItem) {
-          if (existingItem.quantity >= 20) {
+          const newQty = existingItem.quantity + addQty;
+          if (newQty > 20) {
             toast.warning("You can add only 20 quantity per product.");
             return;
           }
           set((state) => ({
-            cart: state.cart.map((cartItem) => {
-              if (cartItem.quantity >= 20) {
-                toast.warning("You can add only 20 quantity per product.");
-
-                return cartItem;
-              }
-              toast.success(`Adding ${item.title} Successfully`);
-              return cartItem._id === item._id
-                ? { ...cartItem, quantity: cartItem.quantity + 1 }
-                : cartItem;
-            }),
+            cart: state.cart.map((cartItem) =>
+              cartItem._id === item._id
+                ? { ...cartItem, quantity: newQty }
+                : cartItem
+            ),
           }));
+          toast.success(`Added ${addQty} ${item.title} to cart!`);
         } else {
-          toast.success(`Adding ${item.title} Successfully`);
+          const qtyToAdd = addQty > 20 ? 20 : addQty;
+          if (addQty > 20) {
+            toast.warning("You can add only 20 quantity per product.");
+          }
           set((state) => ({
-            cart: [...state.cart, { ...item, quantity: 1 }],
+            cart: [...state.cart, { ...item, quantity: qtyToAdd }],
           }));
+          toast.success(`Added ${qtyToAdd} ${item.title} to cart!`);
         }
-
         updateTotal();
       },
       removeFromCart: (id: string) => {
@@ -74,9 +76,9 @@ export const useCartStore = create<CartState>()(
           cart: state.cart.map((item) =>
             item._id === id
               ? {
-                ...item,
-                quantity: item.quantity > 1 ? item.quantity - 1 : 1,
-              }
+                  ...item,
+                  quantity: item.quantity > 1 ? item.quantity - 1 : 1,
+                }
               : item
           ),
         }));
@@ -88,13 +90,10 @@ export const useCartStore = create<CartState>()(
             item._id === id ? { ...item, quantity: value } : item
           ),
         }));
-        // Check if value is 0 and set a timeout to remove the item after 1 second
         if (value === 0) {
           const timeoutId = setTimeout(() => {
-            removeFromCartAutomatically(); // Assuming you have a function that removes the item
+            removeFromCartAutomatically();
           }, 1000);
-
-          // Clear the timeout if the value is updated again (prevents unnecessary remove)
           return () => clearTimeout(timeoutId);
         }
         updateTotal();
