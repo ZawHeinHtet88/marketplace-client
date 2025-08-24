@@ -24,6 +24,7 @@ import { useCartStore } from "../../store/index.store";
 import CartContent from "./cart-content";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 function CartModal() {
   const { cart, totalAmount, resetCart } = useCartStore((state) => state);
@@ -31,6 +32,7 @@ function CartModal() {
   const [orderCode, setOrderCode] = useState("");
   const [isOrderStarting, setIsOrderStarting] = useState(false);
   const [paymentType, setPaymentType] = useState("");
+  const { t } = useTranslation();
 
   const {
     mutateAsync: createOrderMutateAsync,
@@ -105,7 +107,7 @@ function CartModal() {
               cart.length && "hidden"
             )}
           >
-            Cart
+            {t("cart")}
           </span>
         </Button>
       </DialogTrigger>
@@ -122,10 +124,10 @@ function CartModal() {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 font-semibold text-2xl text-primary ">
             <ShoppingCart className="text-green-600 !w-7 !h-7" />
-            Cart Items
+            {t("cart_items")}
           </DialogTitle>
           <DialogDescription className="text-left">
-            Thank you for shopping with us! Review your items below.
+            {t("thank_for_shopping")}
           </DialogDescription>
         </DialogHeader>
         <Separator className="dark:bg-neutral-700 w-full" />
@@ -133,7 +135,7 @@ function CartModal() {
         {isOrderStarting ? (
           <div className="space-y-4">
             <Label className="text-base font-medium dark:text-neutral-200">
-              Select Payment Type
+              {t("select_paymant")}
             </Label>
             <RadioGroup value={paymentType} onValueChange={setPaymentType}>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -156,7 +158,7 @@ function CartModal() {
                       Stripe
                     </span>
                     <span className="mt-1 text-center text-sm text-gray-500 dark:text-neutral-400">
-                      Cash on Internet
+                      {t("cash_on_internet")}
                     </span>
                   </Label>
                 </div>
@@ -176,10 +178,10 @@ function CartModal() {
                   >
                     <FileText className="mb-3 h-8 w-8 text-gray-400 peer-checked:text-emerald-600 dark:text-neutral-400 dark:peer-checked:text-emerald-400" />
                     <span className="font-medium text-gray-900 dark:text-neutral-100">
-                      Cash on Delivery
+                      {t("cash_on_delivery")}
                     </span>
                     <span className="mt-1 text-center text-sm text-gray-500 dark:text-neutral-400">
-                      Cash Product When Product Receive
+                      {t("cash_product")}
                     </span>
                   </Label>
                 </div>
@@ -193,8 +195,8 @@ function CartModal() {
               src="./empty-cart.gif"
               alt=""
             />
-            <p className="text-xl font-bold text-primary dark:text-primary-foreground">
-              Your cart is empty now
+            <p className="text-xl font-bold text-primary ">
+              {t("there_no_items_found")}
             </p>
           </div>
         ) : (
@@ -204,7 +206,7 @@ function CartModal() {
         <Separator className="dark:bg-neutral-700" />
         <div className="flex justify-between items-center">
           <p className="text-lg font-semibold text-primary ">
-            Total Cost -{" "}
+            {t("total_cost")} -{" "}
             <span className="text-green-600 dark:text-green-400">
               {totalAmount}
             </span>
@@ -213,19 +215,19 @@ function CartModal() {
             <Button
               onClick={handleCheckout}
               disabled={
-                !cart.length || isCheckoutPending || isCashOnDeliveryPending
+                !cart.length || isCheckoutPending || isCashOnDeliveryPending || !paymentType
               }
-              className="bg-green-600 dark:bg-green-700"
+              className="bg-green-600 text-white dark:bg-green-700"
             >
-              Check Out
+              {t("checkout")}
             </Button>
           ) : (
             <Button
               onClick={handleOrder}
-              disabled={!cart.length || isOrderPending}
-              className="bg-green-600 dark:bg-green-700"
+              disabled={!cart.length || isOrderPending }
+              className="bg-green-600 text-white dark:bg-green-700"
             >
-              {isOrderPending ? "Ordering..." : "Make Order"}
+              {isOrderPending ? t("ordering") : t("make_order")}
             </Button>
           )}
         </div>

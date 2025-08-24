@@ -4,10 +4,12 @@ import { Minus, Plus } from "lucide-react";
 import { useCartStore } from "../../store/index.store";
 import { CartItem } from "../../type";
 import { getImageUrl } from "./../../../../utils/images";
+import { useTranslation } from "react-i18next";
 
 function CartItemCard({ item }: { item: CartItem }) {
   const { addQuantity, subQuantity, removeFromCart, changeQuantity } =
     useCartStore((state) => state);
+  const {t} = useTranslation()
 
   return (
     <div className="flex  gap-10 items-center">
@@ -26,7 +28,7 @@ function CartItemCard({ item }: { item: CartItem }) {
             onClick={() => removeFromCart(item._id)}
             className="text-red-600 text-sm"
           >
-            remove
+            {t("remove")}
           </button>
         </div>
       </div>

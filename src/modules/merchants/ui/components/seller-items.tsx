@@ -17,11 +17,12 @@ import { Search, SidebarClose, SidebarOpen } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNewFeedSidebarStore } from "../../store/index.store";
+import { useTranslation } from "react-i18next";
 
 function SellerItems() {
   const { id } = useParams();
   const { isNewFeedOpen, setIsNewFeedOpen } = useNewFeedSidebarStore();
-
+  const {t} = useTranslation();
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebouncedState(search, 200);
   const [page, setPage] = useState(1);
@@ -72,19 +73,19 @@ function SellerItems() {
     >
       <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between">
         <CardTitle className="font-semibold text-lg">
-          Products{" "}
+          {t("products")}{" "}
           <span className="text-gray-500">
             ({productData?.pagination.totalResult ?? 0})
           </span>
         </CardTitle>
         <div className="flex items-center gap-5">
-          <div className="relative max-w-sm rounded-xl">
+          <div className="relative rounded-xl w-[340px]" >
             <Search className="absolute left-3 top-1/2 h-6 w-6 -translate-y-1/2 text-gray-600" />
             <Input
               value={search}
               onChange={handleSearchChange}
               type="search"
-              placeholder="Type to search products..."
+              placeholder={t("type_to_search")}
               className="pl-15"
             />
           </div>
@@ -107,10 +108,9 @@ function SellerItems() {
             <ProductCard product={product} key={index} />
           ))
         ) : (
-          <div className="col-span-full flex flex-col items-center justify-center py-16">
-           
-            <span className="text-lg mt-15 font-semibold text-gray-500">
-              No products found.
+          <div className="grid col-span-full h-[400px] row-span-full items-center justify-center">
+            <span className="font-semibold text-gray-500">
+              {t("no_products_found")}
             </span>
           </div>
         )}

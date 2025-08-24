@@ -4,11 +4,12 @@ import { Boxes, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "./../../../lib/utils";
 import Navprofile from "./nav-profile";
+import { useTranslation } from "react-i18next";
 
 function Links() {
   const { isAuthenticated } = useAuthStore((state) => state);
+  const { t } = useTranslation();
 
-  
   return (
     <div className="flex items-center">
       <div className="flex items-center gap-2 border-r-2 px-10">
@@ -17,7 +18,7 @@ function Links() {
           className="font-semibold text-secondary-foreground"
           to={"/products"}
         >
-          Products
+          {t("products")}
         </Link>
       </div>
       {!isAuthenticated && (
@@ -40,7 +41,7 @@ function Links() {
       >
         <CartModal />
       </div>
-        <Navprofile/>
+      <Navprofile />
     </div>
   );
 }

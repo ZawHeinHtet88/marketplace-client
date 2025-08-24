@@ -11,9 +11,11 @@ import { useCartStore } from "@/modules/cart/store/index.store";
 import ProductCard from "../components/ui/product-card";
 import { getImageUrl } from "@/utils/images";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 function ProductDetailPage() {
   const { addToCart } = useCartStore((state) => state);
+  const {t} = useTranslation();
 
   const { id } = useParams<{ id: string }>();
 
@@ -36,7 +38,7 @@ function ProductDetailPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div>{t("loading")}...</div>;
 
   return (
     <section className="my-10 space-y-10 min-h-screen">
@@ -109,7 +111,7 @@ function ProductDetailPage() {
               variant={"outline"}
             >
               <LucideShoppingCart />
-              Add To Cart
+              {t("add_to_cart")}
             </Button>
           </div>
           <h5 className="text-2xl font-bold text-primary">
@@ -118,7 +120,7 @@ function ProductDetailPage() {
           <div className="flex gap-3">
             <Badge>{product?.category.name}</Badge>
             <Badge className="bg-green-600">
-              In Stock : {product?.inventory}
+              {t("in_stock")} : {product?.inventory}
             </Badge>
           </div>
           <div
@@ -128,7 +130,7 @@ function ProductDetailPage() {
 
           <div>
             <h6 className="text-lg text-foreground/80 font-bold mb-3">
-              Description
+              {t("description")}
             </h6>
             <div>
               <p className="text-foreground/80">{product?.description}</p>
@@ -139,7 +141,7 @@ function ProductDetailPage() {
       </div>
       <div>
         <h6 className="text-xl text-foreground font-semibold mb-5">
-          Related Products
+          {t("related_products")}
         </h6>
         <div className="grid grid-col-2 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
           {product?.relatedProducts.map((product) => (

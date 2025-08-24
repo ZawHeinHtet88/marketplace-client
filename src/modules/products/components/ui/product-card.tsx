@@ -8,11 +8,13 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { Product } from "../../type";
+import { useTranslation } from "react-i18next";
 
 function ProductCard({ product }: { product: Product }) {
   const { addToCart } = useCartStore();
   const [quantity, setQuantity] = useState(1);
   const maxQuantity = product.inventory ?? 1;
+  const {t} = useTranslation()
 
   const item = {
     _id: product.id,
@@ -29,7 +31,6 @@ function ProductCard({ product }: { product: Product }) {
       return;
     }
     addToCart(item);
-    toast.success("Added to cart!");
   };
 
   return (
@@ -50,7 +51,7 @@ function ProductCard({ product }: { product: Product }) {
         </div>
         <div className="absolute bottom-2 right-2 flex gap-1">
           <Badge className="bg-green-600 text-white text-xs px-2 py-1 rounded shadow">
-            {product.price} kyats
+            {product.price} {t("kyats")}
           </Badge>
           <Badge className="bg-orange-600 text-white text-xs px-2 py-1 rounded shadow flex items-center gap-1">
             <Box className="w-4 h-4" />
@@ -67,13 +68,13 @@ function ProductCard({ product }: { product: Product }) {
           dangerouslySetInnerHTML={{ __html: product.description }}
         />
         <div className="flex items-center gap-2 mt-1">
-          <span className="text-xs text-gray-500">Available:</span>
+          <span className="text-xs text-gray-500">{t("avaliable")}:</span>
           <span className="font-bold text-green-600 text-xs">
             {maxQuantity}
           </span>
         </div>
         <div className="flex items-center gap-2 mt-1">
-          <span className="text-xs text-gray-500">Qty:</span>
+          <span className="text-xs text-gray-500">{t("quantity")}:</span>
           <Button
             type="button"
             size="sm"
@@ -104,11 +105,11 @@ function ProductCard({ product }: { product: Product }) {
           onClick={handleAddToCart}
           className="flex-1 bg-primary font-bold py-2 rounded-lg shadow hover:bg-primary/90 transition"
         >
-          <ShoppingCart className="mr-2" /> Add to Cart
+          <ShoppingCart className="mr-2" /> {t("add_to_cart")}
         </Button>
         <Link to={`/products/${product.id}`} className="flex-1">
           <Button className="w-full bg-green-600 text-white font-bold py-2 rounded-lg shadow hover:bg-green-700 transition">
-            <ViewIcon className="mr-2" /> View
+            <ViewIcon className="mr-2" /> {t("view")}
           </Button>
         </Link>
       </CardFooter>

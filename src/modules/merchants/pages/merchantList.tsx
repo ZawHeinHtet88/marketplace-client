@@ -5,13 +5,14 @@ import { Loader2 } from "lucide-react";
 import { api } from "@/lib/axios";
 import { GetAllMerchantsApiResponse } from "../types/api";
 import { Merchant } from "../types";
+import { useTranslation } from "react-i18next";
 
 function MerchantListPage() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [merchants, setMerchants] = useState<Merchant[]>([]);
-
+  const {t} = useTranslation()
 
   const next = async () => {
     setLoading(true);
@@ -35,7 +36,7 @@ function MerchantListPage() {
   };
   return (
     <section className="my-10">
-      <h4 className="text-xl text-primary underline mb-5">Merchants</h4>
+      <h4 className="text-xl text-primary underline mb-5">{t("merchants")}</h4>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
         {merchants.map((merchant, index) => (
           <MerchantCard merchant={merchant} key={index} />

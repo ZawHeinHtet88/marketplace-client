@@ -2,8 +2,10 @@ import { Link } from "react-router-dom";
 import { Order } from "../types";
 import { formatDate } from "@/utils/format-date";
 import { getImageUrl } from "@/utils/images";
+import { useTranslation } from "react-i18next";
 
 function OrderCard({ order }: { order: Order }) {
+  const {t} = useTranslation()
   return (
     <Link to={`/orders/${order.code}`}>
       <div className="mb-4 rounded-xl p-5 flex justify-between items-center shadow dark:border dark:border-gray-700 dark:bg-background">
@@ -13,11 +15,11 @@ function OrderCard({ order }: { order: Order }) {
           </div>
           {order.isDelivered ? (
             <p className="text-orange-600 font-semibold text-sm">
-              Deliverd Finished
+              {t("delivery_finished")}
             </p>
           ) : (
             <p className="text-green-600 font-semibold text-sm">
-              Stay on progress...
+              {t("still_on_progress")}
             </p>
           )}
           <div className="mt-1 font-semibold text-foreground/70">{formatDate(order.createdAt)}</div>

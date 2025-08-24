@@ -6,10 +6,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "../popover";
 import { Separator } from "../separator";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 function Navprofile() {
   const { isAuthenticated, logout, user } = useAuthStore((state) => state);
-
+  const {t} = useTranslation()
   if (!isAuthenticated) return;
 
   const handleLogout = () => {
@@ -40,15 +41,15 @@ function Navprofile() {
         <PopoverContent className="w-[200px] space-y-2">
           <div className="flex items-center gap-2">
             <User />
-            Profile
+            {t("profile")}
           </div>
           <Separator />
           <Link to="/orders" className="flex items-center px-4 gap-2 bg-primary/5  hover:bg-primary/10 py-2  rounded-lg">
             <Truck />
-            Orders List
+            {t("order_lists")}
           </Link>
           <Button onClick={handleLogout} className="w-full">
-            Logout
+            {t("logout")}
           </Button>
         </PopoverContent>
       </Popover>

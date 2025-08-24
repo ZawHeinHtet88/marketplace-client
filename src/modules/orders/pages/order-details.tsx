@@ -29,12 +29,14 @@ import { toast } from "sonner";
 import { useGetOrderQuery } from "../hooks/queries";
 import { QueryClient } from "@tanstack/react-query";
 import { getImageUrl } from "@/utils/images";
+import { useTranslation } from "react-i18next";
 
 function OrderDetails() {
   const { id } = useParams<{ id: string }>();
   const [paymentType, setPaymentType] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
-  const queryClient = new QueryClient()
+  const { t } = useTranslation();
+  const queryClient = new QueryClient();
   const {
     mutateAsync: createCheckoutSessionMutation,
     isPending: isCheckoutPending,
@@ -68,14 +70,14 @@ function OrderDetails() {
   const { data, isLoading } = useGetOrderQuery(id!);
 
   if (isLoading) {
-    return <div className="w-full min-h-screen">Loading...</div>;
+    return <div className="w-full min-h-screen">{t("loading")}...</div>;
   }
 
   return (
     <div className="max-w-6xl mx-auto my-10 min-h-screen space-y-5">
       <BreadCrumps
         breadcrumbs={[
-          { label: "Orders", href: "/orders" },
+          { label: t("order"), href: "/orders" },
           {
             label: data?.order[0]?.code || "",
             href: `/orders/${data?.order[0].code}`,
@@ -96,13 +98,13 @@ function OrderDetails() {
                   onClick={() => setDialogOpen(true)}
                 >
                   <DollarSign />
-                  Cash
+                  {t("cash")}
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-5xl">
                 <div className="space-y-4">
-                  <Label className="text-base font-medium">
-                    Select Payment Type
+                  <Label className="text-base font-medium text-primary">
+                    {t("select_paymant")}
                   </Label>
                   <RadioGroup
                     value={paymentType}
@@ -118,12 +120,13 @@ function OrderDetails() {
                         <Label
                           htmlFor="stripe"
                           className={cn(
-                            "flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-gray-200 bg-white p-6 transition-all peer-checked:bg-emerald-50 hover:bg-gray-50",
-                            paymentType === "stripe" && "border-primary"
+                            "flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-gray-200 bg-white p-6 transition-all peer-checked:bg-emerald-50 hover:bg-gray-50 dark:bg-neutral-800 dark:border-neutral-700 dark:hover:bg-neutral-700",
+                            paymentType === "stripe" &&
+                              "border-primary dark:border-primary"
                           )}
                         >
                           <CreditCard className="mb-3 h-8 w-8 text-gray-400 peer-checked:text-emerald-600" />
-                          <span className="font-medium text-gray-900">
+                          <span className="font-medium dark:text-white">
                             Stripe
                           </span>
                         </Label>
@@ -137,13 +140,14 @@ function OrderDetails() {
                         <Label
                           htmlFor="cashOnDelivery"
                           className={cn(
-                            "flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-gray-200 bg-white p-6 transition-all peer-checked:bg-emerald-50 hover:bg-gray-50",
-                            paymentType === "cashOnDelivery" && "border-primary"
+                            "flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-gray-200 bg-white p-6 transition-all peer-checked:bg-emerald-50 hover:bg-gray-50 dark:bg-neutral-800 dark:border-neutral-700 dark:hover:bg-neutral-700",
+                            paymentType === "cashOnDelivery" &&
+                              "border-primary dark:border-primary"
                           )}
                         >
                           <FileText className="mb-3 h-8 w-8 text-gray-400 peer-checked:text-emerald-600" />
-                          <span className="font-medium text-gray-900">
-                            Cash on Delivery
+                          <span className="font-medium dark:text-white">
+                            {t("cash_on_delivery")}
                           </span>
                         </Label>
                       </div>
@@ -159,7 +163,7 @@ function OrderDetails() {
                     {isCashOnDeliveryPending ? (
                       <Loader className="animate-spin" />
                     ) : (
-                      "Check out"
+                      t("checkout")
                     )}
                   </Button>
                 </DialogFooter>
@@ -173,16 +177,16 @@ function OrderDetails() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableCell className="md:w-[10px]">No</TableCell>
-              <TableCell className="md:w-[100px]">Image</TableCell>
-              <TableCell className="md:w-[200px]">Product</TableCell>
-              <TableCell>Quantity</TableCell>
-              <TableCell>Price</TableCell>
-              <TableCell>Shipping Cost</TableCell>
-              <TableCell>Total</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Is Delivered</TableCell>
-              <TableCell>Created At</TableCell>
+              <TableCell className="md:w-[10px]">{t("number")}</TableCell>
+              <TableCell className="md:w-[100px]">{t("image")}</TableCell>
+              <TableCell className="md:w-[200px]">{t("product")}</TableCell>
+              <TableCell>{t("quantity")}</TableCell>
+              <TableCell>{t("price")}</TableCell>
+              <TableCell>{t("shipping_cost")}</TableCell>
+              <TableCell>{t("total")}</TableCell>
+              <TableCell>{t("status")}</TableCell>
+              <TableCell>{t("is_delivered")}</TableCell>
+              <TableCell>{t("created_at")}</TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -192,16 +196,25 @@ function OrderDetails() {
                 <TableCell>
                   <img
                     className="w-[30px] h-[30px] object-cover rounded-2xl"
-                    src={getImageUrl({resource:"images", fileName:item.productId.images[0]})}
+                    src={getImageUrl({
+                      resource: "images",
+                      fileName: item.productId.images[0],
+                    })}
                     alt={item.productId.name}
                   />
                 </TableCell>
                 <TableCell>{item.productId.name}</TableCell>
 
                 <TableCell>{item.quantity}</TableCell>
-                <TableCell>{item.productId.price} MMK</TableCell>
-                <TableCell>{item.productId.shipping} MMK</TableCell>
-                <TableCell>{item.total} MMK</TableCell>
+                <TableCell>
+                  {item.productId.price} {t("kyats")}
+                </TableCell>
+                <TableCell>
+                  {item.productId.shipping} {t("kyats")}
+                </TableCell>
+                <TableCell>
+                  {item.total} {t("kyats")}
+                </TableCell>
                 <TableCell className="capitalize">{item.status} </TableCell>
                 <TableCell className="capitalize">
                   {item.isDelivered ? "Yes" : "No"}{" "}
@@ -212,8 +225,10 @@ function OrderDetails() {
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell colSpan={8}>Total</TableCell>
-              <TableCell colSpan={2} className="text-right">{data?.amount} MMK</TableCell>
+              <TableCell colSpan={8}>{t("total")}</TableCell>
+              <TableCell colSpan={2} className="text-right">
+                {data?.amount} {t("kyats")}
+              </TableCell>
             </TableRow>
           </TableFooter>
         </Table>

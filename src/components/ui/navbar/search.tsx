@@ -7,8 +7,10 @@ import { useDebouncedCallback } from "use-debounce";
 import { Card } from "../card";
 import { Input } from "../input";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 function NavSearch() {
+  const {t} = useTranslation()
   const [inputValue, setInputValue] = useState("");
   const [query, setQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -45,7 +47,7 @@ function NavSearch() {
   };
 
   return (
-    <div className="relative w-[500px] max-w-sm bg-red-50 dark:bg-background rounded-xl hidden md:block">
+    <div className="relative w-[450px]  bg-red-50 dark:bg-background rounded-xl hidden md:block">
       <Search className="absolute left-3 top-1/2 h-6 w-6 -translate-y-1/2 text-primary" />
       <Input
         onKeyDown={(e) => {
@@ -66,7 +68,7 @@ function NavSearch() {
         onFocus={() => {
           if (inputValue.length > 2) setShowSuggestions(true);
         }}
-        placeholder="Search essentials, groceries and more..."
+        placeholder={t("search_bar_placeholder")}
         className="pl-12 py-5"
       />
 
@@ -86,13 +88,13 @@ function NavSearch() {
 
       {showSuggestions && isLoading && (
         <p className="absolute top-full w-full z-10 p-2 text-xs text-muted-foreground mt-1">
-          Loading...
+          {t("loading")}...
         </p>
       )}
 
       {showSuggestions && inputValue.length > 0 && !isLoading && suggestions.length === 0 && (
         <Card className="absolute top-full w-full z-10 p-2 text-xs text-muted-foreground mt-1">
-          No results found.
+          {t("no_products_found")}
         </Card>
       )}
     </div>

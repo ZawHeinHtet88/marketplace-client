@@ -1,7 +1,8 @@
+import i18n from "i18next";
 import { toast } from "sonner";
-import { CartItem, Product } from "../type";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { CartItem, Product } from "../type";
 
 interface CartState {
   cart: CartItem[];
@@ -13,6 +14,7 @@ interface CartState {
   changeQuantity: (id: string, value: number) => void;
   resetCart: () => void;
 }
+
 
 export const useCartStore = create<CartState>()(
   persist(
@@ -27,7 +29,7 @@ export const useCartStore = create<CartState>()(
         if (existingItem) {
           const newQty = existingItem.quantity + addQty;
           if (newQty > 20) {
-            toast.warning("You can add only 20 quantity per product.");
+            toast.warning(i18n.t("can_add_only"));
             return;
           }
           set((state) => ({
@@ -41,12 +43,17 @@ export const useCartStore = create<CartState>()(
         } else {
           const qtyToAdd = addQty > 20 ? 20 : addQty;
           if (addQty > 20) {
-            toast.warning("You can add only 20 quantity per product.");
+            toast.warning(i18n.t("can_add_only"));
           }
           set((state) => ({
             cart: [...state.cart, { ...item, quantity: qtyToAdd }],
           }));
-          toast.success(`Added ${qtyToAdd} ${item.title} to cart!`);
+          toast.success(
+            i18n
+              .t("added_to_cart")
+              .replace("{{item_title}}", item.title)
+              .replace("{{qtyToAdd}}", item!.quantity!.toString())
+          );
         }
         updateTotal();
       },

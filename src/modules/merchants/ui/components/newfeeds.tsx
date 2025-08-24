@@ -5,8 +5,10 @@ import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { MessageCircle } from "lucide-react";
 import { useNewFeedSidebarStore } from "../../store/index.store";
+import { useTranslation } from "react-i18next";
 function NewFeeds() {
   const { isNewFeedOpen } = useNewFeedSidebarStore();
+  const { t } = useTranslation();
 
   return (
     <AnimatePresence>
@@ -20,16 +22,18 @@ function NewFeeds() {
         >
           <Card className={cn("shadow rounded-2xl border")}>
             <CardHeader>
-              <CardTitle className="text-lg">Feedback</CardTitle>
+              <CardTitle className="text-lg">{t("feed_back")}</CardTitle>
             </CardHeader>
             <Separator />
             <CardContent className="h-[475px] flex items-center justify-center flex-col text-center">
               <div className="w-[60px] bg-secondary h-[60px] rounded-full flex justify-center items-center">
                 <MessageCircle />
               </div>
-              <p className="text-xl font-semibold">No Feedback</p>
+              <p className="text-xl font-semibold">{t("no_feed_back")}</p>
               <p className="font-semibold text-gray-500">
-                This seller has receive and feedback Yet
+                {
+                  t("this_seller_haven't_recive")
+                }
               </p>
             </CardContent>
           </Card>

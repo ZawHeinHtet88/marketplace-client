@@ -7,7 +7,7 @@ import {
   SelectGroup,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from "@/components/ui/select";
 import ProductCard from "@/modules/products/components/ui/product-card";
 import {
@@ -19,8 +19,8 @@ import {
   SortDesc,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
-import FilterModal from "../components/filter-modal";
 import Pagination from "../components/pagination";
 import Skeletons from "../components/skeletons";
 import {
@@ -31,14 +31,14 @@ import {
 
 function ProductListPage() {
   const [values, setValues] = useState<number[]>([2, 4534534]);
-
+  const { t } = useTranslation();
   const location = useLocation();
 
   const { type, search } = location.state || {};
 
   const [selectedType, setSelectedType] = useState("");
 
-  const [selectedCategory,setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const [filters, setFilters] = useState({
     page: 1,
@@ -47,15 +47,17 @@ function ProductListPage() {
     "price[lt]": values[1],
     "name[regex]": "",
     type: selectedType,
-    category : selectedCategory
+    category: selectedCategory,
   });
 
   const { data: productData, isLoading } = useGetAllProductsQuery(filters);
 
   const { data: categories } = useGetAllCategoriesQuery();
 
-  const filteredCategories = useMemo(()=> {
-    return categories?.data.filter(category => category.type === selectedType);
+  const filteredCategories = useMemo(() => {
+    return categories?.data.filter(
+      (category) => category.type === selectedType
+    );
   }, [categories, selectedType]);
 
   const { data: types } = useGetAllTypesQuery();
@@ -65,6 +67,10 @@ function ProductListPage() {
       setSelectedType(type);
     }
   }, [type, setFilters]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   const numberOfPage =
     productData?.pagination.totalResult &&
@@ -89,7 +95,6 @@ function ProductListPage() {
     }));
   };
 
-
   return (
     <section className="flex gap-5 min-h-screen my-10">
       <div className="hidden md:block">
@@ -97,17 +102,17 @@ function ProductListPage() {
           <CardContent className="flex flex-col gap-5">
             <div className="space-y-3">
               <h5 className="text-primary font-semibold">
-                Filter By price(MMK)
+                {t("filter_by_price")}
               </h5>
               <div className="grid grid-cols-2 gap-2">
                 <div className="">
-                  <label className="text-sm ">Min Price(MMK)</label>
+                  <label className="text-sm ">{t("min_price")}</label>
                   <div className="border-2 border-foreground rounded mt-2">
                     <p className="text-center">{values[0]}</p>
                   </div>
                 </div>
                 <div className="">
-                  <label className="text-sm ">Max Price(MMK)</label>
+                  <label className="text-sm ">{t("max_price")}</label>
                   <div className="">
                     <div className="border-2 border-foreground rounded mt-2">
                       <p className="text-center">{values[1]}</p>
@@ -125,7 +130,9 @@ function ProductListPage() {
               />{" "}
             </div>
             <div className="space-y-3">
-              <h5 className="text-primary font-semibold">Filter By Types</h5>
+              <h5 className="text-primary font-semibold">
+                {t("filter_by_type")}
+              </h5>
               <div>
                 <Select
                   value={selectedType}
@@ -134,7 +141,7 @@ function ProductListPage() {
                   }}
                 >
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a Type" />
+                    <SelectValue placeholder={t("select_type")} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
@@ -149,17 +156,18 @@ function ProductListPage() {
               </div>
             </div>
             <div className="space-y-3">
-              <h5 className="text-primary font-semibold">Filter By Category</h5>
+              <h5 className="text-primary font-semibold">
+                {t("filter_by_category")}
+              </h5>
               <div>
-                <Select value={selectedCategory} onValueChange={(value) => {
-                  setSelectedCategory(value);
-                }}>
-                  <SelectTrigger
-                    disabled={!selectedType}
-                   
-                    className="w-full"
-                  >
-                    <SelectValue placeholder="Select a Category" />
+                <Select
+                  value={selectedCategory}
+                  onValueChange={(value) => {
+                    setSelectedCategory(value);
+                  }}
+                >
+                  <SelectTrigger disabled={!selectedType} className="w-full">
+                    <SelectValue placeholder={t("select_category")} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
@@ -174,7 +182,9 @@ function ProductListPage() {
               </div>
             </div>
             <div className="space-y-3">
-              <h5 className="text-primary font-semibold">Sorting by Order</h5>
+              <h5 className="text-primary font-semibold">
+                {t("sorting_order")}
+              </h5>
               <div className="flex justify-between">
                 <Button size={"icon"}>
                   <SortAsc />
@@ -215,7 +225,7 @@ function ProductListPage() {
         </Card>
       </div>
       <div className="w-full md:w-[75%] space-y-5">
-        <FilterModal />
+        {/* <FilterModal /> */}
 
         {isLoading ? (
           <Skeletons />

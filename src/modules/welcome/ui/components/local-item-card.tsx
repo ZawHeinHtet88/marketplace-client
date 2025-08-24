@@ -13,11 +13,13 @@ import { FeaturedProduct } from "../../types";
 import { useNavigate } from "react-router-dom";
 import { getImageUrl } from "@/utils/images";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 function LocalItemCard({ product }: { product: FeaturedProduct }) {
   const { addToCart } = useCartStore((state) => state);
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
+  const { t } = useTranslation();
 
   const maxQuantity = product.inventory ?? 1;
 
@@ -37,7 +39,6 @@ function LocalItemCard({ product }: { product: FeaturedProduct }) {
       return;
     }
     addToCart(item);
-    toast.success("Added to cart!");
   };
 
   return (
@@ -47,7 +48,7 @@ function LocalItemCard({ product }: { product: FeaturedProduct }) {
     >
       <div className="bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center rounded-xl p-2">
         <img
-          className="h-[160px] w-full object-cover rounded-xl"
+          className="h-[180px] w-full object-cover rounded-xl"
           src={getImageUrl({
             resource: "optimize",
             fileName: product.optimize_images[0],
@@ -74,7 +75,7 @@ function LocalItemCard({ product }: { product: FeaturedProduct }) {
         </div>
         <div className="flex items-center gap-2 mt-2">
           <span className="text-xs text-gray-500 dark:text-gray-400">
-            Available:
+            {t("avaliable")}:
           </span>
           <span className="font-bold text-green-600 dark:text-green-400">
             {maxQuantity}
@@ -82,7 +83,7 @@ function LocalItemCard({ product }: { product: FeaturedProduct }) {
         </div>
         <div className="flex items-center gap-2 mt-2">
           <span className="text-xs text-gray-500 dark:text-gray-400">
-            Quantity:
+            {t("quantity")}:
           </span>
           <Button
             type="button"
@@ -97,7 +98,7 @@ function LocalItemCard({ product }: { product: FeaturedProduct }) {
           >
             -
           </Button>
-          <span className="font-semibold text-primary dark:text-primary-foreground">
+          <span className="font-semibold text-primary ">
             {quantity}
           </span>
           <Button
@@ -119,14 +120,14 @@ function LocalItemCard({ product }: { product: FeaturedProduct }) {
       <CardFooter className="flex flex-col gap-2 px-3 pt-2">
         <div className="flex items-center justify-between w-full">
           <CardDescription className="text-lg font-extrabold text-green-600 dark:text-green-400">
-            {product.price} kyats
+            {product.price} {t("kyats_short")}
           </CardDescription>
           <Button
             onClick={handleAddToCart}
             className="bg-primary flex items-center gap-2 px-4 py-2 rounded-lg dark:bg-primary dark:text-primary-foreground"
             disabled={quantity > maxQuantity}
           >
-            <ShoppingCart /> Add to Cart
+            <ShoppingCart /> {t("add_to_cart")}
           </Button>
         </div>
       </CardFooter>
