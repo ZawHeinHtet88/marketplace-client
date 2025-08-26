@@ -27,6 +27,7 @@ import { toast } from "sonner";
 import { useSignupMutation } from "../../hook/mutations";
 import { useAuthStore } from "../../store/index.store";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 export const SignupForm = () => {
   const [step, setStep] = useState<number>(1);
@@ -34,6 +35,7 @@ export const SignupForm = () => {
   const { mutateAsync, isPending } = useSignupMutation();
   const { login } = useAuthStore((state) => state);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const form = useForm<SignupSchemaType>({
     resolver: zodResolver(SignupSchama),
@@ -46,7 +48,7 @@ export const SignupForm = () => {
       token: res.token,
       user: res.data.user,
     });
-    toast.success("login successfully");
+    toast.success(t("login_success"));
     navigate("/");
   };
 
@@ -61,7 +63,12 @@ export const SignupForm = () => {
             password: values.password,
             passwordConfirm: values.passwordConfirm,
           }
-        : { name: values.name };
+        : { name: values.name ,
+            street : values.street,
+            city : values.city,
+            state : values.state,
+            country : values.country,
+            postalCode : values.postalCode};
 
     const result = await schema.safeParseAsync(stepValues);
 
@@ -90,13 +97,13 @@ export const SignupForm = () => {
 
   return (
     <section
-      className="min-h-screen w-full flex items-center justify-center px-2"
+      className="min-h-screen flex items-center justify-center px-2"
       style={{
         background:
-          "linear-gradient(135deg, var(--primary), var(--primary), var(--secondary))",
+          "light:linear-gradient(135deg, var(--primary), var(--primary), var(--secondary))",
       }}
     >
-      <div className="w-full max-w-md bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 sm:p-10 space-y-8 border border-white/30 mx-auto">
+      <div className="w-full max-w-md bg-white/80 dark:bg-neutral-900 backdrop-blur-lg rounded-2xl shadow-xl p-6 sm:p-10 space-y-2 border border-white/30 mx-auto">
         <header className="flex flex-col items-center gap-3">
           <div
             className="p-1 rounded-full"
@@ -119,20 +126,25 @@ export const SignupForm = () => {
               WebkitTextFillColor: "transparent",
             }}
           >
-            Ayeyar Marketplace
+            {t("ayeyar_marketplace")}
           </h4>
-          <p className="text-base font-semibold text-gray-700">
-            Create your account
+          <p className="text-base font-semibold text-foreground/70">
+            {t("create_account")}
           </p>
         </header>
         <p className="text-lg font-bold text-foreground text-center">
-          <span className={cn(step === 1 && "text-green-600")}>Step 1</span> |{" "}
-          <span className={cn(step === 2 && "text-green-600")}>Step 2</span>
+          <span className={cn(step === 1 && "text-green-600")}>
+            {t("step_1")}
+          </span>{" "}
+          |{" "}
+          <span className={cn(step === 2 && "text-green-600")}>
+            {t("step_2")}
+          </span>
         </p>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full space-y-6"
+            className="w-full space-y-4"
           >
             {step === 1 && (
               <>
@@ -142,12 +154,12 @@ export const SignupForm = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-[12px] font-semibold text-foreground/50">
-                        Email
+                        {t("email")}
                       </FormLabel>
                       <FormControl>
                         <Input
                           className="bg-white/70 py-4 text-gray-700 placeholder:text-gray-400 rounded-xl border border-gray-200 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/30"
-                          placeholder="Pls enter mail..."
+                          placeholder={t("pls_enter_email")}
                           {...field}
                         />
                       </FormControl>
@@ -161,7 +173,7 @@ export const SignupForm = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-[12px] font-semibold text-foreground/70 flex items-center justify-between">
-                        <p className="">Password</p>
+                        <p className="">{t("password")}</p>
                       </FormLabel>
                       <FormControl>
                         <PasswordInput
@@ -180,7 +192,7 @@ export const SignupForm = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-[12px] font-semibold text-foreground/70 flex items-center justify-between">
-                        <p className="">Confirm Password</p>
+                        <p className="">{t("confirm_password")}</p>
                       </FormLabel>
                       <FormControl>
                         <PasswordInput
@@ -204,7 +216,7 @@ export const SignupForm = () => {
                       color: "#fff",
                     }}
                   >
-                    Next Step <ForwardIcon />
+                    {t("next_step")} <ForwardIcon />
                   </Button>
                 </div>
               </>
@@ -217,12 +229,112 @@ export const SignupForm = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-[12px] font-semibold text-foreground/50">
-                        Username
+                        {t("username")}
                       </FormLabel>
                       <FormControl>
                         <Input
                           className="bg-white/70 py-4 text-gray-700 placeholder:text-gray-400 rounded-xl border border-gray-200 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/30"
-                          placeholder="Pls enter name..."
+                          placeholder={t("enter_name")}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="grid grid-cols-2 gap-2">
+                  <FormField
+                    control={form.control}
+                    name="street"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[12px] font-semibold text-foreground/50">
+                          {t("street")}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            className="bg-white/70 py-4 text-gray-700 placeholder:text-gray-400 rounded-xl border border-gray-200 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/30"
+                            placeholder={t("enter_street")}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="city"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[12px] font-semibold text-foreground/50">
+                          {t("city")}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            className="bg-white/70 py-4 text-gray-700 placeholder:text-gray-400 rounded-xl border border-gray-200 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/30"
+                            placeholder={t("enter_city")}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="state"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[12px] font-semibold text-foreground/50">
+                          {t("state")}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            className="bg-white/70 py-4 text-gray-700 placeholder:text-gray-400 rounded-xl border border-gray-200 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/30"
+                            placeholder={t("enter_state")}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="country"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[12px] font-semibold text-foreground/50">
+                          {t("country")}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            className="bg-white/70 py-4 text-gray-700 placeholder:text-gray-400 rounded-xl border border-gray-200 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/30"
+                            placeholder={t("enter_country")}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <FormField
+                  control={form.control}
+                  name="postalCode"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-[12px] font-semibold text-foreground/50">
+                        {t("postal_code")}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className="bg-white/70 py-4 text-gray-700 placeholder:text-gray-400 rounded-xl border border-gray-200 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/30"
+                          placeholder={t("enter_postal_code")}
                           {...field}
                         />
                       </FormControl>
@@ -241,7 +353,7 @@ export const SignupForm = () => {
                       color: "#fff",
                     }}
                   >
-                    Back
+                    {t("back")}
                   </Button>
                   <Button
                     disabled={isPending}
@@ -253,21 +365,25 @@ export const SignupForm = () => {
                       color: "#fff",
                     }}
                   >
-                    {isPending ? <Loader className="animate-spin" /> : "Submit"}
+                    {isPending ? (
+                      <Loader className="animate-spin" />
+                    ) : (
+                      t("submit")
+                    )}
                   </Button>
                 </div>
               </>
             )}
             <div className="flex items-center justify-center gap-2 pt-2">
               <p className="text-[14px] font-semibold text-foreground">
-                Do you already have an account?
+                {t("already_have_account")}
               </p>
               <Link
                 to={"/login"}
                 className="text-[14px] hover:underline font-semibold"
                 style={{ color: "var(--primary)" }}
               >
-                Sign In
+                {t("sign_in")}
               </Link>
             </div>
           </form>

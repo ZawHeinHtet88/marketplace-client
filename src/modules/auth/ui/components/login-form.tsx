@@ -24,11 +24,13 @@ import { toast } from "sonner";
 import { Loader } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleLogin from "./google-login";
+import { useTranslation } from "react-i18next";
 
 export const LoginForm = () => {
   const { mutateAsync, isPending } = useLoginMutation();
   const { login } = useAuthStore((state) => state);
   const navigate = useNavigate();
+  const {t} = useTranslation("");
 
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(LoginSchama),
@@ -44,7 +46,7 @@ export const LoginForm = () => {
         token: res.token,
         user: res.data.user,
       });
-      toast.success("login successfully");
+      toast.success(t("login_success"));
       navigate("/");
     }
   };
@@ -54,10 +56,10 @@ export const LoginForm = () => {
       className="min-h-screen w-full flex items-center justify-center px-2"
       style={{
         background:
-          "linear-gradient(135deg, var(--primary), var(--primary), var(--secondary))",
+          "light:linear-gradient(135deg, var(--primary), var(--primary), var(--secondary))",
       }}
     >
-      <div className="w-full max-w-md bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 sm:p-10 space-y-8 border border-white/30 mx-auto">
+      <div className="w-full max-w-md bg-white/80 dark:bg-neutral-900 backdrop-blur-lg rounded-2xl shadow-xl p-6 sm:p-10 space-y-8 border border-white/30 mx-auto">
         <header className="flex flex-col items-center gap-3">
           <div
             className="p-1 rounded-full"
@@ -80,10 +82,10 @@ export const LoginForm = () => {
               WebkitTextFillColor: "transparent",
             }}
           >
-            Ayeyar Marketplace
+            {t("ayeyar_marketplace")}
           </h4>
-          <p className="text-base font-semibold text-gray-700">
-            Welcome Back 👋
+          <p className="text-base font-semibold text-foreground">
+            {t("welcome_back")} 👋
           </p>
         </header>
         <Form {...form}>
@@ -97,12 +99,12 @@ export const LoginForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[12px] font-semibold text-foreground/50">
-                    Email
+                    {t("email")}
                   </FormLabel>
                   <FormControl>
                     <Input
                       className="bg-white/70 py-5 text-gray-700 placeholder:text-gray-400 "
-                      placeholder="Pls enter mail..."
+                      placeholder={t("pls_enter_email")}
                       {...field}
                     />
                   </FormControl>
@@ -116,14 +118,14 @@ export const LoginForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[12px] font-semibold text-foreground/70 flex items-center justify-between">
-                    <p className="">Password</p>
-                    <Button
+                    <p className="">{t("password")}</p>
+                    {/* <Button
                       variant={"link"}
                       className="text-sm font-medium"
                       style={{ color: "var(--primary)" }}
                     >
                       Forget Password?
-                    </Button>
+                    </Button> */}
                   </FormLabel>
                   <FormControl>
                     <PasswordInput
@@ -145,19 +147,19 @@ export const LoginForm = () => {
               disabled={isPending}
               type="submit"
             >
-              {isPending ? <Loader className="animate-spin" /> : "Sign In"}
+              {isPending ? <Loader className="animate-spin" /> : t("sign_in")}
             </Button>
             <GoogleLogin />
             <div className="flex items-center justify-center gap-2 pt-2">
               <p className="text-[14px] font-semibold text-foreground">
-                Don't have an account?
+                {t("don't_have_account")}
               </p>
               <Link
                 to={"/signup"}
                 className="text-[14px] hover:underline font-semibold"
                 style={{ color: "var(--primary)" }}
               >
-                Sign up now
+                {t("sign_up")}
               </Link>
             </div>
           </form>

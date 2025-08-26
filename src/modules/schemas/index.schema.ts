@@ -15,6 +15,11 @@ export const SignupSchama = z
     email: z.string().email().min(1),
     password: z.string().min(8),
     passwordConfirm: z.string(),
+    street: z.string().min(1).max(20),
+    city: z.string().min(1).max(20),
+    state: z.string().min(1).max(20),
+    country: z.string().min(1).max(20),
+    postalCode: z.coerce.number().int().min(1),
   })
   .strict()
   .refine((data) => data.password === data.passwordConfirm, {
@@ -39,5 +44,10 @@ export const StepOneSchema = z
 export const StepTwoSchema = z
   .object({
     name: z.string().min(1).max(20),
+    street: z.string().min(1).max(20),
+    city: z.string().min(1).max(20),
+    state: z.string().min(1).max(20),
+    country: z.string().min(1).max(20),
+    postalCode: z.coerce.number().int().min(1),
   })
   .strict();

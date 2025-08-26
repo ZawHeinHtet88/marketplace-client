@@ -18,8 +18,6 @@ function LoginPage() {
       const data = decryptAES(decodedUri);
 
       if (data.isSuccess) {
-        console.log("hi");
-
         toast.success("Login Successfully");
         login({
           user: data.data.user,

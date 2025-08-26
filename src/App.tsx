@@ -15,6 +15,7 @@ import OrderListPage from "./modules/orders/pages/order-list";
 import PaymentSuccessPage from "./modules/cart/pages/payment-success";
 import OrderDetails from "./modules/orders/pages/order-details";
 import CustomerSupportPage from "./modules/supports/pages";
+import ProfilePage from "./modules/profile/pages";
 
 function App() {
   return (
@@ -40,7 +41,7 @@ function App() {
               <Route path="/orders/:id" element={<OrderDetails />} />
               <Route path="/payment-success" element={<PaymentSuccessPage />} />
               <Route path="/supports" element={<CustomerSupportPage/>} />
-
+              <Route path="/profile" element={<ProfilePage/>}/>
               <Route path="*" element={<h3>Not Found</h3>}></Route>
             </Route>
           </Routes>

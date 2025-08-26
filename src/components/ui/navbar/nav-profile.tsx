@@ -13,9 +13,10 @@ function Navprofile() {
   const {t} = useTranslation()
   if (!isAuthenticated) return;
 
+
   const handleLogout = () => {
     logout();
-    toast.success("Logout Successfully");
+    toast.success(t("logout_success"));
   };
   return (
     <div className="flex items-center gap-2  px-10">
@@ -39,12 +40,18 @@ function Navprofile() {
           </div>
         </PopoverTrigger>
         <PopoverContent className="w-[200px] space-y-2">
-          <div className="flex items-center gap-2">
+          <Link
+            to="/profile"
+            className="flex items-center px-4 gap-2   hover:bg-primary/10 py-2  rounded-lg"
+          >
             <User />
             {t("profile")}
-          </div>
+          </Link>
           <Separator />
-          <Link to="/orders" className="flex items-center px-4 gap-2 bg-primary/5  hover:bg-primary/10 py-2  rounded-lg">
+          <Link
+            to="/orders"
+            className="flex items-center px-4 gap-2 bg-primary/5  hover:bg-primary/10 py-2  rounded-lg"
+          >
             <Truck />
             {t("order_lists")}
           </Link>
