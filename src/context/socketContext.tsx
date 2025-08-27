@@ -22,6 +22,8 @@ interface SocketContextType {
   socket: Socket | null;
   onlineUsers: OnlineUser[];
 }
+export const API_SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
+
 
 const SocketContext = createContext<SocketContextType | undefined>(undefined);
 
@@ -37,7 +39,7 @@ export function SocketProvider({ children, userInfo }: SocketProviderProps) {
   useEffect(() => {
     if (!userInfo) return;
 
-    const newSocket = io(import.meta.env.VITE_SOCKET_URL, {
+    const newSocket = io(API_SOCKET_URL, {
       withCredentials: true,
       query: { userId: userInfo._id },
     });
