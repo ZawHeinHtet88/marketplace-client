@@ -1,8 +1,14 @@
+import { Product } from "@/modules/products/type";
 import { Ad, FeaturedProduct, PopularType } from ".";
 
 export interface AllFeaturedProductsApiResponse {
   messge: string;
   products: FeaturedProduct[];
+}
+
+export interface AllRecommendedProductsApiResponse {
+  messge: string;
+  products: Product[];
 }
 
 export interface AllPopularTypeApiResponse {

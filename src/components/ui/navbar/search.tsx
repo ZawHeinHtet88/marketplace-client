@@ -47,7 +47,7 @@ function NavSearch() {
   };
 
   return (
-    <div className="relative w-[450px]  bg-red-50 dark:bg-background rounded-xl hidden md:block">
+    <div className="relative w-[420px]  bg-red-50 dark:bg-background rounded-xl hidden md:block">
       <Search className="absolute left-3 top-1/2 h-6 w-6 -translate-y-1/2 text-primary" />
       <Input
         onKeyDown={(e) => {

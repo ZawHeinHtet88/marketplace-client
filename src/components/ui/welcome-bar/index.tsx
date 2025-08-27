@@ -11,7 +11,7 @@ function WelcomeBar() {
         <p className="capitalize text-secondary-foreground font-thin">
           {t("welcome")}
           <span className="hidden md:inline-block">
-            {t("to_worldwide_mega_mark")}
+            {t("greeting")}
           </span>
         </p>
         <div className="flex items-center">

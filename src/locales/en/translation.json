@@ -1,6 +1,6 @@
 {
   "welcome": "Welcome",
-  "greeting": "Hello, {{name}}!",
+  "greeting": "to our marketplace",
   "ayeyar": "Ayeyar",
   "mart": "Mart",
   "search_bar_placeholder": "Search products, categories, and more...",
@@ -29,8 +29,8 @@
   "no_feed_back": "No Feedback",
   "this_seller_haven't_recive": "This seller haven't recive any feedback yet.",
   "filter_by_price": "Filter By Price(MMK)",
-  "min_price": "Min Price",
-  "max_price": "Max Price",
+  "min_price": "Min Price (MMK)",
+  "max_price": "Max Price (MMK)",
   "filter_by_type": "Filter By Type",
   "select_type": "Select a Type",
   "description": "Description",
@@ -105,4 +105,5 @@
   "enter_country" : "please enter country name",
   "postal_code" : "Postal Code",
   "enter_postal_code" : "please enter postal code"
+  ,"recommended_products" : "Recommend Products for you"
 }
