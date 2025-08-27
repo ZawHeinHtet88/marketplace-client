@@ -6,5 +6,5 @@ export function getImageUrl({
   fileName: string | undefined | null;  
 }) {
   if (!fileName) return "";
-  return `http://localhost:3000/${resource}/${fileName}`;
+  return `${import.meta.env.VITE_API_URL}/${resource}/${fileName}`;
 }
