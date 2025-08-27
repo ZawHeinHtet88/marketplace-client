@@ -37,7 +37,7 @@ export function SocketProvider({ children, userInfo }: SocketProviderProps) {
   useEffect(() => {
     if (!userInfo) return;
 
-    const newSocket = io(import.meta.env.VITE_API_URL, {
+    const newSocket = io(import.meta.env.VITE_SOCKET_URL, {
       withCredentials: true,
       query: { userId: userInfo._id },
     });
