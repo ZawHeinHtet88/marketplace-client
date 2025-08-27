@@ -8,12 +8,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { BaggageClaim, CheckCircle, Download, Loader, Mail } from "lucide-react";
+import { BaggageClaim, CheckCircle, Loader, Mail } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { toast } from "sonner";
 import { useCheckoutSuccessMutation } from "../hooks/mutations";
 import { useCartStore } from "../store/index.store";
-import { toast } from "sonner";
 
 interface OrderData {
   transcation_id: string;
@@ -181,10 +181,7 @@ function PaymentSuccessPage() {
               Go to Product List
             </Button>
           </Link>
-          <Button variant="outline" size="lg">
-            <Download className="w-4 h-4 mr-2" />
-            Download Receipt
-          </Button>
+         
         </div>
 
         {/* Footer */}
