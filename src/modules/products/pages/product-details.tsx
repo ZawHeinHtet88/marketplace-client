@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 
 function ProductDetailPage() {
   const { addToCart } = useCartStore((state) => state);
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const { id } = useParams<{ id: string }>();
 
@@ -27,11 +27,9 @@ function ProductDetailPage() {
     _id: product?.id ?? "",
     title: product?.name ?? "",
     category: product?.category.name ?? "",
-    price:
-      typeof product?.price === "number"
-        ? product.price
-        : Number(product?.price) || 0,
+    price: product?.price ?? 0,
     img: product?.optimize_images ? product?.optimize_images[0] : "",
+    quantity : 1
   };
 
   useEffect(() => {

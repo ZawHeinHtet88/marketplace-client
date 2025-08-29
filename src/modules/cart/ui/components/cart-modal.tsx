@@ -1,3 +1,5 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,6 +34,7 @@ function CartModal() {
   const [orderCode, setOrderCode] = useState("");
   const [isOrderStarting, setIsOrderStarting] = useState(false);
   const [paymentType, setPaymentType] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { t } = useTranslation();
 
   const {
@@ -51,7 +54,7 @@ function CartModal() {
     isPending: isCashOnDeliveryPending,
   } = useCashOnDeliveryMutation();
 
-  // ✅ Move state update into useEffect to prevent infinite loop
+  // Move state update into useEffect to prevent infinite loop
   useEffect(() => {
     if (isSuccess) {
       setIsOrderStarting(true);
@@ -63,9 +66,7 @@ function CartModal() {
     const products = cart
       .map((item) => `${item.quantity}_${item._id}`)
       .join("#");
-
     const res = await createOrderMutateAsync(products);
-
     if (res.isSuccess) {
       setOrderCode(res.code);
     }
@@ -74,11 +75,11 @@ function CartModal() {
   const handleCheckout = async () => {
     if (paymentType === "cashOnDelivery") {
       const res = await cashOnDeliveryMutation({ code: orderCode });
-
       if (res.isSuccess) {
         resetCart();
         toast.success("Order Created Successfully");
         setIsOrderStarting(false);
+        setIsModalOpen(false);
         navigate("/");
       }
     } else {
@@ -92,9 +93,9 @@ function CartModal() {
   };
 
   return (
-    <Dialog>
+    <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
       <DialogTrigger asChild>
-        <Button className="border-0" variant="outline">
+        <Button className="border-0 bg-transparent" variant="outline">
           <ShoppingCart className="text-primary !w-6 !h-6" />
           {cart.length > 0 && (
             <sup>
@@ -122,7 +123,7 @@ function CartModal() {
           <span className="sr-only">Close</span>
         </DialogClose>
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 font-semibold text-2xl text-primary ">
+          <DialogTitle className="flex items-center gap-2 font-semibold text-2xl text-primary">
             <ShoppingCart className="text-green-600 !w-7 !h-7" />
             {t("cart_items")}
           </DialogTitle>
@@ -131,7 +132,6 @@ function CartModal() {
           </DialogDescription>
         </DialogHeader>
         <Separator className="dark:bg-neutral-700 w-full" />
-
         {isOrderStarting ? (
           <div className="space-y-4">
             <Label className="text-base font-medium dark:text-neutral-200">
@@ -155,10 +155,12 @@ function CartModal() {
                   >
                     <CreditCard className="mb-3 h-8 w-8 text-gray-400 peer-checked:text-emerald-600 dark:text-neutral-400 dark:peer-checked:text-emerald-400" />
                     <span className="font-medium text-gray-900 dark:text-neutral-100">
-                      Stripe
+                      {" "}
+                      Stripe{" "}
                     </span>
                     <span className="mt-1 text-center text-sm text-gray-500 dark:text-neutral-400">
-                      {t("cash_on_internet")}
+                      {" "}
+                      {t("cash_on_internet")}{" "}
                     </span>
                   </Label>
                 </div>
@@ -178,10 +180,12 @@ function CartModal() {
                   >
                     <FileText className="mb-3 h-8 w-8 text-gray-400 peer-checked:text-emerald-600 dark:text-neutral-400 dark:peer-checked:text-emerald-400" />
                     <span className="font-medium text-gray-900 dark:text-neutral-100">
-                      {t("cash_on_delivery")}
+                      {" "}
+                      {t("cash_on_delivery")}{" "}
                     </span>
                     <span className="mt-1 text-center text-sm text-gray-500 dark:text-neutral-400">
-                      {t("cash_product")}
+                      {" "}
+                      {t("cash_product")}{" "}
                     </span>
                   </Label>
                 </div>
@@ -192,20 +196,19 @@ function CartModal() {
           <div className="flex flex-col items-center justify-center space-x-2 h-[400px]">
             <img
               className="w-[200px] h-[200px]"
-              src="./empty-cart.gif"
-              alt=""
+              src="/empty-cart.gif"
+              alt="sds"
             />
-            <p className="text-xl font-bold text-primary ">
+            <p className="text-xl font-bold text-primary">
               {t("there_no_items_found")}
             </p>
           </div>
         ) : (
           <CartContent />
         )}
-
         <Separator className="dark:bg-neutral-700" />
         <div className="flex justify-between items-center">
-          <p className="text-lg font-semibold text-primary ">
+          <p className="text-lg font-semibold text-primary">
             {t("total_cost")} -{" "}
             <span className="text-green-600 dark:text-green-400">
               {totalAmount}
@@ -215,7 +218,10 @@ function CartModal() {
             <Button
               onClick={handleCheckout}
               disabled={
-                !cart.length || isCheckoutPending || isCashOnDeliveryPending || !paymentType
+                !cart.length ||
+                isCheckoutPending ||
+                isCashOnDeliveryPending ||
+                !paymentType
               }
               className="bg-green-600 text-white dark:bg-green-700"
             >
@@ -224,7 +230,7 @@ function CartModal() {
           ) : (
             <Button
               onClick={handleOrder}
-              disabled={!cart.length || isOrderPending }
+              disabled={!cart.length || isOrderPending}
               className="bg-green-600 text-white dark:bg-green-700"
             >
               {isOrderPending ? t("ordering") : t("make_order")}

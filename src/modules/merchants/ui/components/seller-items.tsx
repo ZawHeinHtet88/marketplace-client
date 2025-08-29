@@ -71,15 +71,15 @@ function SellerItems() {
         isNewFeedOpen ? "lg:w-[70%]" : "lg:w-full"
       )}
     >
-      <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between">
+      <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
         <CardTitle className="font-semibold text-lg">
           {t("products")}{" "}
           <span className="text-gray-500">
             ({productData?.pagination.totalResult ?? 0})
           </span>
         </CardTitle>
-        <div className="flex items-center gap-5">
-          <div className="relative rounded-xl w-[340px]" >
+        <div className="flex  items-center gap-5">
+          <div className="relative rounded-xl  md:w-[340px]" >
             <Search className="absolute left-3 top-1/2 h-6 w-6 -translate-y-1/2 text-gray-600" />
             <Input
               value={search}

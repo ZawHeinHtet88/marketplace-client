@@ -8,10 +8,12 @@ import { Card } from "../card";
 import { Input } from "../input";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useSidebar } from "../sidebar";
 
 function NavSearch() {
-  const {t} = useTranslation()
+  const { t } = useTranslation();
   const [inputValue, setInputValue] = useState("");
+  const {toggleSidebar} = useSidebar()
   const [query, setQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
 
@@ -35,26 +37,31 @@ function NavSearch() {
     setShowSuggestions(true);
   }, 300);
 
-  const { data, isLoading } = useGetAllSearchProductsQuery(query, query.length > 2);
+  const { data, isLoading } = useGetAllSearchProductsQuery(
+    query,
+    query.length > 2
+  );
 
   const suggestions = data?.product ?? [];
 
   const handleSelect = (productName: string) => {
-    setInputValue(productName);   // ✅ Keep input showing the clicked product
-    setQuery("");                 // ❌ Stop fetching
-    setShowSuggestions(false);   // ✅ Hide dropdown
+    setInputValue(productName); // ✅ Keep input showing the clicked product
+    toggleSidebar()
+    setQuery(""); // ❌ Stop fetching
+    setShowSuggestions(false); // ✅ Hide dropdown
     handleNavigate(productName); // 🚀 Navigate
   };
 
   return (
-    <div className="relative w-[420px]  bg-red-50 dark:bg-background rounded-xl hidden md:block">
+    <div className="relative  md:w-[420px]  bg-red-50 dark:bg-background rounded-xl block">
       <Search className="absolute left-3 top-1/2 h-6 w-6 -translate-y-1/2 text-primary" />
       <Input
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             e.preventDefault();
             handleNavigate(inputValue);
-            setShowSuggestions(false)
+            setShowSuggestions(false);
+            toggleSidebar()
           }
         }}
         ref={inputRef}
@@ -87,16 +94,19 @@ function NavSearch() {
       )}
 
       {showSuggestions && isLoading && (
-        <p className="absolute top-full w-full z-10 p-2 text-xs text-muted-foreground mt-1">
-          {t("loading")}...
-        </p>
-      )}
-
-      {showSuggestions && inputValue.length > 0 && !isLoading && suggestions.length === 0 && (
         <Card className="absolute top-full w-full z-10 p-2 text-xs text-muted-foreground mt-1">
-          {t("no_products_found")}
+          {t("loading")}...
         </Card>
       )}
+
+      {showSuggestions &&
+        inputValue.length > 0 &&
+        !isLoading &&
+        suggestions.length === 0 && (
+          <Card className="absolute top-full w-full z-10 p-2 text-xs text-muted-foreground mt-1">
+            {t("no_products_found")}
+          </Card>
+        )}
     </div>
   );
 }
