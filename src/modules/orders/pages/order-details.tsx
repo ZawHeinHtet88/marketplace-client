@@ -1,3 +1,5 @@
+"use client";
+
 import BreadCrumps from "@/components/ui/breadcrumps";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,66 +14,99 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useSocket } from "@/context/socketContext";
 import { cn } from "@/lib/utils";
 import {
   useCashOnDeliveryMutation,
   useCreateCheckOutSessionMutation,
 } from "@/modules/cart/hooks/mutations";
 import { formatDate } from "@/utils/format-date";
+import { getImageUrl } from "@/utils/images";
 import { CreditCard, DollarSign, FileText, Loader } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { useGetOrderQuery } from "../hooks/queries";
-import { QueryClient } from "@tanstack/react-query";
-import { getImageUrl } from "@/utils/images";
-import { useTranslation } from "react-i18next";
+import OrderProgressStepper from "../ui/stepper";
 
 function OrderDetails() {
   const { id } = useParams<{ id: string }>();
   const [paymentType, setPaymentType] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const { socket } = useSocket();
   const { t } = useTranslation();
-  const queryClient = new QueryClient();
+
+  const { data: orderQueryData, isLoading } = useGetOrderQuery(id!);
+  console.log(orderQueryData);
+
+  // Local state for order
+  const [order, setOrder] = useState(orderQueryData?.order || []);
+
+  // Mutations
   const {
     mutateAsync: createCheckoutSessionMutation,
     isPending: isCheckoutPending,
   } = useCreateCheckOutSessionMutation();
-
   const {
     mutateAsync: cashOnDeliveryMutation,
     isPending: isCashOnDeliveryPending,
   } = useCashOnDeliveryMutation();
 
+  // Handle checkout
   const handleCheckout = async (orderId: string) => {
     if (paymentType === "cashOnDelivery") {
       const res = await cashOnDeliveryMutation({ code: orderId });
       if (res.isSuccess) {
         toast.success("Order Successfully");
-        setDialogOpen(false); // Close dialog
-        queryClient.invalidateQueries({ queryKey: ["order"] });
+        setDialogOpen(false);
       }
     } else {
       const res = await createCheckoutSessionMutation({ code: orderId });
-
       if (res.isSuccess) {
-        setDialogOpen(false); // Close dialog before redirect
+        setDialogOpen(false);
         window.location.href = res.url;
       } else {
         toast.error("Can't checkout");
       }
     }
-    setDialogOpen(false); // Close dialog
   };
-  const { data, isLoading } = useGetOrderQuery(id!);
 
-  if (isLoading) {
+  // Update local state when initial query loads
+  useEffect(() => {
+    if (orderQueryData?.order) {
+      setOrder(orderQueryData.order);
+    }
+  }, [orderQueryData?.order]);
+
+  // Socket listener for order updates
+  useEffect(() => {
+    if (!socket) return;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const onReceive = (updatedOrder: any) => {
+      console.log(updatedOrder[0]);
+
+      // Update the local state when socket data comes
+      setOrder(updatedOrder);
+    };
+
+    socket.on("order-status-changed", onReceive);
+
+    return () => {
+      socket.off("order-status-changed", onReceive);
+    };
+  }, [socket]);
+
+  if (isLoading)
     return <div className="w-full min-h-screen">{t("loading")}...</div>;
-  }
+
+  const firstOrder = order[0];
+
+  console.log("first order", firstOrder);
 
   return (
     <div className="max-w-6xl mx-auto my-10 min-h-screen space-y-5">
@@ -79,18 +114,19 @@ function OrderDetails() {
         breadcrumbs={[
           { label: t("order"), href: "/orders" },
           {
-            label: data?.order[0]?.code || "",
-            href: `/orders/${data?.order[0].code}`,
+            label: firstOrder?.code || "",
+            href: `/orders/${firstOrder?.code}`,
           },
         ]}
       />
 
-      <div className="space-y-4">
+      <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-primary text-lg font-semibold">
-            Order - {data?.order[0]?.code}
+            Order - {firstOrder?.code}
           </h1>
-          {data?.order[0]?.status === "pending" ? (
+
+          {firstOrder?.status === "pending" && (
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
               <DialogTrigger asChild>
                 <Button
@@ -154,10 +190,9 @@ function OrderDetails() {
                     </div>
                   </RadioGroup>
                 </div>
-                <DialogFooter className="">
+                <DialogFooter>
                   <Button
-                    onClick={() => handleCheckout(data?.order[0]?.code ?? "")}
-                    type="button"
+                    onClick={() => handleCheckout(firstOrder?.code ?? "")}
                     disabled={isCashOnDeliveryPending}
                   >
                     {isCashOnDeliveryPending ? (
@@ -169,17 +204,26 @@ function OrderDetails() {
                 </DialogFooter>
               </DialogContent>
             </Dialog>
-          ) : (
-            ""
           )}
+        </div>
+
+        <div className="bg-white dark:bg-gray-900 rounded-lg border p-6">
+          <h2 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
+            Order Progress
+          </h2>
+          <OrderProgressStepper
+            currentStatus={firstOrder?.status || "delivered"}
+            isPaid={firstOrder?.isPaid || false}
+            isDelivered={firstOrder?.isDelivered || false}
+          />
         </div>
 
         <Table>
           <TableHeader>
             <TableRow>
-              <TableCell className="md:w-[10px]">{t("number")}</TableCell>
-              <TableCell className="md:w-[100px]">{t("image")}</TableCell>
-              <TableCell className="md:w-[200px]">{t("product")}</TableCell>
+              <TableCell>{t("number")}</TableCell>
+              <TableCell>{t("image")}</TableCell>
+              <TableCell>{t("product")}</TableCell>
               <TableCell>{t("quantity")}</TableCell>
               <TableCell>{t("price")}</TableCell>
               <TableCell>{t("shipping_cost")}</TableCell>
@@ -190,7 +234,7 @@ function OrderDetails() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data?.order.map((item, index) => (
+            {order.map((item, index) => (
               <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>
@@ -198,13 +242,12 @@ function OrderDetails() {
                     className="w-[30px] h-[30px] object-cover rounded-2xl"
                     src={getImageUrl({
                       resource: "images",
-                      fileName: item.productId.images[0],
+                      fileName: item.productId.images[0] || "/placeholder.svg",
                     })}
                     alt={item.productId.name}
                   />
                 </TableCell>
                 <TableCell>{item.productId.name}</TableCell>
-
                 <TableCell>{item.quantity}</TableCell>
                 <TableCell>
                   {item.productId.price} {t("kyats")}
@@ -215,22 +258,14 @@ function OrderDetails() {
                 <TableCell>
                   {item.total} {t("kyats")}
                 </TableCell>
-                <TableCell className="capitalize">{item.status} </TableCell>
+                <TableCell className="capitalize">{item.status}</TableCell>
                 <TableCell className="capitalize">
-                  {item.isDelivered ? "Yes" : "No"}{" "}
+                  {item.isDelivered ? "Yes" : "No"}
                 </TableCell>
                 <TableCell>{formatDate(item.createdAt)}</TableCell>
               </TableRow>
             ))}
           </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell colSpan={8}>{t("total")}</TableCell>
-              <TableCell colSpan={2} className="text-right">
-                {data?.amount} {t("kyats")}
-              </TableCell>
-            </TableRow>
-          </TableFooter>
         </Table>
       </div>
     </div>

@@ -8,29 +8,22 @@ import BannerCard from "./banner-card";
 const slides = [
   {
     id: 1,
-    title: "Fresh Ayeyarwaddy River Fish",
-    highlight: "DAILY FRESH CATCH",
-    discount: "UP TO 30% OFF",
-    image: "/fresh-fish-from-ayeyarwaddy-river.png",
-    category: "Seafood",
+    title: "Pathein Umbrella",
+    highlight: "TRADITIONAL ARTISTRY",
+    discount: "HANDMADE DESIGNS",
+    image: "umbrella.jpg",
+    category: "Handicrafts",
   },
   {
     id: 2,
-    title: "Premium Myanmar Rice",
-    highlight: "DELTA GROWN RICE",
-    discount: "BULK ORDERS 20% OFF",
-    image: "/premium-myanmar-rice-bags.png",
-    category: "Grains",
-  },
-  {
-    id: 3,
-    title: "Traditional Handicrafts",
-    highlight: "HANDMADE CRAFTS",
-    discount: "SPECIAL DEALS",
-    image: "/traditional-myanmar-handicrafts.png",
-    category: "Crafts",
+    title: "Halawrr (Myanmar Halawa Sweet)",
+    highlight: "AUTHENTIC MYANMAR DESSERT",
+    discount: "SPECIAL OFFERS AVAILABLE",
+    image: "./halawrr.jpg",
+    category: "Sweets",
   },
 ];
+
 
 export function Banners() {
   const [current, setCurrent] = useState(0);

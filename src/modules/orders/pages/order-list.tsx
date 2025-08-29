@@ -29,14 +29,13 @@ function OrderListPage() {
       setPage((prev) => prev + 1);
 
       // Usually your response will tell you if there is no more data.
-      if (data.orders.length < 100) {
+      if (data.orders.length < 1000) {
         setHasMore(false);
       }
       setLoading(false);
     }, 800);
   };
 
-  console.log(orders);
 
   return (
     <section className="max-w-4xl mx-auto my-10 min-h-screen">
