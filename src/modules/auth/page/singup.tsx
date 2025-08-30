@@ -1,16 +1,13 @@
-import { SignupForm } from "../ui/components/signup-form"
+import { SignupForm } from "../ui/components/signup-form";
 
-function SignupPage() {
+export default function SignupPage() {
   return (
-    <section className="w-screen h-screen flex">
-      <div className="w-[60%] h-full hidden lg:block">
-        <img className="w-full h-full object-cover" alt="Login Image" src="./login_image.jpg"/>
-      </div>
-      <div className="flex-1">
-        <SignupForm/>
-      </div>
-    </section>
-  )
-}
+    <div className="min-h-screen w-full relative overflow-hidden bg-gradient-to-br from-cyan-100 via-purple-100 to-blue-100 animate-gradient-shift">
+      <div className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-r from-cyan-400/30 to-purple-400/30 rounded-full blur-3xl animate-float"></div>
+      <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-purple-400/30 to-blue-400/30 rounded-full blur-3xl animate-float-delayed"></div>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-blue-400/20 to-cyan-400/20 rounded-full blur-3xl animate-pulse-slow"></div>
 
-export default SignupPage
+      <SignupForm />
+    </div>
+  );
+}

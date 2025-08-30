@@ -22,6 +22,7 @@
   "ads_from_partners": "Ads from",
   "partnership": "partnership",
   "reliable_merchants": "Reliable Merchants",
+  "phone" :"Phone",
   "merchants": "Merchants",
   "type_to_search": "Type to search products...",
   "no_products_found": "No products found.",
@@ -49,6 +50,8 @@
   "total": "Total",
   "total_kyats": "Total (Kyats)",
   "cart_empty": "Your cart is empty.",
+  "edit_profile": "Edit Profile",
+  "edit_profile_desc" : "Edit your profile",
   "total_cost": "Total Cost",
   "make_order": "Make Order",
   "ordering": "Ordering...",
@@ -104,6 +107,7 @@
   "country" : "Country",
   "enter_country" : "please enter country name",
   "postal_code" : "Postal Code",
+  "enter_phone" : "Enter a phone number",
   "enter_postal_code" : "please enter postal code"
   ,"recommended_products" : "Recommend Products for you"
 }

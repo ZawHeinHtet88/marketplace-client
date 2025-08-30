@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useAuthStore } from "@/modules/auth/store/index.store";
-import { Calendar, Mail, MapPin, User } from "lucide-react";
+import { Calendar, Mail, MapPin, Phone, User } from "lucide-react";
 import { useGetProfileQuery } from "../hooks/queries";
 import { ProfileEditForm } from "../ui/components/form";
 import { getImageUrl } from "@/utils/images";
@@ -52,7 +52,13 @@ export default function ProfilePage() {
         {/* Header Section */}
         <div className="text-center space-y-4">
           <Avatar className="mx-auto h-24 w-24">
-            <AvatarImage src={getImageUrl({ resource: "optimize", fileName: customer.optimize_images })} alt={customer.name} />
+            <AvatarImage
+              src={getImageUrl({
+                resource: "optimize",
+                fileName: customer.optimize_images,
+              })}
+              alt={customer.name}
+            />
             <AvatarFallback className="text-2xl font-heading bg-primary text-primary-foreground">
               {customer.name
                 .split(" ")
@@ -82,11 +88,18 @@ export default function ProfilePage() {
               <ProfileEditForm customer={customer} />
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 <Mail className="h-4 w-4 text-muted-foreground" />
                 <div>
                   <p className="text-sm text-muted-foreground">Email</p>
                   <p className="font-medium">{customer.email}</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Phone className="h-4 w-4 text-muted-foreground" />
+                  <div>
+                    <p className="text-sm text-muted-foreground">Phone</p>
+                    <p className="font-medium">{customer.phone}</p>
+                  </div>
                 </div>
               </div>
               <Separator />

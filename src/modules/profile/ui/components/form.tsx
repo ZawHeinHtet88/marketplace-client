@@ -43,7 +43,8 @@ export function ProfileEditForm({ customer }: { customer: Customer }) {
       state: customer.shippingAddresse?.state,
       country: customer.shippingAddresse?.country,
       street: customer.shippingAddresse?.street,
-      // if your schema expects a number, keep this as number; otherwise cast to string
+      phone : customer.phone,
+      // if your schema expects a number, keep thpis as number; otherwise cast to string
       postalCode: customer.shippingAddresse?.postalCode,
       image: undefined as unknown as File | undefined, // ensure type exists
     },
@@ -54,6 +55,7 @@ export function ProfileEditForm({ customer }: { customer: Customer }) {
     formData.set("name", values.name);
     formData.set("city", values.city);
     formData.set("state", values.state);
+    formData.set("phone",values.phone)
     formData.set("country", values.country);
     formData.set("street", values.street);
     formData.set("postalCode", values.postalCode.toString());
@@ -68,7 +70,6 @@ export function ProfileEditForm({ customer }: { customer: Customer }) {
       await queryClient.invalidateQueries({ queryKey: ["profile"] });
       toast.success(t("profile_updated"));
       setOpen(false); // close the sheet after success
-      
     }
   };
 
@@ -114,6 +115,50 @@ export function ProfileEditForm({ customer }: { customer: Customer }) {
               />
 
               <div className="grid grid-cols-2 gap-2">
+                <FormField
+                  control={form.control}
+                  name="postalCode"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-[12px] font-semibold text-foreground/50">
+                        {t("postal_code")}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          className="bg-white/70 py-4 text-gray-700 placeholder:text-gray-400 rounded-xl border border-gray-200 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/30"
+                          placeholder={t("enter_postal_code") as string}
+                          value={field.value ?? ""}
+                          onChange={(e) => {
+                            const v = e.target.value;
+                            // keep number in RHF state if your schema expects number
+                            field.onChange(v === "" ? undefined : Number(v));
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-[12px] font-semibold text-foreground/50">
+                        {t("phone")}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className="bg-white/70 py-4 text-gray-700 placeholder:text-gray-400 rounded-xl border border-gray-200 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/30"
+                          placeholder={t("enter_phone")}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="street"
@@ -194,32 +239,6 @@ export function ProfileEditForm({ customer }: { customer: Customer }) {
                   )}
                 />
               </div>
-
-              <FormField
-                control={form.control}
-                name="postalCode"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[12px] font-semibold text-foreground/50">
-                      {t("postal_code")}
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        className="bg-white/70 py-4 text-gray-700 placeholder:text-gray-400 rounded-xl border border-gray-200 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/30"
-                        placeholder={t("enter_postal_code") as string}
-                        value={field.value ?? ""}
-                        onChange={(e) => {
-                          const v = e.target.value;
-                          // keep number in RHF state if your schema expects number
-                          field.onChange(v === "" ? undefined : Number(v));
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
 
               {/* File upload field */}
               <FormField

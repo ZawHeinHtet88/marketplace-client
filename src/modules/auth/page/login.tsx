@@ -1,3 +1,5 @@
+"use client";
+
 import { decryptAES } from "@/utils/decrypt";
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -27,18 +29,10 @@ function LoginPage() {
       }
     }
   }, [decryptToken, navigate, login]);
+
   return (
-    <section className="w-screen h-screen flex">
-      <div className="w-[60%] h-full hidden lg:block">
-        <img
-          className="w-full h-full object-cover"
-          alt="Login Image"
-          src="./login_image.jpg"
-        />
-      </div>
-      <div className="flex-1">
-        <LoginForm />
-      </div>
+    <section className="w-screen h-screen">
+      <LoginForm />
     </section>
   );
 }

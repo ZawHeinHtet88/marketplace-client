@@ -7,6 +7,7 @@ export interface Customer {
     postalCode: number;
   };
   _id: string;
+  phone : string;
   name: string;
   email: string;
   role: string;
