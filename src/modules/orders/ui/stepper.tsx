@@ -125,9 +125,9 @@ const OrderProgressStepper = ({
   const visibleSteps = getVisibleSteps();
 
   return (
-    <div className="w-full">
-      <div className="flex items-center justify-between relative">
-        {/* Progress Line */}
+    <div className="w-full px-2 sm:px-4">
+      {/* Progress Line */}
+      <div className="flex items-center justify-between relative overflow-x-auto">
         <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-200 -z-10">
           <div
             className={cn(
@@ -150,14 +150,16 @@ const OrderProgressStepper = ({
         {visibleSteps.map((step, index) => {
           const status = getStepStatus(step.id, index);
           const Icon = step.icon;
-          const isLast = index === visibleSteps.length - 1;
 
           return (
-            <div key={step.id} className="flex flex-col items-center relative">
+            <div
+              key={step.id}
+              className="flex flex-col items-center relative min-w-0 flex-1"
+            >
               {/* Step Circle */}
               <div
                 className={cn(
-                  "w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 z-10",
+                  "w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 z-10 flex-shrink-0",
                   status === "completed" &&
                     step.id === "cancelled" &&
                     "bg-red-500 border-red-500 text-white",
@@ -185,33 +187,17 @@ const OrderProgressStepper = ({
                 )}
               >
                 {status === "completed" ? (
-                  <Check className="w-5 h-5" />
+                  <Check className="w-3 h-3 sm:w-5 sm:h-5" />
                 ) : (
-                  <Icon className="w-5 h-5" />
+                  <Icon className="w-3 h-3 sm:w-5 sm:h-5" />
                 )}
               </div>
 
-              {/* Line between steps */}
-              {!isLast && (
-                <div
-                  className={cn(
-                    "absolute top-5 left-full w-10 h-0.5 transition-colors duration-300",
-                    status === "completed"
-                      ? step.id === "cancelled"
-                        ? "bg-red-500"
-                        : step.id === "expired"
-                        ? "bg-orange-500"
-                        : "bg-primary"
-                      : "bg-gray-300 dark:bg-gray-600"
-                  )}
-                />
-              )}
-
               {/* Step Content */}
-              <div className="mt-3 text-center max-w-[120px]">
+              <div className="mt-2 sm:mt-3 text-center px-1">
                 <p
                   className={cn(
-                    "text-sm font-medium transition-colors",
+                    "text-xs sm:text-sm font-medium transition-colors leading-tight",
                     status === "completed" &&
                       step.id === "cancelled" &&
                       "text-red-600",
@@ -235,7 +221,7 @@ const OrderProgressStepper = ({
                 >
                   {step.label}
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 hidden sm:block">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 hidden md:block leading-tight">
                   {step.description}
                 </p>
               </div>
@@ -245,9 +231,9 @@ const OrderProgressStepper = ({
       </div>
 
       {/* Status Summary */}
-      <div className="mt-4 p-2rounded-lg">
-        <div className="flex items-center justify-between text-sm">
-          <div className="flex items-center gap-4">
+      <div className="mt-4 p-3 sm:p-4 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 text-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
             <span className="text-gray-600 dark:text-gray-300">
               Status:{" "}
               <span
@@ -264,7 +250,7 @@ const OrderProgressStepper = ({
               </span>
             </span>
             <span className="text-gray-600 dark:text-gray-300">
-              Estimated Delivery Time :
+              Estimated Delivery:{" "}
               <span
                 className={cn(
                   "font-medium",
@@ -275,26 +261,28 @@ const OrderProgressStepper = ({
               </span>
             </span>
           </div>
-          {isDelivered &&
-            currentStatus !== "cancelled" &&
-            currentStatus !== "expired" && (
-              <div className="flex items-center gap-1 text-green-600">
-                <Check className="w-4 h-4" />
-                <span className="font-medium">Delivered</span>
+          <div className="flex items-center gap-2">
+            {isDelivered &&
+              currentStatus !== "cancelled" &&
+              currentStatus !== "expired" && (
+                <div className="flex items-center gap-1 text-green-600">
+                  <Check className="w-4 h-4" />
+                  <span className="font-medium">Delivered</span>
+                </div>
+              )}
+            {currentStatus === "cancelled" && (
+              <div className="flex items-center gap-1 text-red-600">
+                <X className="w-4 h-4" />
+                <span className="font-medium">Cancelled</span>
               </div>
             )}
-          {currentStatus === "cancelled" && (
-            <div className="flex items-center gap-1 text-red-600">
-              <X className="w-4 h-4" />
-              <span className="font-medium">Cancelled</span>
-            </div>
-          )}
-          {currentStatus === "expired" && (
-            <div className="flex items-center gap-1 text-orange-600">
-              <AlertTriangle className="w-4 h-4" />
-              <span className="font-medium">Expired</span>
-            </div>
-          )}
+            {currentStatus === "expired" && (
+              <div className="flex items-center gap-1 text-orange-600">
+                <AlertTriangle className="w-4 h-4" />
+                <span className="font-medium">Expired</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
