@@ -242,6 +242,25 @@ export const SignupForm = () => {
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-[12px] font-semibold text-foreground/50">
+                        {t("phone")}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className="bg-white/70 py-4 text-gray-700 placeholder:text-gray-400 rounded-xl border border-gray-200 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/30"
+                          placeholder={t("enter_phone")}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <div className="grid grid-cols-2 gap-2">
                   <FormField
                     control={form.control}

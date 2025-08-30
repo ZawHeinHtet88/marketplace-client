@@ -13,6 +13,7 @@ export const SignupSchama = z
   .object({
     name: z.string().min(1).max(20),
     email: z.string().email().min(1),
+    phone : z.string().min(9),
     password: z.string().min(8),
     passwordConfirm: z.string(),
     street: z.string().min(1).max(20),
